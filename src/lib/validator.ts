@@ -117,19 +117,19 @@ export class Validator {
       id: { type: 'string' },
     };
 
-    const required = ['id'];
+    const requiredSet = new Set(['id']);
 
     table.fields.forEach((field) => {
       properties[field.name] = this.fieldToJsonSchema(field);
       if (field.required) {
-        required.push(field.name);
+        requiredSet.add(field.name);
       }
     });
 
     return {
       type: 'object',
       properties,
-      required,
+      required: Array.from(requiredSet),
       additionalProperties: false,
     };
   }
