@@ -9,13 +9,17 @@ import {
   RefreshCw,
   Shield,
   Zap,
-  Clock
+  Clock,
+  Wand2,
+  Loader2
 } from 'lucide-react';
 
 export default function ValidationCenter() {
   const [report, setReport] = useState<ValidationReport | null>(null);
   const [loading, setLoading] = useState(true);
   const [validating, setValidating] = useState(false);
+  const [fixing, setFixing] = useState<string | null>(null);
+  const [fixingAll, setFixingAll] = useState(false);
 
   useEffect(() => {
     runValidation();
@@ -45,6 +49,48 @@ export default function ValidationCenter() {
       setLoading(false);
     } finally {
       setValidating(false);
+    }
+  };
+
+  const applyQuickFix = async (alert: ValidationAlert, index: number) => {
+    setFixing(`${alert.code}-${index}`);
+    try {
+      const response = await fetch('/api/auto-fix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ alert, fixType: 'single' })
+      });
+
+      if (response.ok) {
+        await runValidation();
+      }
+    } catch (error) {
+      console.error('Erreur auto-fix:', error);
+    } finally {
+      setFixing(null);
+    }
+  };
+
+  const applyAllFixes = async () => {
+    if (!report) return;
+
+    const fixableAlerts = report.alerts.filter(a => a.quickFix);
+    if (fixableAlerts.length === 0) return;
+
+    setFixingAll(true);
+    try {
+      for (const alert of fixableAlerts) {
+        await fetch('/api/auto-fix', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ alert, fixType: 'single' })
+        });
+      }
+      await runValidation();
+    } catch (error) {
+      console.error('Erreur auto-fix all:', error);
+    } finally {
+      setFixingAll(false);
     }
   };
 
@@ -136,8 +182,22 @@ export default function ValidationCenter() {
                   )}
 
                   {alert.quickFix && (
-                    <button className="mt-3 btn btn-secondary text-xs py-1.5 px-3">
-                      Appliquer la correction automatique
+                    <button
+                      onClick={() => applyQuickFix(alert, index)}
+                      disabled={fixing === `${alert.code}-${index}`}
+                      className="mt-3 btn btn-accent text-xs py-1.5 px-3 gap-2"
+                    >
+                      {fixing === `${alert.code}-${index}` ? (
+                        <>
+                          <Loader2 size={14} className="animate-spin" />
+                          Correction en cours...
+                        </>
+                      ) : (
+                        <>
+                          <Wand2 size={14} />
+                          Appliquer la correction
+                        </>
+                      )}
                     </button>
                   )}
                 </div>
@@ -193,14 +253,35 @@ export default function ValidationCenter() {
                 Validation complète du schéma et des données (3 niveaux)
               </p>
             </div>
-            <button
-              onClick={runValidation}
-              disabled={validating}
-              className="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 gap-2"
-            >
-              <RefreshCw size={18} className={validating ? 'animate-spin' : ''} />
-              <span>Relancer</span>
-            </button>
+            <div className="flex gap-3">
+              {report && report.alerts.filter(a => a.quickFix).length > 0 && (
+                <button
+                  onClick={applyAllFixes}
+                  disabled={fixingAll}
+                  className="btn bg-accent-500 hover:bg-accent-600 text-white gap-2"
+                >
+                  {fixingAll ? (
+                    <>
+                      <Loader2 size={18} className="animate-spin" />
+                      <span>Correction...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Wand2 size={18} />
+                      <span>Corriger tout</span>
+                    </>
+                  )}
+                </button>
+              )}
+              <button
+                onClick={runValidation}
+                disabled={validating}
+                className="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 gap-2"
+              >
+                <RefreshCw size={18} className={validating ? 'animate-spin' : ''} />
+                <span>Relancer</span>
+              </button>
+            </div>
           </div>
         </div>
 

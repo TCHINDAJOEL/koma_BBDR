@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
-import { Schema, TableDefinition } from '@/types/schema';
+import { Schema, TableDefinition, FieldDefinition } from '@/types/schema';
 import dynamic from 'next/dynamic';
 import {
   Edit2,
@@ -15,7 +15,9 @@ import {
   ChevronRight,
   Search,
   Layers,
-  Database
+  Database,
+  X,
+  Save
 } from 'lucide-react';
 import { getTables, findTable } from '@/lib/data-helpers';
 
@@ -27,6 +29,12 @@ export default function SchemaExplorer() {
   const [jsonMode, setJsonMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Modal states
+  const [showTableModal, setShowTableModal] = useState(false);
+  const [showFieldModal, setShowFieldModal] = useState(false);
+  const [editingTable, setEditingTable] = useState<TableDefinition | null>(null);
+  const [editingField, setEditingField] = useState<FieldDefinition | null>(null);
 
   useEffect(() => {
     loadSchema();
@@ -61,6 +69,125 @@ export default function SchemaExplorer() {
     } catch (error) {
       console.error('Erreur de sauvegarde:', error);
     }
+  };
+
+  // Table CRUD operations
+  const handleAddTable = () => {
+    setEditingTable(null);
+    setShowTableModal(true);
+  };
+
+  const handleEditTable = (table: TableDefinition) => {
+    setEditingTable(table);
+    setShowTableModal(true);
+  };
+
+  const handleDeleteTable = async (tableName: string) => {
+    if (!schema || !confirm(`Supprimer la table "${tableName}" et toutes ses données ?`)) return;
+
+    const newSchema = {
+      ...schema,
+      tables: schema.tables.filter(t => t.name !== tableName),
+      relations: schema.relations.filter(r => r.fromTable !== tableName && r.toTable !== tableName)
+    };
+
+    await saveSchema(newSchema);
+    if (selectedTable === tableName) {
+      setSelectedTable(null);
+    }
+  };
+
+  const handleSaveTable = async (tableData: { name: string; label: string; description: string; primaryKey: string }) => {
+    if (!schema) return;
+
+    if (editingTable) {
+      // Update existing table
+      const newSchema = {
+        ...schema,
+        tables: schema.tables.map(t =>
+          t.name === editingTable.name
+            ? { ...t, name: tableData.name, label: tableData.label, description: tableData.description, primaryKey: tableData.primaryKey }
+            : t
+        )
+      };
+      await saveSchema(newSchema);
+      if (selectedTable === editingTable.name) {
+        setSelectedTable(tableData.name);
+      }
+    } else {
+      // Create new table
+      const newTable: TableDefinition = {
+        name: tableData.name,
+        label: tableData.label,
+        description: tableData.description,
+        primaryKey: tableData.primaryKey,
+        fields: [
+          { name: tableData.primaryKey, type: 'integer', required: true }
+        ]
+      };
+      const newSchema = {
+        ...schema,
+        tables: [...schema.tables, newTable]
+      };
+      await saveSchema(newSchema);
+    }
+
+    setShowTableModal(false);
+  };
+
+  // Field CRUD operations
+  const handleAddField = () => {
+    setEditingField(null);
+    setShowFieldModal(true);
+  };
+
+  const handleEditField = (field: FieldDefinition) => {
+    setEditingField(field);
+    setShowFieldModal(true);
+  };
+
+  const handleDeleteField = async (fieldName: string) => {
+    if (!schema || !selectedTable || !confirm(`Supprimer le champ "${fieldName}" ?`)) return;
+
+    const table = findTable(schema, selectedTable);
+    if (!table) return;
+
+    const newSchema = {
+      ...schema,
+      tables: schema.tables.map(t =>
+        t.name === selectedTable
+          ? { ...t, fields: t.fields.filter(f => f.name !== fieldName) }
+          : t
+      )
+    };
+
+    await saveSchema(newSchema);
+  };
+
+  const handleSaveField = async (fieldData: FieldDefinition) => {
+    if (!schema || !selectedTable) return;
+
+    const table = findTable(schema, selectedTable);
+    if (!table) return;
+
+    let newFields: FieldDefinition[];
+    if (editingField) {
+      newFields = table.fields.map(f =>
+        f.name === editingField.name ? fieldData : f
+      );
+    } else {
+      newFields = [...table.fields, fieldData];
+    }
+
+    const newSchema = {
+      ...schema,
+      tables: schema.tables.map(t =>
+        t.name === selectedTable ? { ...t, fields: newFields } : t
+      )
+    };
+
+    await saveSchema(newSchema);
+    setShowFieldModal(false);
   };
 
   const handleJsonChange = (value: string | undefined) => {
@@ -110,9 +237,9 @@ export default function SchemaExplorer() {
   const tables = getTables(schema);
   const filteredTables = searchQuery
     ? tables.filter(t =>
-        t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (t.label?.toLowerCase() || '').includes(searchQuery.toLowerCase())
-      )
+      t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (t.label?.toLowerCase() || '').includes(searchQuery.toLowerCase())
+    )
     : tables;
   const table = selectedTable ? findTable(schema, selectedTable) : null;
 
@@ -202,7 +329,7 @@ export default function SchemaExplorer() {
                       <Layers size={18} />
                       Tables
                     </h3>
-                    <button className="btn btn-ghost p-2">
+                    <button onClick={handleAddTable} className="btn btn-ghost p-2" title="Ajouter une table">
                       <Plus size={18} className="text-primary-600" />
                     </button>
                   </div>
@@ -218,24 +345,21 @@ export default function SchemaExplorer() {
                         <button
                           key={t.name}
                           onClick={() => setSelectedTable(t.name)}
-                          className={`w-full text-left p-4 transition-all duration-200 hover:bg-dark-50 flex items-center justify-between group ${
-                            selectedTable === t.name
-                              ? 'bg-primary-50 border-l-4 border-primary-500'
-                              : ''
-                          }`}
+                          className={`w-full text-left p-4 transition-all duration-200 hover:bg-dark-50 flex items-center justify-between group ${selectedTable === t.name
+                            ? 'bg-primary-50 border-l-4 border-primary-500'
+                            : ''
+                            }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                              selectedTable === t.name
-                                ? 'bg-primary-100 text-primary-600'
-                                : 'bg-dark-100 text-dark-500 group-hover:bg-primary-100 group-hover:text-primary-600'
-                            }`}>
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${selectedTable === t.name
+                              ? 'bg-primary-100 text-primary-600'
+                              : 'bg-dark-100 text-dark-500 group-hover:bg-primary-100 group-hover:text-primary-600'
+                              }`}>
                               <Table size={20} />
                             </div>
                             <div>
-                              <div className={`font-medium ${
-                                selectedTable === t.name ? 'text-primary-700' : 'text-dark-800'
-                              }`}>
+                              <div className={`font-medium ${selectedTable === t.name ? 'text-primary-700' : 'text-dark-800'
+                                }`}>
                                 {t.label || t.name}
                               </div>
                               <div className="text-xs text-dark-500">
@@ -245,11 +369,10 @@ export default function SchemaExplorer() {
                           </div>
                           <ChevronRight
                             size={18}
-                            className={`transition-transform ${
-                              selectedTable === t.name
-                                ? 'text-primary-500'
-                                : 'text-dark-300 group-hover:translate-x-1'
-                            }`}
+                            className={`transition-transform ${selectedTable === t.name
+                              ? 'text-primary-500'
+                              : 'text-dark-300 group-hover:translate-x-1'
+                              }`}
                           />
                         </button>
                       ))}
@@ -275,10 +398,10 @@ export default function SchemaExplorer() {
                         )}
                       </div>
                       <div className="flex gap-2">
-                        <button className="btn btn-ghost p-2">
+                        <button onClick={() => handleEditTable(table)} className="btn btn-ghost p-2" title="Éditer la table">
                           <Edit2 size={18} />
                         </button>
-                        <button className="btn btn-ghost p-2 text-red-500 hover:bg-red-50">
+                        <button onClick={() => handleDeleteTable(table.name)} className="btn btn-ghost p-2 text-red-500 hover:bg-red-50" title="Supprimer la table">
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -323,15 +446,19 @@ export default function SchemaExplorer() {
                           <th className="px-6 py-3 text-center">Requis</th>
                           <th className="px-6 py-3 text-center">Unique</th>
                           <th className="px-6 py-3 text-left">Description</th>
+                          <th className="px-6 py-3 text-center">
+                            <button onClick={handleAddField} className="btn btn-ghost p-1" title="Ajouter un champ">
+                              <Plus size={16} className="text-primary-600" />
+                            </button>
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {table.fields.map((field, index) => (
                           <tr
                             key={field.name}
-                            className={`hover:bg-dark-50 transition-colors ${
-                              index % 2 === 0 ? 'bg-white' : 'bg-dark-50/50'
-                            }`}
+                            className={`hover:bg-dark-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-dark-50/50'
+                              }`}
                           >
                             <td className="table-cell">
                               <code className="text-sm font-mono text-dark-700">
@@ -364,6 +491,16 @@ export default function SchemaExplorer() {
                             <td className="table-cell text-dark-600 text-sm">
                               {field.description || '—'}
                             </td>
+                            <td className="table-cell text-center">
+                              <div className="flex gap-1 justify-center">
+                                <button onClick={() => handleEditField(field)} className="p-1 text-primary-600 hover:bg-primary-50 rounded" title="Éditer">
+                                  <Edit2 size={14} />
+                                </button>
+                                <button onClick={() => handleDeleteField(field.name)} className="p-1 text-red-500 hover:bg-red-50 rounded" title="Supprimer">
+                                  <Trash2 size={14} />
+                                </button>
+                              </div>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -389,6 +526,268 @@ export default function SchemaExplorer() {
           </div>
         )}
       </div>
+
+      {/* Table Modal */}
+      {showTableModal && (
+        <TableModal
+          table={editingTable}
+          onSave={handleSaveTable}
+          onClose={() => setShowTableModal(false)}
+        />
+      )}
+
+      {/* Field Modal */}
+      {showFieldModal && (
+        <FieldModal
+          field={editingField}
+          onSave={handleSaveField}
+          onClose={() => setShowFieldModal(false)}
+        />
+      )}
     </Layout>
+  );
+}
+
+// Table Modal Component
+interface TableModalProps {
+  table: TableDefinition | null;
+  onSave: (data: { name: string; label: string; description: string; primaryKey: string }) => void;
+  onClose: () => void;
+}
+
+function TableModal({ table, onSave, onClose }: TableModalProps) {
+  const [name, setName] = useState(table?.name || '');
+  const [label, setLabel] = useState(table?.label || '');
+  const [description, setDescription] = useState(table?.description || '');
+  const [primaryKey, setPrimaryKey] = useState(
+    table?.primaryKey
+      ? (Array.isArray(table.primaryKey) ? table.primaryKey[0] : table.primaryKey)
+      : 'id'
+  );
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+    onSave({ name, label: label || name, description, primaryKey: primaryKey || 'id' });
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content w-full max-w-lg p-6 animate-fade-in">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-bold text-dark-900">
+            {table ? 'Modifier la table' : 'Nouvelle table'}
+          </h3>
+          <button onClick={onClose} className="p-2 text-dark-500 hover:bg-dark-100 rounded-lg">
+            <X size={24} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-dark-700 mb-1">
+              Nom technique <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value.replace(/\s/g, '_').toLowerCase())}
+              className="input"
+              placeholder="ma_table"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-dark-700 mb-1">
+              Libellé
+            </label>
+            <input
+              type="text"
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              className="input"
+              placeholder="Ma Table"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-dark-700 mb-1">
+              Description
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="input"
+              rows={3}
+              placeholder="Description de la table..."
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-dark-700 mb-1">
+              Clé primaire
+            </label>
+            <input
+              type="text"
+              value={primaryKey}
+              onChange={(e) => setPrimaryKey(e.target.value)}
+              className="input"
+              placeholder="id"
+            />
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4 border-t border-dark-100">
+            <button type="button" onClick={onClose} className="btn btn-secondary">
+              Annuler
+            </button>
+            <button type="submit" className="btn btn-primary gap-2">
+              <Save size={18} />
+              {table ? 'Mettre à jour' : 'Créer'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// Field Modal Component
+interface FieldModalProps {
+  field: FieldDefinition | null;
+  onSave: (data: FieldDefinition) => void;
+  onClose: () => void;
+}
+
+function FieldModal({ field, onSave, onClose }: FieldModalProps) {
+  const [name, setName] = useState(field?.name || '');
+  const [type, setType] = useState<string>(field?.type || 'string');
+  const [label, setLabel] = useState(field?.label || '');
+  const [description, setDescription] = useState(field?.description || '');
+  const [required, setRequired] = useState(field?.required || false);
+  const [unique, setUnique] = useState(field?.unique || false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+    onSave({
+      name,
+      type: type as any,
+      label: label || name,
+      description,
+      required,
+      unique,
+    });
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content w-full max-w-lg p-6 animate-fade-in">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-bold text-dark-900">
+            {field ? 'Modifier le champ' : 'Nouveau champ'}
+          </h3>
+          <button onClick={onClose} className="p-2 text-dark-500 hover:bg-dark-100 rounded-lg">
+            <X size={24} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-dark-700 mb-1">
+                Nom <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value.replace(/\s/g, '_').toLowerCase())}
+                className="input"
+                placeholder="mon_champ"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-dark-700 mb-1">
+                Type
+              </label>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                className="select"
+              >
+                <option value="string">Texte</option>
+                <option value="number">Nombre</option>
+                <option value="integer">Entier</option>
+                <option value="boolean">Booléen</option>
+                <option value="date">Date</option>
+                <option value="datetime">Date/Heure</option>
+                <option value="enum">Énumération</option>
+                <option value="json">JSON</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-dark-700 mb-1">
+              Libellé
+            </label>
+            <input
+              type="text"
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              className="input"
+              placeholder="Mon Champ"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-dark-700 mb-1">
+              Description
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="input"
+              rows={2}
+              placeholder="Description du champ..."
+            />
+          </div>
+
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={required}
+                onChange={(e) => setRequired(e.target.checked)}
+                className="h-5 w-5 rounded border-dark-300 text-primary-600"
+              />
+              <span className="text-sm text-dark-700">Requis</span>
+            </label>
+
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={unique}
+                onChange={(e) => setUnique(e.target.checked)}
+                className="h-5 w-5 rounded border-dark-300 text-primary-600"
+              />
+              <span className="text-sm text-dark-700">Unique</span>
+            </label>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-4 border-t border-dark-100">
+            <button type="button" onClick={onClose} className="btn btn-secondary">
+              Annuler
+            </button>
+            <button type="submit" className="btn btn-primary gap-2">
+              <Save size={18} />
+              {field ? 'Mettre à jour' : 'Ajouter'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }

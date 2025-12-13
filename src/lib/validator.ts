@@ -297,8 +297,10 @@ export class Validator {
               location: `/data/${relation.fromTable}/${index}/${relation.fromField}`,
               message: `FK invalide: ${fkValue} n'existe pas dans ${relation.toTable}.${relation.toField}`,
               suggestion: `Supprimer l'enregistrement ou créer la référence dans ${relation.toTable}`,
+              quickFix: { op: 'setNull', field: relation.fromField },
               context: {
                 table: relation.fromTable,
+                field: relation.fromField,
                 recordId: record.id,
                 referencedTable: relation.toTable,
               },
@@ -380,6 +382,7 @@ export class Validator {
               location: `/data/${table.name}/*/${field.name}`,
               message: `${invalid.length} enregistrement(s) ont une valeur hors enum pour ${field.name}`,
               suggestion: `Utiliser une des valeurs: ${field.enumValues.join(', ')}`,
+              quickFix: { op: 'setValid', value: field.enumValues[0] },
               context: {
                 table: table.name,
                 field: field.name,
@@ -402,6 +405,7 @@ export class Validator {
               location: `/data/${table.name}/*/${field.name}`,
               message: `${invalid.length} valeur(s) ne peuvent pas être converties en ${field.type}`,
               suggestion: 'Corriger les valeurs ou changer le type du champ',
+              quickFix: { op: 'convert', targetType: field.type },
               context: {
                 table: table.name,
                 field: field.name,
