@@ -6,7 +6,18 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
-import { Plus, Edit2, Trash2, X, Search, Settings, Undo, Database } from 'lucide-react';
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  X,
+  Search,
+  Settings,
+  Undo,
+  Database,
+  Table,
+  Layers
+} from 'lucide-react';
 import { getTables, findTable, getTableData } from '@/lib/data-helpers';
 
 export default function DataEnrichment() {
@@ -82,14 +93,14 @@ export default function DataEnrichment() {
           <div className="flex gap-2 items-center h-full">
             <button
               onClick={() => onEditRecord(params.data)}
-              className="text-blue-600 hover:text-blue-800 p-1"
+              className="p-1.5 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
               title="Éditer"
             >
               <Edit2 size={16} />
             </button>
             <button
               onClick={() => onDeleteRecord(params.data)}
-              className="text-red-600 hover:text-red-800 p-1"
+              className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
               title="Supprimer"
             >
               <Trash2 size={16} />
@@ -155,7 +166,6 @@ export default function DataEnrichment() {
 
   const saveData = async (newData: TableData) => {
     try {
-      // Save current state to history before making changes
       setHistory([...history, { schema, data }]);
 
       await fetch('/api/apply-change', {
@@ -177,7 +187,6 @@ export default function DataEnrichment() {
 
   const saveSchema = async (newSchema: Schema) => {
     try {
-      // Save current state to history before making changes
       setHistory([...history, { schema, data }]);
 
       await fetch('/api/apply-change', {
@@ -246,7 +255,6 @@ export default function DataEnrichment() {
       ),
     };
 
-    // Remove field data from all records
     const newTableData = tableData.map((record) => {
       const { [fieldName]: removed, ...rest } = record;
       return rest;
@@ -278,7 +286,6 @@ export default function DataEnrichment() {
       ),
     };
 
-    // Rename field in all records
     const newTableData = tableData.map((record) => {
       const { [oldName]: value, ...rest } = record;
       return { ...rest, [newName]: value };
@@ -296,8 +303,11 @@ export default function DataEnrichment() {
   if (loading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-full">
-          <p className="text-gray-500">Chargement...</p>
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-dark-500">Chargement des données...</p>
+          </div>
         </div>
       </Layout>
     );
@@ -305,90 +315,102 @@ export default function DataEnrichment() {
 
   return (
     <Layout>
-      <div className="h-full flex flex-col">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-800">Data Enrichment</h2>
-            <p className="text-gray-600 mt-2">
-              Gérez les données de vos tables avec validation automatique
-            </p>
+      <div className="animate-fade-in">
+        {/* Hero Section */}
+        <div className="card p-8 mb-8 gradient-hero text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Data Enrichment</h1>
+              <p className="text-primary-200">
+                Gérez les données de vos tables avec validation automatique
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <div className="text-3xl font-bold">{Object.values(data).reduce((acc, arr) => acc + arr.length, 0)}</div>
+                <div className="text-primary-200 text-sm">Enregistrements</div>
+              </div>
+            </div>
           </div>
-          <button
-            onClick={handleUndo}
-            disabled={history.length === 0}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-lg ${
-              history.length === 0
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-gray-600 text-white hover:bg-gray-700'
-            }`}
-            title="Annuler la dernière action"
-          >
-            <Undo size={18} />
-            <span>Annuler</span>
-          </button>
         </div>
 
-        <div className="flex gap-4 mb-4">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-            <input
-              type="text"
-              placeholder="Rechercher une table..."
-              value={tableSearchQuery}
-              onChange={(e) => setTableSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            />
+        {/* Controls */}
+        <div className="flex flex-col lg:flex-row gap-4 mb-6">
+          <div className="flex-1 flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1 max-w-xs">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-dark-400" size={20} />
+              <input
+                type="text"
+                placeholder="Rechercher une table..."
+                value={tableSearchQuery}
+                onChange={(e) => setTableSearchQuery(e.target.value)}
+                className="input input-with-icon"
+              />
+            </div>
+            <select
+              value={selectedTable || ''}
+              onChange={(e) => setSelectedTable(e.target.value)}
+              className="select max-w-xs"
+            >
+              <option value="">Sélectionner une table...</option>
+              {filteredTables.map((t) => (
+                <option key={t.name} value={t.name}>
+                  {t.label || t.name}
+                </option>
+              ))}
+            </select>
           </div>
-          <select
-            value={selectedTable || ''}
-            onChange={(e) => setSelectedTable(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Sélectionner une table...</option>
-            {filteredTables.map((t) => (
-              <option key={t.name} value={t.name}>
-                {t.label || t.name}
-              </option>
-            ))}
-          </select>
 
-          {selectedTable && (
-            <>
-              <button
-                onClick={onAddRecord}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              >
-                <Plus size={18} />
-                <span>Ajouter</span>
-              </button>
-              <button
-                onClick={() => setShowFieldManager(true)}
-                className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-              >
-                <Settings size={18} />
-                <span>Gérer les champs</span>
-              </button>
-            </>
-          )}
+          <div className="flex gap-3">
+            {selectedTable && (
+              <>
+                <button
+                  onClick={onAddRecord}
+                  className="btn btn-primary gap-2"
+                >
+                  <Plus size={18} />
+                  <span>Ajouter</span>
+                </button>
+                <button
+                  onClick={() => setShowFieldManager(true)}
+                  className="btn btn-secondary gap-2"
+                >
+                  <Settings size={18} />
+                  <span>Champs</span>
+                </button>
+              </>
+            )}
+            <button
+              onClick={handleUndo}
+              disabled={history.length === 0}
+              className={`btn gap-2 ${
+                history.length === 0 ? 'btn-ghost opacity-50 cursor-not-allowed' : 'btn-secondary'
+              }`}
+              title="Annuler la dernière action"
+            >
+              <Undo size={18} />
+              <span className="hidden sm:inline">Annuler</span>
+            </button>
+          </div>
         </div>
 
         {selectedTable && table && (
           <div className="mb-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-dark-400" size={20} />
               <input
                 type="text"
                 placeholder="Rechercher dans les enregistrements..."
                 value={recordSearchQuery}
                 onChange={(e) => setRecordSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="input input-with-icon"
               />
             </div>
           </div>
         )}
 
-        {selectedTable && table && (
-          <div className="flex-1 bg-white rounded-lg shadow overflow-hidden">
+        {selectedTable && table ? (
+          <div className="card overflow-hidden" style={{ height: '500px' }}>
             <div className="ag-theme-alpine h-full">
               <AgGridReact
                 rowData={filteredRecords}
@@ -403,24 +425,40 @@ export default function DataEnrichment() {
               />
             </div>
           </div>
+        ) : (
+          <div className="card p-12 text-center">
+            <div className="w-16 h-16 bg-dark-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Layers className="w-8 h-8 text-dark-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-dark-700 mb-2">
+              Sélectionnez une table
+            </h3>
+            <p className="text-dark-500">
+              Choisissez une table pour gérer ses données
+            </p>
+          </div>
         )}
 
+        {/* Record Form Modal */}
         {showForm && table && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold">
+          <div className="modal-overlay">
+            <div className="modal-content w-full max-w-2xl p-6 animate-fade-in">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-dark-900">
                   {editingRecord ? 'Éditer' : 'Ajouter'} un enregistrement
                 </h3>
-                <button onClick={() => setShowForm(false)}>
-                  <X size={24} className="text-gray-500 hover:text-gray-700" />
+                <button
+                  onClick={() => setShowForm(false)}
+                  className="p-2 text-dark-500 hover:bg-dark-100 rounded-lg transition-colors"
+                >
+                  <X size={24} />
                 </button>
               </div>
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {table.fields.map((field) => (
                   <div key={field.name}>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-dark-700 mb-1.5">
                       {field.label || field.name}
                       {field.required && <span className="text-red-500 ml-1">*</span>}
                     </label>
@@ -429,12 +467,12 @@ export default function DataEnrichment() {
                       <input
                         type="checkbox"
                         {...register(field.name)}
-                        className="h-4 w-4"
+                        className="h-5 w-5 rounded border-dark-300 text-primary-600 focus:ring-primary-500"
                       />
                     ) : field.type === 'enum' && field.enumValues ? (
                       <select
                         {...register(field.name, { required: field.required })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="select"
                       >
                         <option value="">Sélectionner...</option>
                         {field.enumValues.map((val) => (
@@ -452,13 +490,13 @@ export default function DataEnrichment() {
                           min: field.min,
                           max: field.max,
                         })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="input"
                       />
                     ) : field.type === 'date' || field.type === 'datetime' ? (
                       <input
                         type={field.type === 'date' ? 'date' : 'datetime-local'}
                         {...register(field.name, { required: field.required })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="input"
                       />
                     ) : (
                       <input
@@ -469,27 +507,27 @@ export default function DataEnrichment() {
                           minLength: field.min,
                           maxLength: field.max,
                         })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="input"
                       />
                     )}
 
                     {field.description && (
-                      <p className="text-xs text-gray-500 mt-1">{field.description}</p>
+                      <p className="text-xs text-dark-500 mt-1">{field.description}</p>
                     )}
                   </div>
                 ))}
 
-                <div className="flex justify-end space-x-3 pt-4">
+                <div className="flex justify-end gap-3 pt-4 border-t border-dark-100">
                   <button
                     type="button"
                     onClick={() => setShowForm(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                    className="btn btn-secondary"
                   >
                     Annuler
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="btn btn-primary"
                   >
                     {editingRecord ? 'Mettre à jour' : 'Créer'}
                   </button>
@@ -499,6 +537,7 @@ export default function DataEnrichment() {
           </div>
         )}
 
+        {/* Field Manager Modal */}
         {showFieldManager && table && (
           <FieldManagerModal
             table={table}
@@ -513,7 +552,6 @@ export default function DataEnrichment() {
   );
 }
 
-// Field Manager Modal Component
 interface FieldManagerModalProps {
   table: TableDefinition;
   onClose: () => void;
@@ -549,32 +587,35 @@ function FieldManagerModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl p-6 max-w-3xl w-full max-h-[80vh] overflow-y-auto">
+    <div className="modal-overlay">
+      <div className="modal-content w-full max-w-3xl p-6 animate-fade-in">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-2xl font-bold text-gray-800">
-            Gérer les champs - {table.label || table.name}
+          <h3 className="text-xl font-bold text-dark-900">
+            Gérer les champs — {table.label || table.name}
           </h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <button
+            onClick={onClose}
+            className="p-2 text-dark-500 hover:bg-dark-100 rounded-lg transition-colors"
+          >
             <X size={24} />
           </button>
         </div>
 
         {/* Add Field Section */}
-        <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-          <h4 className="font-semibold text-gray-700 mb-3">Ajouter un nouveau champ</h4>
+        <div className="mb-6 p-4 bg-primary-50 rounded-xl border border-primary-100">
+          <h4 className="font-semibold text-dark-800 mb-3">Ajouter un nouveau champ</h4>
           <div className="flex gap-3">
             <input
               type="text"
               placeholder="Nom du champ"
               value={newFieldName}
               onChange={(e) => setNewFieldName(e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="input flex-1"
             />
             <select
               value={newFieldType}
               onChange={(e) => setNewFieldType(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="select w-40"
             >
               <option value="string">Texte</option>
               <option value="number">Nombre</option>
@@ -587,7 +628,7 @@ function FieldManagerModal({
             </select>
             <button
               onClick={handleAddField}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="btn btn-primary"
             >
               <Plus size={18} />
             </button>
@@ -596,12 +637,12 @@ function FieldManagerModal({
 
         {/* Fields List */}
         <div>
-          <h4 className="font-semibold text-gray-700 mb-3">Champs existants</h4>
-          <div className="space-y-2">
+          <h4 className="font-semibold text-dark-800 mb-3">Champs existants</h4>
+          <div className="space-y-2 max-h-80 overflow-y-auto">
             {table.fields.map((field) => (
               <div
                 key={field.name}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100"
+                className="flex items-center justify-between p-3 bg-dark-50 rounded-xl hover:bg-dark-100 transition-colors"
               >
                 <div className="flex-1">
                   {renamingField === field.name ? (
@@ -611,12 +652,12 @@ function FieldManagerModal({
                         value={newName}
                         onChange={(e) => setNewName(e.target.value)}
                         placeholder={field.name}
-                        className="flex-1 px-3 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                        className="input flex-1 py-1.5"
                         autoFocus
                       />
                       <button
                         onClick={() => handleRename(field.name)}
-                        className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700"
+                        className="btn btn-primary py-1.5"
                       >
                         OK
                       </button>
@@ -625,20 +666,25 @@ function FieldManagerModal({
                           setRenamingField(null);
                           setNewName('');
                         }}
-                        className="px-3 py-1 bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                        className="btn btn-secondary py-1.5"
                       >
                         Annuler
                       </button>
                     </div>
                   ) : (
-                    <div>
-                      <div className="font-medium text-gray-800">
-                        {field.label || field.name}
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
+                        <Table size={14} className="text-primary-600" />
                       </div>
-                      <div className="text-sm text-gray-500">
-                        Type: {field.type}
-                        {field.required && ' • Requis'}
-                        {field.unique && ' • Unique'}
+                      <div>
+                        <div className="font-medium text-dark-800">
+                          {field.label || field.name}
+                        </div>
+                        <div className="text-xs text-dark-500 flex items-center gap-2">
+                          <span className="badge badge-primary">{field.type}</span>
+                          {field.required && <span className="badge badge-warning">Requis</span>}
+                          {field.unique && <span className="badge badge-accent">Unique</span>}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -650,14 +696,14 @@ function FieldManagerModal({
                         setRenamingField(field.name);
                         setNewName(field.name);
                       }}
-                      className="p-2 text-blue-600 hover:bg-blue-100 rounded"
+                      className="p-2 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
                       title="Renommer"
                     >
                       <Edit2 size={16} />
                     </button>
                     <button
                       onClick={() => onDeleteField(field.name)}
-                      className="p-2 text-red-600 hover:bg-red-100 rounded"
+                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                       title="Supprimer"
                     >
                       <Trash2 size={16} />
@@ -669,10 +715,10 @@ function FieldManagerModal({
           </div>
         </div>
 
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end mt-6 pt-4 border-t border-dark-100">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+            className="btn btn-secondary"
           >
             Fermer
           </button>

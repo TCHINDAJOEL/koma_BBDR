@@ -2,25 +2,192 @@
   "version": "1.0",
   "dictionary": {
     "owner": null,
-    "source": "Documents KOMA / WeCare SCI",
-    "description": "Tables de référence extraites strictement des documents fournis",
+    "source": "KOMA Platform - export JSON",
+    "description": "Base de données normalisée pour la gestion de chantiers BTP - KOMA Platform",
     "sensitivity": null,
     "status": "imported"
   },
   "tables": {
-    "ref_articles": {
-      "description": "Articles (matériaux/consommables/équipements) et coûts.",
+    "lots": {
+      "description": "Lots de travaux (regroupement par spécialité)",
       "fields": {
-        "id": {
+        "lot_id": {
           "type": "integer",
           "required": true,
           "pk": true
         },
-        "code": {
+        "code_lot": {
+          "type": "string",
+          "required": true
+        },
+        "nom_lot": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
           "type": "string",
           "required": false
         },
-        "designation": {
+        "budget_previsionnel": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "sections": {
+      "description": "Sections (regroupement logique de tâches)",
+      "fields": {
+        "section_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "lot_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "lots.lot_id"
+        },
+        "code_section": {
+          "type": "string",
+          "required": true
+        },
+        "nom_section": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "taches": {
+      "description": "Tâches (unité centrale du planning et devis)",
+      "fields": {
+        "tache_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "section_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "sections.section_id"
+        },
+        "code_tache": {
+          "type": "string",
+          "required": true
+        },
+        "nom_tache": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "unite": {
+          "type": "string",
+          "required": false
+        },
+        "quantite_prevue": {
+          "type": "number",
+          "required": false
+        },
+        "cout_previsionnel": {
+          "type": "number",
+          "required": false
+        },
+        "date_debut": {
+          "type": "date",
+          "required": false
+        },
+        "date_fin": {
+          "type": "date",
+          "required": false
+        },
+        "statut": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "operations": {
+      "description": "Opérations (actions concrètes rattachées à une tâche)",
+      "fields": {
+        "operation_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "tache_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "taches.tache_id"
+        },
+        "code_operation": {
+          "type": "string",
+          "required": true
+        },
+        "nom_operation": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "duree_estimee": {
+          "type": "number",
+          "required": false
+        },
+        "cout_estime": {
+          "type": "number",
+          "required": false
+        },
+        "avancement": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "materiaux": {
+      "description": "Matériaux et consommables",
+      "fields": {
+        "materiau_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code_materiau": {
+          "type": "string",
+          "required": false
+        },
+        "nom_materiau": {
           "type": "string",
           "required": true
         },
@@ -28,30 +195,30 @@
           "type": "string",
           "required": true
         },
-        "cout_initial": {
-          "type": "integer",
-          "required": false
-        },
-        "cout_actuel": {
-          "type": "integer",
+        "prix_unitaire": {
+          "type": "number",
           "required": false
         },
         "categorie": {
           "type": "string",
           "required": true
+        },
+        "fournisseur": {
+          "type": "string",
+          "required": false
         }
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_categories_articles": {
-      "description": "Catégories d’articles.",
+    "categories_materiaux": {
+      "description": "Catégories de matériaux",
       "fields": {
-        "id": {
+        "categorie_id": {
           "type": "integer",
           "required": true,
           "pk": true
@@ -63,44 +230,70 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_unites": {
-      "description": "Unités de mesure (codes).",
+    "operation_materiaux": {
+      "description": "Liaison opérations-matériaux (consommation)",
       "fields": {
         "id": {
           "type": "integer",
           "required": true,
           "pk": true
         },
-        "code": {
-          "type": "string",
-          "required": true
+        "operation_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "operations.operation_id"
+        },
+        "materiau_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "materiaux.materiau_id"
+        },
+        "quantite": {
+          "type": "number",
+          "required": false
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "cout_total": {
+          "type": "number",
+          "required": false
         }
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_profils_main_oeuvre": {
-      "description": "Référentiel main d’œuvre (tâches, coût unitaire, variation, section).",
+    "main_oeuvre": {
+      "description": "Profils main d'œuvre",
       "fields": {
-        "id": {
+        "mo_id": {
           "type": "integer",
           "required": true,
           "pk": true
         },
-        "tache": {
+        "type_mo": {
           "type": "string",
           "required": true
         },
-        "unite": {
+        "categorie_mo": {
+          "type": "string",
+          "required": false
+        },
+        "section_mo": {
+          "type": "string",
+          "required": true
+        },
+        "unite_facturation": {
           "type": "string",
           "required": true
         },
@@ -115,23 +308,19 @@
         "cout_final": {
           "type": "number",
           "required": false
-        },
-        "section": {
-          "type": "string",
-          "required": true
         }
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_sections_main_oeuvre": {
-      "description": "Sections main d’œuvre.",
+    "sections_main_oeuvre": {
+      "description": "Sections de main d'œuvre",
       "fields": {
-        "id": {
+        "section_mo_id": {
           "type": "integer",
           "required": true,
           "pk": true
@@ -143,20 +332,245 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_charges": {
-      "description": "Charges / consommables et utilitaires (désignation, quantité, coûts).",
+    "operation_main_oeuvre": {
+      "description": "Liaison opérations-main d'œuvre",
       "fields": {
         "id": {
           "type": "integer",
           "required": true,
           "pk": true
         },
+        "operation_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "operations.operation_id"
+        },
+        "mo_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "main_oeuvre.mo_id"
+        },
+        "quantite": {
+          "type": "number",
+          "required": false
+        },
+        "cout_total": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "engins": {
+      "description": "Engins et équipements",
+      "fields": {
+        "engin_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "nom_engin": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "cout_journalier": {
+          "type": "number",
+          "required": false
+        },
+        "cout_final": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "operation_engins": {
+      "description": "Liaison opérations-engins",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "operation_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "operations.operation_id"
+        },
+        "engin_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "engins.engin_id"
+        },
+        "duree_utilisation": {
+          "type": "number",
+          "required": false
+        },
+        "cout_total": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "utilitaires_materiel": {
+      "description": "Utilitaires matériel (carburant, eau, électricité)",
+      "fields": {
+        "utilitaire_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
         "designation": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "cout_final": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "metres": {
+      "description": "Métrés (calcul quantitatif)",
+      "fields": {
+        "metre_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "tache_id": {
+          "type": "integer",
+          "required": true,
+          "fk": "taches.tache_id"
+        },
+        "type_calcul": {
+          "type": "string",
+          "required": true
+        },
+        "quantite_calculee": {
+          "type": "number",
+          "required": false
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "formule": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "etudes": {
+      "description": "Études techniques et architecturales",
+      "fields": {
+        "etude_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "numero": {
+          "type": "integer",
+          "required": true
+        },
+        "nom_etude": {
+          "type": "string",
+          "required": true
+        },
+        "type_etude": {
+          "type": "string",
+          "required": true
+        },
+        "details": {
+          "type": "array",
+          "required": false
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "quantite": {
+          "type": "integer",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "integer",
+          "required": true
+        },
+        "cout_total": {
+          "type": "integer",
+          "required": true
+        },
+        "date_livraison": {
+          "type": "date",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "charges": {
+      "description": "Charges et frais généraux",
+      "fields": {
+        "charge_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "designation": {
+          "type": "string",
+          "required": true
+        },
+        "categorie": {
           "type": "string",
           "required": true
         },
@@ -179,179 +593,19 @@
         "cout_final": {
           "type": "number",
           "required": true
-        },
-        "section": {
-          "type": "string",
-          "required": true
         }
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_lots_types": {
-      "description": "Lots/types de lots (CCTP / organisation).",
+    "echeancier": {
+      "description": "Échéancier de paiement",
       "fields": {
-        "id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "libelle": {
-          "type": "string",
-          "required": true
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "ref_sections": {
-      "description": "Sections (avec code) rattachées à un lot.",
-      "fields": {
-        "id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "code": {
-          "type": "string",
-          "required": true
-        },
-        "libelle": {
-          "type": "string",
-          "required": true
-        },
-        "lot_id": {
-          "type": "integer",
-          "required": true
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "ref_operations": {
-      "description": "Opérations (si présent).",
-      "fields": {
-        "id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "code": {
-          "type": "string",
-          "required": true
-        },
-        "libelle": {
-          "type": "string",
-          "required": true
-        },
-        "unite": {
-          "type": "string",
-          "required": false
-        },
-        "section_id": {
-          "type": "integer",
-          "required": true
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "ref_compositions_operations": {
-      "description": "Compositions d’opérations (si présent).",
-      "fields": {
-        "id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "operation_id": {
-          "type": "integer",
-          "required": true
-        },
-        "designation": {
-          "type": "string",
-          "required": true
-        },
-        "unite": {
-          "type": "string",
-          "required": true
-        },
-        "prix_unitaire": {
-          "type": "number",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "ref_etude": {
-      "description": "Table ref_etude.",
-      "fields": {
-        "id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "numero": {
-          "type": "integer",
-          "required": true
-        },
-        "designation": {
-          "type": "string",
-          "required": true
-        },
-        "unite": {
-          "type": "string",
-          "required": true
-        },
-        "quantite": {
-          "type": "integer",
-          "required": true
-        },
-        "prix_unitaire": {
-          "type": "integer",
-          "required": true
-        },
-        "prix_total": {
-          "type": "integer",
-          "required": true
-        },
-        "details": {
-          "type": "object",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "ref_echeancier": {
-      "description": "Échéancier de paiement (tranches).",
-      "fields": {
-        "id": {
+        "echeance_id": {
           "type": "integer",
           "required": true,
           "pk": true
@@ -360,7 +614,7 @@
           "type": "string",
           "required": true
         },
-        "date_echeance": {
+        "description": {
           "type": "string",
           "required": true
         },
@@ -379,15 +633,15 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_modes_paiement": {
-      "description": "Modes de paiement (type, compte).",
+    "modes_paiement": {
+      "description": "Modes de paiement acceptés",
       "fields": {
-        "id": {
+        "mode_paiement_id": {
           "type": "integer",
           "required": true,
           "pk": true
@@ -407,15 +661,15 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_tarifs_koma": {
-      "description": "Tarifs KOMA (prestation, prix, conditions).",
+    "tarifs_koma": {
+      "description": "Tarifs des prestations KOMA",
       "fields": {
-        "id": {
+        "tarif_id": {
           "type": "integer",
           "required": true,
           "pk": true
@@ -439,15 +693,15 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_types_projet": {
-      "description": "Types de projet.",
+    "types_projet": {
+      "description": "Types de projets",
       "fields": {
-        "id": {
+        "type_projet_id": {
           "type": "integer",
           "required": true,
           "pk": true
@@ -459,15 +713,15 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_profils_utilisateurs": {
-      "description": "Profils utilisateurs (rôles, accès).",
+    "profils_utilisateurs": {
+      "description": "Profils utilisateurs et droits d'accès",
       "fields": {
-        "id": {
+        "profil_id": {
           "type": "integer",
           "required": true,
           "pk": true
@@ -487,15 +741,39 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "ref_lexique": {
-      "description": "Lexique (termes, définitions).",
+    "unites": {
+      "description": "Unités de mesure",
       "fields": {
-        "id": {
+        "unite_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code": {
+          "type": "string",
+          "required": true
+        },
+        "libelle": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA Platform - export JSON",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "lexique": {
+      "description": "Lexique des termes métier",
+      "fields": {
+        "terme_id": {
           "type": "integer",
           "required": true,
           "pk": true
@@ -511,44 +789,10 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "Documents KOMA / WeCare SCI",
+        "source": "KOMA Platform - export JSON",
         "sensitivity": null,
         "status": "imported"
       }
     }
-  },
-  "relations": [
-    {
-      "from": "ref_articles.unite",
-      "to": "ref_unites.code",
-      "cardinality": "n-1",
-      "onDelete": "restrict",
-      "onUpdate": "restrict",
-      "note": "Relation déduite des codes d’unités présents dans les données."
-    },
-    {
-      "from": "ref_articles.categorie",
-      "to": "ref_categories_articles.libelle",
-      "cardinality": "n-1",
-      "onDelete": "restrict",
-      "onUpdate": "restrict",
-      "note": "Relation déduite des libellés de catégories présents dans les données."
-    },
-    {
-      "from": "ref_profils_main_oeuvre.section",
-      "to": "ref_sections_main_oeuvre.libelle",
-      "cardinality": "n-1",
-      "onDelete": "restrict",
-      "onUpdate": "restrict",
-      "note": "Relation déduite des libellés de sections présents dans les données."
-    },
-    {
-      "from": "ref_sections.lot_id",
-      "to": "ref_lots_types.id",
-      "cardinality": "n-1",
-      "onDelete": "restrict",
-      "onUpdate": "restrict",
-      "note": "Relation basée sur l’identifiant de lot."
-    }
-  ]
+  }
 }

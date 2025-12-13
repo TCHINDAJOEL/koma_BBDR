@@ -2,9 +2,141 @@
   "version": "1.0",
   "rules": [
     {
-      "id": "unique_id_per_table",
-      "description": "Dans chaque table, le champ 'id' est supposé unique.",
-      "scope": "tables.*.id",
+      "id": "unique_lots_lot_id",
+      "description": "Dans la table 'lots', le champ 'lot_id' doit être unique.",
+      "scope": "tables.lots.lot_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_sections_section_id",
+      "description": "Dans la table 'sections', le champ 'section_id' doit être unique.",
+      "scope": "tables.sections.section_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_taches_tache_id",
+      "description": "Dans la table 'taches', le champ 'tache_id' doit être unique.",
+      "scope": "tables.taches.tache_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_operations_operation_id",
+      "description": "Dans la table 'operations', le champ 'operation_id' doit être unique.",
+      "scope": "tables.operations.operation_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_materiaux_materiau_id",
+      "description": "Dans la table 'materiaux', le champ 'materiau_id' doit être unique.",
+      "scope": "tables.materiaux.materiau_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_categories_materiaux_categorie_id",
+      "description": "Dans la table 'categories_materiaux', le champ 'categorie_id' doit être unique.",
+      "scope": "tables.categories_materiaux.categorie_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_operation_materiaux_id",
+      "description": "Dans la table 'operation_materiaux', le champ 'id' doit être unique.",
+      "scope": "tables.operation_materiaux.id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_main_oeuvre_mo_id",
+      "description": "Dans la table 'main_oeuvre', le champ 'mo_id' doit être unique.",
+      "scope": "tables.main_oeuvre.mo_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_sections_main_oeuvre_section_mo_id",
+      "description": "Dans la table 'sections_main_oeuvre', le champ 'section_mo_id' doit être unique.",
+      "scope": "tables.sections_main_oeuvre.section_mo_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_operation_main_oeuvre_id",
+      "description": "Dans la table 'operation_main_oeuvre', le champ 'id' doit être unique.",
+      "scope": "tables.operation_main_oeuvre.id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_engins_engin_id",
+      "description": "Dans la table 'engins', le champ 'engin_id' doit être unique.",
+      "scope": "tables.engins.engin_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_operation_engins_id",
+      "description": "Dans la table 'operation_engins', le champ 'id' doit être unique.",
+      "scope": "tables.operation_engins.id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_utilitaires_materiel_utilitaire_id",
+      "description": "Dans la table 'utilitaires_materiel', le champ 'utilitaire_id' doit être unique.",
+      "scope": "tables.utilitaires_materiel.utilitaire_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_metres_metre_id",
+      "description": "Dans la table 'metres', le champ 'metre_id' doit être unique.",
+      "scope": "tables.metres.metre_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_etudes_etude_id",
+      "description": "Dans la table 'etudes', le champ 'etude_id' doit être unique.",
+      "scope": "tables.etudes.etude_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_charges_charge_id",
+      "description": "Dans la table 'charges', le champ 'charge_id' doit être unique.",
+      "scope": "tables.charges.charge_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_echeancier_echeance_id",
+      "description": "Dans la table 'echeancier', le champ 'echeance_id' doit être unique.",
+      "scope": "tables.echeancier.echeance_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_modes_paiement_mode_paiement_id",
+      "description": "Dans la table 'modes_paiement', le champ 'mode_paiement_id' doit être unique.",
+      "scope": "tables.modes_paiement.mode_paiement_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_tarifs_koma_tarif_id",
+      "description": "Dans la table 'tarifs_koma', le champ 'tarif_id' doit être unique.",
+      "scope": "tables.tarifs_koma.tarif_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_types_projet_type_projet_id",
+      "description": "Dans la table 'types_projet', le champ 'type_projet_id' doit être unique.",
+      "scope": "tables.types_projet.type_projet_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_profils_utilisateurs_profil_id",
+      "description": "Dans la table 'profils_utilisateurs', le champ 'profil_id' doit être unique.",
+      "scope": "tables.profils_utilisateurs.profil_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_unites_unite_id",
+      "description": "Dans la table 'unites', le champ 'unite_id' doit être unique.",
+      "scope": "tables.unites.unite_id",
+      "check": "unique"
+    },
+    {
+      "id": "unique_lexique_terme_id",
+      "description": "Dans la table 'lexique', le champ 'terme_id' doit être unique.",
+      "scope": "tables.lexique.terme_id",
       "check": "unique"
     }
   ]

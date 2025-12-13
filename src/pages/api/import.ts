@@ -1,7 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
-import JSZip from 'jszip';
+import decompress from 'decompress';
+import decompressUnzip from 'decompress-unzip';
+import decompressTargz from 'decompress-targz';
+import decompressTarbz2 from 'decompress-tarbz2';
+import decompressTar from 'decompress-tar';
 import fs from 'fs/promises';
+import path from 'path';
+import os from 'os';
 import { storage } from '@/lib/storage';
 
 export const config = {
@@ -10,6 +16,19 @@ export const config = {
   },
 };
 
+// Extensions supportées
+const SUPPORTED_EXTENSIONS = ['.zip', '.tar', '.tar.gz', '.tgz', '.tar.bz2', '.tbz2', '.tbz'];
+
+function getSupportedExtension(filename: string): string | null {
+  const lowerName = filename.toLowerCase();
+  for (const ext of SUPPORTED_EXTENSIONS) {
+    if (lowerName.endsWith(ext)) {
+      return ext;
+    }
+  }
+  return null;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -17,6 +36,8 @@ export default async function handler(
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+
+  let tempDir: string | null = null;
 
   try {
     // Parse le fichier uploadé
@@ -28,40 +49,70 @@ export default async function handler(
       return res.status(400).json({ error: 'Aucun fichier uploadé' });
     }
 
-    // Lire le ZIP
-    const zipBuffer = await fs.readFile(file.filepath);
-    const zip = await JSZip.loadAsync(zipBuffer);
+    const originalFilename = file.originalFilename || 'archive';
+    const extension = getSupportedExtension(originalFilename);
 
-    // Extraire et sauvegarder les fichiers
-    const schemaFile = zip.file('schema.json');
-    const rulesFile = zip.file('rules.json');
-    const auditFile = zip.file('audit.ndjson');
-
-    if (schemaFile) {
-      const content = await schemaFile.async('string');
-      await storage.writeFile('schema.json', content);
+    if (!extension) {
+      return res.status(400).json({
+        error: `Format non supporté. Formats acceptés: ${SUPPORTED_EXTENSIONS.join(', ')}`
+      });
     }
 
-    // Lire les données depuis le dossier data/
-    const dataFiles = zip.folder('data');
+    // Créer un répertoire temporaire pour l'extraction
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'koma-import-'));
+
+    // Décompresser le fichier avec les plugins appropriés
+    const extractedFiles = await decompress(file.filepath, tempDir, {
+      plugins: [
+        decompressUnzip(),
+        decompressTargz(),
+        decompressTarbz2(),
+        decompressTar(),
+      ],
+    });
+
+    // Trouver et traiter les fichiers
+    let schemaContent: string | null = null;
+    let rulesContent: string | null = null;
+    let auditContent: string | null = null;
     const allTableData: Record<string, any> = {};
 
-    if (dataFiles) {
-      const files = Object.keys(zip.files).filter((name) => name.startsWith('data/') && name.endsWith('.json'));
+    for (const extractedFile of extractedFiles) {
+      const filePath = extractedFile.path;
+      const fileData = extractedFile.data.toString('utf-8');
 
-      for (const fileName of files) {
-        const file = zip.file(fileName);
-        if (file) {
-          const content = await file.async('string');
-          const tableData = JSON.parse(content);
-          // Extraire le nom de la table depuis le nom de fichier
-          const tableName = fileName.replace('data/', '').replace('.json', '');
+      // schema.json (peut être à la racine ou dans un dossier)
+      if (filePath === 'schema.json' || filePath.endsWith('/schema.json')) {
+        schemaContent = fileData;
+      }
+      // rules.json
+      else if (filePath === 'rules.json' || filePath.endsWith('/rules.json')) {
+        rulesContent = fileData;
+      }
+      // audit.ndjson
+      else if (filePath === 'audit.ndjson' || filePath.endsWith('/audit.ndjson')) {
+        auditContent = fileData;
+      }
+      // Fichiers de données dans le dossier data/
+      else if (filePath.includes('data/') && filePath.endsWith('.json')) {
+        try {
+          const tableData = JSON.parse(fileData);
+          // Extraire le nom de la table depuis le chemin
+          const parts = filePath.split('/');
+          const fileName = parts[parts.length - 1];
+          const tableName = fileName.replace('.json', '');
           allTableData[tableName] = tableData;
+        } catch (parseError) {
+          console.warn(`Erreur de parsing pour ${filePath}:`, parseError);
         }
       }
     }
 
-    // Sauvegarder les données fusionnées
+    // Sauvegarder les fichiers extraits
+    if (schemaContent) {
+      await storage.writeFile('schema.json', schemaContent);
+    }
+
     if (Object.keys(allTableData).length > 0) {
       const dataContent = JSON.stringify({
         updatedAt: new Date().toISOString(),
@@ -70,28 +121,52 @@ export default async function handler(
       await storage.writeFile('data.json', dataContent);
     }
 
-    if (rulesFile) {
-      const content = await rulesFile.async('string');
-      await storage.writeFile('rules.json', content);
+    if (rulesContent) {
+      await storage.writeFile('rules.json', rulesContent);
     }
 
-    if (auditFile) {
-      const content = await auditFile.async('string');
-      await storage.writeFile('audit.ndjson', content);
+    if (auditContent) {
+      await storage.writeFile('audit.ndjson', auditContent);
     }
 
     // Créer un événement d'audit pour l'import
     const importEvent = storage.createAuditEvent(
       'IMPORT',
-      { type: 'file', ref: file.originalFilename || 'unknown.zip' },
+      { type: 'file', ref: originalFilename },
       undefined,
-      { filename: file.originalFilename },
-      'Import depuis ZIP'
+      {
+        filename: originalFilename,
+        format: extension,
+        filesExtracted: extractedFiles.length,
+        tablesImported: Object.keys(allTableData).length,
+      },
+      `Import depuis ${extension.toUpperCase().replace('.', '')}`
     );
     await storage.appendAuditEvent(importEvent);
 
-    res.status(200).json({ success: true, message: 'Import réussi' });
+    res.status(200).json({
+      success: true,
+      message: 'Import réussi',
+      details: {
+        format: extension,
+        filesExtracted: extractedFiles.length,
+        tablesImported: Object.keys(allTableData).length,
+        hasSchema: !!schemaContent,
+        hasRules: !!rulesContent,
+        hasAudit: !!auditContent,
+      }
+    });
   } catch (error: any) {
+    console.error('Erreur d\'import:', error);
     res.status(500).json({ error: error.message || 'Erreur lors de l\'import' });
+  } finally {
+    // Nettoyer le répertoire temporaire
+    if (tempDir) {
+      try {
+        await fs.rm(tempDir, { recursive: true, force: true });
+      } catch (cleanupError) {
+        console.warn('Erreur lors du nettoyage:', cleanupError);
+      }
+    }
   }
 }
