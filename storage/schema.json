@@ -1,0 +1,554 @@
+{
+  "version": "1.0",
+  "dictionary": {
+    "owner": null,
+    "source": "Documents KOMA / WeCare SCI",
+    "description": "Tables de référence extraites strictement des documents fournis",
+    "sensitivity": null,
+    "status": "imported"
+  },
+  "tables": {
+    "ref_articles": {
+      "description": "Articles (matériaux/consommables/équipements) et coûts.",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code": {
+          "type": "string",
+          "required": false
+        },
+        "designation": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "cout_initial": {
+          "type": "integer",
+          "required": false
+        },
+        "cout_actuel": {
+          "type": "integer",
+          "required": false
+        },
+        "categorie": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_categories_articles": {
+      "description": "Catégories d’articles.",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "libelle": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_unites": {
+      "description": "Unités de mesure (codes).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_profils_main_oeuvre": {
+      "description": "Référentiel main d’œuvre (tâches, coût unitaire, variation, section).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "tache": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "variation": {
+          "type": "number",
+          "required": false
+        },
+        "cout_final": {
+          "type": "number",
+          "required": false
+        },
+        "section": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_sections_main_oeuvre": {
+      "description": "Sections main d’œuvre.",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "libelle": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_charges": {
+      "description": "Charges / consommables et utilitaires (désignation, quantité, coûts).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "designation": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "quantite": {
+          "type": "number",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "amortissement": {
+          "type": "number",
+          "required": false
+        },
+        "cout_final": {
+          "type": "number",
+          "required": true
+        },
+        "section": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_lots_types": {
+      "description": "Lots/types de lots (CCTP / organisation).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "libelle": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_sections": {
+      "description": "Sections (avec code) rattachées à un lot.",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code": {
+          "type": "string",
+          "required": true
+        },
+        "libelle": {
+          "type": "string",
+          "required": true
+        },
+        "lot_id": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_operations": {
+      "description": "Opérations (si présent).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code": {
+          "type": "string",
+          "required": true
+        },
+        "libelle": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": false
+        },
+        "section_id": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_compositions_operations": {
+      "description": "Compositions d’opérations (si présent).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "operation_id": {
+          "type": "integer",
+          "required": true
+        },
+        "designation": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "prix_unitaire": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_etude": {
+      "description": "Table ref_etude.",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "numero": {
+          "type": "integer",
+          "required": true
+        },
+        "designation": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "quantite": {
+          "type": "integer",
+          "required": true
+        },
+        "prix_unitaire": {
+          "type": "integer",
+          "required": true
+        },
+        "prix_total": {
+          "type": "integer",
+          "required": true
+        },
+        "details": {
+          "type": "object",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_echeancier": {
+      "description": "Échéancier de paiement (tranches).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "tranche": {
+          "type": "string",
+          "required": true
+        },
+        "date_echeance": {
+          "type": "string",
+          "required": true
+        },
+        "duree_jours": {
+          "type": "integer",
+          "required": true
+        },
+        "pourcentage": {
+          "type": "number",
+          "required": true
+        },
+        "montant": {
+          "type": "integer",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_modes_paiement": {
+      "description": "Modes de paiement (type, compte).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "type": {
+          "type": "string",
+          "required": true
+        },
+        "numero_compte": {
+          "type": "string",
+          "required": true
+        },
+        "nom_compte": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_tarifs_koma": {
+      "description": "Tarifs KOMA (prestation, prix, conditions).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "categorie": {
+          "type": "string",
+          "required": true
+        },
+        "prestation": {
+          "type": "string",
+          "required": true
+        },
+        "prix_fcfa": {
+          "type": "integer",
+          "required": true
+        },
+        "conditions": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_types_projet": {
+      "description": "Types de projet.",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "libelle": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_profils_utilisateurs": {
+      "description": "Profils utilisateurs (rôles, accès).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "profil": {
+          "type": "string",
+          "required": true
+        },
+        "description": {
+          "type": "string",
+          "required": true
+        },
+        "acces_principal": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "ref_lexique": {
+      "description": "Lexique (termes, définitions).",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "terme": {
+          "type": "string",
+          "required": true
+        },
+        "definition": {
+          "type": "string",
+          "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Documents KOMA / WeCare SCI",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    }
+  },
+  "relations": [
+    {
+      "from": "ref_articles.unite",
+      "to": "ref_unites.code",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation déduite des codes d’unités présents dans les données."
+    },
+    {
+      "from": "ref_articles.categorie",
+      "to": "ref_categories_articles.libelle",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation déduite des libellés de catégories présents dans les données."
+    },
+    {
+      "from": "ref_profils_main_oeuvre.section",
+      "to": "ref_sections_main_oeuvre.libelle",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation déduite des libellés de sections présents dans les données."
+    },
+    {
+      "from": "ref_sections.lot_id",
+      "to": "ref_lots_types.id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation basée sur l’identifiant de lot."
+    }
+  ]
+}

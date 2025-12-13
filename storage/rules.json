@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "id": "unique_id_per_table",
+      "description": "Dans chaque table, le champ 'id' est supposé unique.",
+      "scope": "tables.*.id",
+      "check": "unique"
+    }
+  ]
+}
