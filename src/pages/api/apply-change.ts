@@ -200,16 +200,22 @@ export default async function handler(
       newState.data = after as TableData;
     }
 
-    // 5. Valider le nouvel état AVANT d'écrire
+    // 5. Valider le nouvel état AVANT d'écrire (validation légère pour ne pas bloquer)
     const preValidation = validator.validate(newState.schema, newState.data, newState.rules);
-    const criticalErrors = preValidation.alerts.filter(a => a.severity === 'error');
 
-    // Si des erreurs critiques sont détectées, ne pas appliquer le changement
-    if (criticalErrors.length > 0) {
+    // Ne bloquer que sur les erreurs vraiment critiques de structure
+    // Les erreurs de données (required, type mismatch) sont tolérées pour permettre la flexibilité
+    const blockingErrors = preValidation.alerts.filter(a =>
+      a.severity === 'error' &&
+      (a.code === 'INVALID_SCHEMA_STRUCTURE' || a.code === 'PRIMARY_KEY_DUPLICATE')
+    );
+
+    // Si des erreurs bloquantes sont détectées, ne pas appliquer le changement
+    if (blockingErrors.length > 0) {
       return res.status(400).json({
         success: false,
         event: null as any,
-        alerts: criticalErrors,
+        alerts: blockingErrors,
       });
     }
 

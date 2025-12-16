@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { getTables, findTable } from '@/lib/data-helpers';
 import { fetchWithCacheBusting } from '@/lib/cache-helper';
+import { useToast } from '@/components/Toast';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -38,6 +39,9 @@ export default function SchemaExplorer() {
   const [jsonError, setJsonError] = useState<string | null>(null);
   const [alerts, setAlerts] = useState<ValidationAlert[]>([]);
   const [showAlerts, setShowAlerts] = useState(false);
+
+  // Hook pour les notifications
+  const toast = useToast();
 
   // Modal states
   const [showTableModal, setShowTableModal] = useState(false);
@@ -77,6 +81,19 @@ export default function SchemaExplorer() {
     setSaving(true);
     setAlerts([]);
     try {
+      // S'assurer que le schéma a tous les champs requis
+      const schemaToSave = {
+        ...newSchema,
+        version: newSchema.version || '1.0.0',
+        updatedAt: new Date().toISOString(),
+        relations: newSchema.relations || [],
+        tables: newSchema.tables.map(t => ({
+          ...t,
+          fields: t.fields || [],
+          primaryKey: t.primaryKey || 'id',
+        })),
+      };
+
       const res = await fetch('/api/apply-change', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -84,12 +101,21 @@ export default function SchemaExplorer() {
           action: 'SCHEMA_UPDATE',
           target: { type: 'schema', ref: 'schema.json' },
           before: schema,
-          after: newSchema,
+          after: schemaToSave,
           reason: 'Manual schema update',
         }),
       });
 
-      const result: ApplyChangeResponse = await res.json();
+      // Vérifier si la réponse est du JSON valide
+      const text = await res.text();
+      let result: ApplyChangeResponse;
+      try {
+        result = JSON.parse(text);
+      } catch (parseError) {
+        console.error('Erreur de parsing JSON:', text);
+        toast.error('Erreur serveur', 'La réponse du serveur est invalide');
+        return false;
+      }
 
       // Toujours afficher les alertes retournées
       if (result.alerts && result.alerts.length > 0) {
@@ -99,21 +125,25 @@ export default function SchemaExplorer() {
 
       if (result.success) {
         // Mettre à jour l'état local SEULEMENT si le backend a réussi
-        setSchema(result.newState?.schema || newSchema);
+        setSchema(result.newState?.schema || schemaToSave);
         setPendingSchema(null);
+        toast.success('Schéma sauvegardé', 'Les modifications ont été enregistrées');
         return true;
       } else {
         // En cas d'erreur, ne pas mettre à jour l'état local
         console.error('Erreur de sauvegarde:', result.alerts);
+        const errorMsg = result.alerts?.[0]?.message || 'Erreur de validation';
+        toast.error('Erreur de sauvegarde', errorMsg);
         return false;
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erreur de sauvegarde:', error);
+      toast.error('Erreur réseau', error.message || 'Impossible de contacter le serveur');
       setAlerts([{
         severity: 'error',
         code: 'NETWORK_ERROR',
         location: '/api/apply-change',
-        message: 'Erreur réseau lors de la sauvegarde',
+        message: `Erreur réseau lors de la sauvegarde: ${error.message || 'Erreur inconnue'}`,
       }]);
       setShowAlerts(true);
       return false;
@@ -142,14 +172,19 @@ export default function SchemaExplorer() {
       relations: schema.relations.filter(r => r.fromTable !== tableName && r.toTable !== tableName)
     };
 
-    await saveSchema(newSchema);
-    if (selectedTable === tableName) {
-      setSelectedTable(null);
+    const success = await saveSchema(newSchema);
+    if (success) {
+      toast.success('Table supprimée', `La table "${tableName}" a été supprimée`);
+      if (selectedTable === tableName) {
+        setSelectedTable(null);
+      }
     }
   };
 
   const handleSaveTable = async (tableData: { name: string; label: string; description: string; primaryKey: string }) => {
     if (!schema) return;
+
+    let success = false;
 
     if (editingTable) {
       // Update existing table
@@ -161,9 +196,12 @@ export default function SchemaExplorer() {
             : t
         )
       };
-      await saveSchema(newSchema);
-      if (selectedTable === editingTable.name) {
-        setSelectedTable(tableData.name);
+      success = await saveSchema(newSchema);
+      if (success) {
+        toast.success('Table modifiée', `La table "${tableData.name}" a été mise à jour`);
+        if (selectedTable === editingTable.name) {
+          setSelectedTable(tableData.name);
+        }
       }
     } else {
       // Create new table
@@ -171,19 +209,24 @@ export default function SchemaExplorer() {
         name: tableData.name,
         label: tableData.label,
         description: tableData.description,
-        primaryKey: tableData.primaryKey,
+        primaryKey: tableData.primaryKey || 'id',
         fields: [
-          { name: tableData.primaryKey, type: 'integer', required: true }
+          { name: tableData.primaryKey || 'id', type: 'integer', required: false }
         ]
       };
       const newSchema = {
         ...schema,
         tables: [...schema.tables, newTable]
       };
-      await saveSchema(newSchema);
+      success = await saveSchema(newSchema);
+      if (success) {
+        toast.success('Table créée', `La table "${tableData.name}" a été ajoutée`);
+      }
     }
 
-    setShowTableModal(false);
+    if (success) {
+      setShowTableModal(false);
+    }
   };
 
   // Field CRUD operations
@@ -692,7 +735,6 @@ export default function SchemaExplorer() {
                         <tr className="table-header">
                           <th className="px-6 py-3 text-left">Nom</th>
                           <th className="px-6 py-3 text-left">Type</th>
-                          <th className="px-6 py-3 text-center">Requis</th>
                           <th className="px-6 py-3 text-center">Unique</th>
                           <th className="px-6 py-3 text-left">Description</th>
                           <th className="px-6 py-3 text-center">
@@ -718,15 +760,6 @@ export default function SchemaExplorer() {
                               <span className="badge badge-primary">
                                 {field.type}
                               </span>
-                            </td>
-                            <td className="table-cell text-center">
-                              {field.required ? (
-                                <span className="inline-flex w-6 h-6 items-center justify-center bg-green-100 text-green-600 rounded-full text-xs font-bold">
-                                  ✓
-                                </span>
-                              ) : (
-                                <span className="text-dark-300">—</span>
-                              )}
                             </td>
                             <td className="table-cell text-center">
                               {field.unique ? (
@@ -940,7 +973,6 @@ function FieldModal({ field, onSave, onClose }: FieldModalProps) {
   const [type, setType] = useState<string>(field?.type || 'string');
   const [label, setLabel] = useState(field?.label || '');
   const [description, setDescription] = useState(field?.description || '');
-  const [required, setRequired] = useState(field?.required || false);
   const [unique, setUnique] = useState(field?.unique || false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -951,7 +983,7 @@ function FieldModal({ field, onSave, onClose }: FieldModalProps) {
       type: type as any,
       label: label || name,
       description,
-      required,
+      required: false, // Toujours non obligatoire
       unique,
     });
   };
@@ -1032,16 +1064,6 @@ function FieldModal({ field, onSave, onClose }: FieldModalProps) {
           </div>
 
           <div className="flex gap-6">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={required}
-                onChange={(e) => setRequired(e.target.checked)}
-                className="h-5 w-5 rounded border-dark-300 text-primary-600"
-              />
-              <span className="text-sm text-dark-700">Requis</span>
-            </label>
-
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"

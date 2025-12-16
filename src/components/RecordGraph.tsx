@@ -31,7 +31,9 @@ import {
   Star,
   X,
   Navigation,
+  Loader2,
 } from 'lucide-react';
+import { useToast } from '@/components/Toast';
 
 // ============================================================================
 // TYPES
@@ -42,7 +44,7 @@ export interface RecordGraphProps {
   data: TableData;
   record: DataRecord;
   tableName: string;
-  onSaveRecord: (tableName: string, record: DataRecord) => Promise<void>;
+  onSaveRecord: (tableName: string, record: DataRecord) => Promise<boolean>;
   onNavigate?: (tableName: string, recordId: string) => void;
   onClose?: () => void;
 }
@@ -174,7 +176,6 @@ function CenterRecordNode({ data }: NodeProps<RecordNodeData>) {
           <div key={field.name}>
             <div className="text-[10px] text-dark-400 uppercase tracking-wide mb-0.5">
               {field.label || field.name}
-              {field.required && <span className="text-red-500 ml-0.5">*</span>}
             </div>
             {isEditing ? (
               <FieldEditor
@@ -582,6 +583,8 @@ export default function RecordGraph({
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [editingNode, setEditingNode] = useState<string | null>(null);
+  const [savingNode, setSavingNode] = useState<string | null>(null);
+  const toast = useToast();
 
   // Ref pour stocker les positions des nodes
   const nodePositionsRef = useRef<Map<string, { x: number; y: number }>>(new Map());
@@ -827,10 +830,25 @@ export default function RecordGraph({
 
   const handleSave = useCallback(
     async (tblName: string, updatedRecord: DataRecord) => {
-      await onSaveRecord(tblName, updatedRecord);
-      setEditingNode(null);
+      const nodeId = `${tblName}:${updatedRecord.id}`;
+      setSavingNode(nodeId);
+
+      try {
+        const success = await onSaveRecord(tblName, updatedRecord);
+        if (success) {
+          toast.success('Enregistrement sauvegardé', `ID: ${String(updatedRecord.id).slice(0, 8)}...`);
+          setEditingNode(null);
+        } else {
+          toast.error('Erreur de sauvegarde', 'Vérifiez les alertes pour plus de détails');
+        }
+      } catch (error: any) {
+        console.error('Erreur lors de la sauvegarde:', error);
+        toast.error('Erreur de sauvegarde', error.message || 'Une erreur est survenue');
+      } finally {
+        setSavingNode(null);
+      }
     },
-    [onSaveRecord]
+    [onSaveRecord, toast]
   );
 
   // Sauvegarder les positions quand les nodes bougent

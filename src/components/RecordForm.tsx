@@ -240,11 +240,11 @@ export default function RecordForm({
             {/* Champ ID (lecture seule en édition) */}
             <div>
               <label className="block text-sm font-medium text-dark-700 mb-1.5">
-                ID <span className="text-red-500">*</span>
+                ID
               </label>
               <input
                 type="text"
-                {...register('id', { required: true })}
+                {...register('id')}
                 readOnly={isEditing}
                 className={`input ${isEditing ? 'bg-dark-100 cursor-not-allowed' : ''}`}
               />
@@ -371,7 +371,7 @@ function FieldInput({ field, register, errors }: FieldInputProps) {
       case 'enum':
         return (
           <select
-            {...register(field.name, { required: field.required })}
+            {...register(field.name)}
             className="select"
           >
             <option value="">Sélectionner...</option>
@@ -390,7 +390,6 @@ function FieldInput({ field, register, errors }: FieldInputProps) {
             type="number"
             step={field.type === 'integer' ? '1' : 'any'}
             {...register(field.name, {
-              required: field.required,
               min: field.min,
               max: field.max,
               valueAsNumber: true,
@@ -405,7 +404,7 @@ function FieldInput({ field, register, errors }: FieldInputProps) {
         return (
           <input
             type="date"
-            {...register(field.name, { required: field.required })}
+            {...register(field.name)}
             className={baseClassName}
           />
         );
@@ -414,7 +413,7 @@ function FieldInput({ field, register, errors }: FieldInputProps) {
         return (
           <input
             type="datetime-local"
-            {...register(field.name, { required: field.required })}
+            {...register(field.name)}
             className={baseClassName}
           />
         );
@@ -436,7 +435,6 @@ function FieldInput({ field, register, errors }: FieldInputProps) {
           return (
             <textarea
               {...register(field.name, {
-                required: field.required,
                 minLength: field.min,
                 maxLength: field.max,
                 pattern: field.regex ? new RegExp(field.regex) : undefined,
@@ -451,7 +449,6 @@ function FieldInput({ field, register, errors }: FieldInputProps) {
           <input
             type="text"
             {...register(field.name, {
-              required: field.required,
               minLength: field.min,
               maxLength: field.max,
               pattern: field.regex ? new RegExp(field.regex) : undefined,
@@ -466,7 +463,6 @@ function FieldInput({ field, register, errors }: FieldInputProps) {
     <div>
       <label className="block text-sm font-medium text-dark-700 mb-1.5">
         {field.label || field.name}
-        {field.required && <span className="text-red-500 ml-1">*</span>}
       </label>
 
       {renderInput()}

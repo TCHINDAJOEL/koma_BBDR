@@ -89,59 +89,51 @@ export function convertFieldValue(value: any, type: string): any {
 
 /**
  * Génère un schéma AJV pour valider un record d'une table
+ * Note: Aucun champ n'est marqué comme required pour plus de flexibilité
  */
 export function generateAjvSchema(table: TableDefinition): object {
   const properties: Record<string, any> = {
-    id: { type: ['string', 'number', 'integer'] },
+    id: { type: ['string', 'number', 'integer', 'null'] },
   };
-
-  const required: string[] = ['id'];
 
   table.fields.forEach((field) => {
     properties[field.name] = fieldToAjvSchema(field);
-    if (field.required) {
-      required.push(field.name);
-    }
   });
 
   return {
     type: 'object',
     properties,
-    required,
+    required: [], // Aucun champ obligatoire
     additionalProperties: true,
   };
 }
 
 /**
  * Convertit un FieldDefinition en schéma AJV
+ * Note: Tous les types sont toujours nullable
  */
 function fieldToAjvSchema(field: FieldDefinition): any {
   const schema: any = {};
 
-  const makeNullable = (types: string | string[]): string | string[] => {
-    if (field.required) return types;
-    if (Array.isArray(types)) return [...types, 'null'];
+  // Toujours permettre null
+  const makeNullable = (types: string | string[]): string[] => {
+    if (Array.isArray(types)) {
+      return types.includes('null') ? types : [...types, 'null'];
+    }
     return [types, 'null'];
   };
 
   switch (field.type) {
     case 'string':
       schema.type = makeNullable('string');
-      if (field.regex) schema.pattern = field.regex;
-      if (field.min !== undefined) schema.minLength = field.min;
-      if (field.max !== undefined) schema.maxLength = field.max;
       break;
 
     case 'number':
       schema.type = makeNullable('number');
-      if (field.min !== undefined) schema.minimum = field.min;
-      if (field.max !== undefined) schema.maximum = field.max;
       break;
 
     case 'integer':
-      schema.type = makeNullable('integer');
-      if (field.min !== undefined) schema.minimum = field.min;
-      if (field.max !== undefined) schema.maximum = field.max;
+      schema.type = makeNullable(['integer', 'number']);
       break;
 
     case 'boolean':
@@ -155,9 +147,7 @@ function fieldToAjvSchema(field: FieldDefinition): any {
 
     case 'enum':
       if (field.enumValues) {
-        schema.enum = field.required
-          ? field.enumValues
-          : [...field.enumValues, null];
+        schema.enum = [...field.enumValues, null, ''];
       } else {
         schema.type = makeNullable('string');
       }
@@ -283,6 +273,7 @@ export interface ClientValidationResult {
 
 /**
  * Valide un record côté client pour feedback immédiat
+ * Note: Les champs requis ne bloquent plus, ils génèrent juste des avertissements
  */
 export function validateRecordClient(
   record: Record<string, any>,
@@ -290,25 +281,19 @@ export function validateRecordClient(
 ): ClientValidationResult {
   const errors: { field: string; message: string }[] = [];
 
-  // Vérifier l'ID
-  if (!record.id) {
-    errors.push({ field: 'id', message: "L'identifiant est requis" });
-  }
+  // L'ID n'est pas obligatoire non plus
+  // if (!record.id) {
+  //   errors.push({ field: 'id', message: "L'identifiant est requis" });
+  // }
 
   // Vérifier chaque champ
   table.fields.forEach((field) => {
     const value = record[field.name];
 
-    // Champ requis
-    if (field.required && (value === undefined || value === null || value === '')) {
-      errors.push({
-        field: field.name,
-        message: `Le champ ${field.label || field.name} est requis`,
-      });
-      return;
-    }
+    // Les champs requis ne génèrent plus d'erreur bloquante
+    // Ils seront gérés comme warnings côté serveur
 
-    // Pas de validation supplémentaire si valeur vide et non requis
+    // Pas de validation supplémentaire si valeur vide
     if (value === undefined || value === null || value === '') return;
 
     // Validation par type

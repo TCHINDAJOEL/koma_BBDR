@@ -417,18 +417,16 @@ export default function DataEnrichment() {
 
   // Sauvegarde depuis le graphe
   const handleGraphSave = useCallback(
-    async (tblName: string, record: DataRecord) => {
+    async (tblName: string, record: DataRecord): Promise<boolean> => {
       setHistory((prev) => [...prev, { data }]);
 
       const result = await updateRecord(tblName, record.id, record);
-      if (result) {
-        toast.success('Enregistrement mis à jour', `Table: ${tblName}`);
-      } else {
-        toast.error('Erreur de sauvegarde', 'Vérifiez les alertes pour plus de détails');
+      if (!result) {
         setShowAlerts(true);
       }
+      return !!result;
     },
-    [data, updateRecord, toast]
+    [data, updateRecord]
   );
 
   // Navigation dans le graphe (changer l'enregistrement central)
@@ -1003,9 +1001,6 @@ function FieldManagerModal({
                         </div>
                         <div className="text-xs text-dark-500 flex items-center gap-2">
                           <span className="badge badge-primary">{field.type}</span>
-                          {field.required && (
-                            <span className="badge badge-warning">Requis</span>
-                          )}
                           {field.unique && (
                             <span className="badge badge-accent">Unique</span>
                           )}

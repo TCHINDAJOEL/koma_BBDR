@@ -22,11 +22,7 @@ export const fieldDefinitionSchema: JSONSchemaType<FieldDefinition> = {
       items: { type: 'string' },
       nullable: true,
     },
-    sensitivity: {
-      type: 'string',
-      enum: ['public', 'internal', 'confidential', 'restricted'],
-      nullable: true,
-    },
+    sensitivity: { type: 'string', nullable: true }, // Pas de contrainte enum
     owner: { type: 'string', nullable: true },
     source: { type: 'string', nullable: true },
     tags: {
@@ -36,7 +32,7 @@ export const fieldDefinitionSchema: JSONSchemaType<FieldDefinition> = {
     },
   },
   required: ['name', 'type'],
-  additionalProperties: false,
+  additionalProperties: true,
 };
 
 export const tableDefinitionSchema: JSONSchemaType<TableDefinition> = {
@@ -68,30 +64,22 @@ export const tableDefinitionSchema: JSONSchemaType<TableDefinition> = {
           unique: { type: 'boolean', nullable: true },
         },
         required: ['name', 'fields'],
-        additionalProperties: false,
+        additionalProperties: true,
       },
       nullable: true,
     },
-    sensitivity: {
-      type: 'string',
-      enum: ['public', 'internal', 'confidential', 'restricted'],
-      nullable: true,
-    },
+    sensitivity: { type: 'string', nullable: true }, // Pas de contrainte enum
     owner: { type: 'string', nullable: true },
     source: { type: 'string', nullable: true },
-    status: {
-      type: 'string',
-      enum: ['active', 'deprecated', 'draft'],
-      nullable: true,
-    },
+    status: { type: 'string', nullable: true }, // Pas de contrainte enum
     tags: {
       type: 'array',
       items: { type: 'string' },
       nullable: true,
     },
   },
-  required: ['name', 'fields', 'primaryKey'],
-  additionalProperties: false,
+  required: ['name', 'fields'],
+  additionalProperties: true,
 };
 
 export const relationDefinitionSchema: JSONSchemaType<RelationDefinition> = {
@@ -120,7 +108,7 @@ export const relationDefinitionSchema: JSONSchemaType<RelationDefinition> = {
     description: { type: 'string', nullable: true },
   },
   required: ['id', 'fromTable', 'fromField', 'toTable', 'toField', 'cardinality'],
-  additionalProperties: false,
+  additionalProperties: true,
 };
 
 export const schemaMetaSchema: JSONSchemaType<Schema> = {
@@ -142,6 +130,6 @@ export const schemaMetaSchema: JSONSchemaType<Schema> = {
       required: [],
     },
   },
-  required: ['version', 'updatedAt', 'tables', 'relations'],
-  additionalProperties: false,
+  required: ['version', 'tables'],
+  additionalProperties: true,
 };

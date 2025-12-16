@@ -125,41 +125,37 @@ export class Validator {
 
   /**
    * Génère un JSON Schema pour une table
+   * Note: On ne rend aucun champ obligatoire pour permettre plus de flexibilité
    */
   private generateTableSchema(table: TableDefinition): any {
     const properties: any = {
       // id peut être string ou number
-      id: { type: ['string', 'number', 'integer'] },
+      id: { type: ['string', 'number', 'integer', 'null'] },
     };
-
-    const requiredSet = new Set<string>(['id']);
 
     table.fields.forEach((field) => {
       properties[field.name] = this.fieldToJsonSchema(field);
-      if (field.required) {
-        requiredSet.add(field.name);
-      }
     });
 
     return {
       type: 'object',
       properties,
-      required: Array.from(requiredSet),
-      additionalProperties: true, // Permettre les propriétés additionnelles pour plus de flexibilité
+      required: [], // Aucun champ obligatoire pour permettre la flexibilité
+      additionalProperties: true,
     };
   }
 
   /**
    * Convertit une définition de champ en JSON Schema
+   * Note: Tous les types sont nullable pour permettre plus de flexibilité
    */
   private fieldToJsonSchema(field: FieldDefinition): any {
     const schema: any = {};
 
-    // Fonction pour ajouter null aux types si le champ n'est pas requis
-    const makeNullable = (types: string | string[]): string | string[] => {
-      if (field.required) return types;
+    // Toujours permettre null pour tous les champs
+    const makeNullable = (types: string | string[]): string[] => {
       if (Array.isArray(types)) {
-        return [...types, 'null'];
+        return types.includes('null') ? types : [...types, 'null'];
       }
       return [types, 'null'];
     };
@@ -179,7 +175,7 @@ export class Validator {
         break;
 
       case 'integer':
-        schema.type = makeNullable('integer');
+        schema.type = makeNullable(['integer', 'number']); // Accepter aussi number pour plus de flexibilité
         if (field.min !== undefined) schema.minimum = field.min;
         if (field.max !== undefined) schema.maximum = field.max;
         break;
@@ -191,13 +187,12 @@ export class Validator {
       case 'date':
       case 'datetime':
         schema.type = makeNullable('string');
-        // Ne pas appliquer le format strict pour plus de flexibilité
         break;
 
       case 'enum':
         schema.type = makeNullable('string');
         if (field.enumValues) {
-          schema.enum = field.required ? field.enumValues : [...field.enumValues, null];
+          schema.enum = [...field.enumValues, null, ''];
         }
         break;
 
@@ -364,14 +359,14 @@ export class Validator {
       const tableData = data[table.name] || [];
 
       table.fields.forEach((field) => {
-        // Champ requis mais valeurs manquantes
+        // Champ requis mais valeurs manquantes - warning seulement, pas d'erreur bloquante
         if (field.required) {
           const missing = tableData.filter(
             (r) => r[field.name] === undefined || r[field.name] === null || r[field.name] === ''
           );
           if (missing.length > 0) {
             alerts.push({
-              severity: 'error',
+              severity: 'warn', // Warning au lieu de error pour ne pas bloquer
               code: 'REQUIRED_FIELD_MISSING',
               location: `/data/${table.name}/*/${field.name}`,
               message: `Le champ ${field.name} est requis mais ${missing.length} enregistrement(s) n'ont pas de valeur`,
