@@ -111,6 +111,14 @@
     @apply bg-red-100 text-red-700;
   }
 
+  .badge-info {
+    @apply bg-blue-100 text-blue-700;
+  }
+
+  .badge-secondary {
+    @apply bg-gray-100 text-gray-700;
+  }
+
   .badge-gray {
     @apply bg-dark-100 text-dark-600;
   }
@@ -210,6 +218,33 @@
   --ag-font-family: 'Inter', sans-serif;
   --ag-font-size: 14px;
   --ag-row-border-color: #f1f5f9;
+  --ag-cell-horizontal-padding: 12px;
+  --ag-row-height: 48px;
+}
+
+.ag-theme-alpine .ag-cell {
+  display: flex;
+  align-items: center;
+}
+
+.ag-theme-alpine .ag-header-cell-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+.ag-theme-alpine .ag-row {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ag-theme-alpine .ag-row:hover {
+  background-color: #f8fafc;
+}
+
+.ag-theme-alpine .ag-cell-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ReactFlow custom styles */
@@ -219,9 +254,19 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
+.react-flow__node-centerNode,
+.react-flow__node-linkedNode {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
 .react-flow__edge-path {
-  stroke: #6366f1 !important;
   stroke-width: 2px !important;
+}
+
+.react-flow__edge-textbg {
+  fill: white !important;
 }
 
 .react-flow__controls {
@@ -237,6 +282,16 @@
 
 .react-flow__controls-button:hover {
   background: #f1f5f9 !important;
+}
+
+.react-flow__minimap {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+.react-flow__panel {
+  margin: 16px !important;
 }
 
 /* Monaco Editor overrides */

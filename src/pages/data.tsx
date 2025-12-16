@@ -1,11 +1,10 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import Layout from '@/components/Layout';
-import { Schema, TableData, DataRecord, TableDefinition, FieldDefinition } from '@/types/schema';
+import { DataRecord, TableDefinition, FieldDefinition, ValidationAlert } from '@/types/schema';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
-import { useForm } from 'react-hook-form';
-import { v4 as uuidv4 } from 'uuid';
 import {
   Plus,
   Edit2,
@@ -14,69 +13,107 @@ import {
   Search,
   Settings,
   Undo,
-  Database,
+  Layers,
+  AlertCircle,
+  CheckCircle,
+  Info,
+  Link2,
   Table,
-  Layers
+  GitBranch,
+  LayoutGrid,
 } from 'lucide-react';
-import { getTables, findTable, getTableData } from '@/lib/data-helpers';
-import { fetchWithCacheBusting } from '@/lib/cache-helper';
+import { getTableData } from '@/lib/data-helpers';
+import useAppState from '@/lib/useAppState';
+import RecordForm from '@/components/RecordForm';
+import RelatedRecords from '@/components/RelatedRecords';
+
+// Import dynamique pour éviter les erreurs SSR avec ReactFlow
+const RecordGraph = dynamic(() => import('@/components/RecordGraph'), { ssr: false });
 
 export default function DataEnrichment() {
-  const [schema, setSchema] = useState<Schema | null>(null);
-  const [data, setData] = useState<TableData>({});
+  // Utiliser le hook centralisé
+  const {
+    schema,
+    data,
+    loading,
+    error,
+    alerts,
+    clearAlerts,
+    tables,
+    createRecord,
+    updateRecord,
+    deleteRecord,
+    updateSchema,
+    refresh,
+  } = useAppState();
+
+  // État local UI
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [editingRecord, setEditingRecord] = useState<DataRecord | null>(null);
-  const [loading, setLoading] = useState(true);
   const [tableSearchQuery, setTableSearchQuery] = useState('');
   const [recordSearchQuery, setRecordSearchQuery] = useState('');
   const [showFieldManager, setShowFieldManager] = useState(false);
+  const [showRelations, setShowRelations] = useState(false);
+  const [showAlerts, setShowAlerts] = useState(false);
   const [history, setHistory] = useState<any[]>([]);
+  const [showGraphView, setShowGraphView] = useState(false);
+  const [graphRecord, setGraphRecord] = useState<DataRecord | null>(null);
+  const [graphTableName, setGraphTableName] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'table' | 'graph'>('table');
 
-  const { register, handleSubmit, reset, setValue } = useForm();
-
-  useEffect(() => {
-    loadState();
-  }, []);
-
-  const loadState = async () => {
-    try {
-      const res = await fetchWithCacheBusting('/api/state');
-      const state = await res.json();
-      setSchema(state.schema);
-      setData(state.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Erreur de chargement:', error);
-      setLoading(false);
-    }
-  };
-
-  const tables = getTables(schema);
+  // Tables filtrées
   const filteredTables = useMemo(() => {
     if (!tableSearchQuery) return tables;
     const query = tableSearchQuery.toLowerCase();
-    return tables.filter((t) =>
-      t.name.toLowerCase().includes(query) ||
-      (t.label?.toLowerCase() || '').includes(query)
+    return tables.filter(
+      (t) =>
+        t.name.toLowerCase().includes(query) ||
+        (t.label?.toLowerCase() || '').includes(query)
     );
   }, [tables, tableSearchQuery]);
 
-  const table = selectedTable ? findTable(schema, selectedTable) : null;
-  const tableData = selectedTable ? getTableData(data, selectedTable) : [];
+  // Table et données sélectionnées
+  const table = useMemo(
+    () => (selectedTable ? tables.find((t) => t.name === selectedTable) : null),
+    [selectedTable, tables]
+  );
 
+  const tableData = useMemo(
+    () => (selectedTable ? getTableData(data, selectedTable) : []),
+    [selectedTable, data]
+  );
+
+  // Records filtrés
   const filteredRecords = useMemo(() => {
     if (!recordSearchQuery || !table) return tableData;
     const query = recordSearchQuery.toLowerCase();
-    return tableData.filter((record) => {
-      return Object.values(record).some((value) =>
+    return tableData.filter((record) =>
+      Object.values(record).some((value) =>
         String(value).toLowerCase().includes(query)
-      );
-    });
+      )
+    );
   }, [tableData, recordSearchQuery, table]);
 
+  // Colonnes AgGrid
   const columnDefs = useMemo(() => {
     if (!table) return [];
+
+    // Colonne ID en premier
+    const idColumn = {
+      field: 'id',
+      headerName: 'ID',
+      editable: false,
+      filter: true,
+      sortable: true,
+      width: 120,
+      pinned: 'left' as const,
+      cellRenderer: (params: any) => (
+        <span className="font-mono text-xs text-dark-600 bg-dark-50 px-2 py-0.5 rounded">
+          {params.value}
+        </span>
+      ),
+    };
 
     const fieldColumns = table.fields.map((field) => ({
       field: field.name,
@@ -84,280 +121,324 @@ export default function DataEnrichment() {
       editable: false,
       filter: true,
       sortable: true,
+      minWidth: 100,
+      cellRenderer: (params: any) => {
+        const value = params.value;
+        if (value === null || value === undefined) {
+          return <span className="text-dark-300 italic">-</span>;
+        }
+        if (typeof value === 'boolean') {
+          return (
+            <span className={`badge ${value ? 'badge-success' : 'badge-gray'}`}>
+              {value ? 'Oui' : 'Non'}
+            </span>
+          );
+        }
+        if (field.type === 'date' || field.type === 'datetime') {
+          try {
+            const date = new Date(value);
+            return (
+              <span className="text-dark-700">
+                {field.type === 'datetime'
+                  ? date.toLocaleString('fr-FR')
+                  : date.toLocaleDateString('fr-FR')}
+              </span>
+            );
+          } catch {
+            return String(value);
+          }
+        }
+        if (field.type === 'number' || field.type === 'integer') {
+          return (
+            <span className="font-mono text-dark-700">
+              {typeof value === 'number' ? value.toLocaleString('fr-FR') : value}
+            </span>
+          );
+        }
+        if (field.type === 'enum') {
+          return <span className="badge badge-primary">{String(value)}</span>;
+        }
+        if (typeof value === 'object') {
+          const jsonStr = JSON.stringify(value);
+          return (
+            <span className="font-mono text-xs text-dark-500 bg-dark-50 px-1.5 py-0.5 rounded" title={jsonStr}>
+              {jsonStr.length > 40 ? jsonStr.substring(0, 40) + '...' : jsonStr}
+            </span>
+          );
+        }
+        const strValue = String(value);
+        return (
+          <span className="text-dark-700" title={strValue.length > 50 ? strValue : undefined}>
+            {strValue.length > 50 ? strValue.substring(0, 50) + '...' : strValue}
+          </span>
+        );
+      },
     }));
 
     const actionColumn = {
       headerName: 'Actions',
       field: 'actions',
-      cellRenderer: (params: any) => {
-        return (
-          <div className="flex gap-2 items-center h-full">
-            <button
-              onClick={() => onEditRecord(params.data)}
-              className="p-1.5 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
-              title="Éditer"
-            >
-              <Edit2 size={16} />
-            </button>
-            <button
-              onClick={() => onDeleteRecord(params.data)}
-              className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-              title="Supprimer"
-            >
-              <Trash2 size={16} />
-            </button>
-          </div>
-        );
-      },
-      width: 100,
+      cellRenderer: (params: any) => (
+        <div className="flex gap-1 items-center h-full">
+          <button
+            onClick={() => onEditRecord(params.data)}
+            className="p-1.5 text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+            title="Éditer"
+          >
+            <Edit2 size={16} />
+          </button>
+          <button
+            onClick={() => onViewRelations(params.data)}
+            className="p-1.5 text-accent-600 hover:bg-accent-50 rounded-lg transition-colors"
+            title="Relations"
+          >
+            <Link2 size={16} />
+          </button>
+          <button
+            onClick={() => onViewGraph(params.data)}
+            className="p-1.5 text-violet-600 hover:bg-violet-50 rounded-lg transition-colors"
+            title="Vue graphique"
+          >
+            <GitBranch size={16} />
+          </button>
+          <button
+            onClick={() => onDeleteRecord(params.data)}
+            className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            title="Supprimer"
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+      ),
+      width: 160,
       pinned: 'right' as const,
       sortable: false,
       filter: false,
     };
 
-    return [...fieldColumns, actionColumn];
+    return [idColumn, ...fieldColumns, actionColumn];
   }, [table]);
 
-  const onAddRecord = () => {
+  // Handlers
+  const onAddRecord = useCallback(() => {
     setEditingRecord(null);
-    reset();
     setShowForm(true);
-  };
+  }, []);
 
-  const onEditRecord = (record: DataRecord) => {
+  const onEditRecord = useCallback((record: DataRecord) => {
     setEditingRecord(record);
-    Object.keys(record).forEach((key) => {
-      setValue(key, record[key]);
-    });
     setShowForm(true);
-  };
+  }, []);
 
-  const onDeleteRecord = async (record: DataRecord) => {
-    if (!selectedTable || !confirm('Supprimer cet enregistrement ?')) return;
+  const onViewRelations = useCallback((record: DataRecord) => {
+    setEditingRecord(record);
+    setShowRelations(true);
+  }, []);
 
-    const newData = {
-      ...data,
-      [selectedTable]: tableData.filter((r) => r.id !== record.id),
-    };
+  // Ouvrir la vue graphique centrée sur un enregistrement
+  const onViewGraph = useCallback((record: DataRecord) => {
+    if (!selectedTable) return;
+    setGraphRecord(record);
+    setGraphTableName(selectedTable);
+    setShowGraphView(true);
+  }, [selectedTable]);
 
-    await saveData(newData);
-  };
+  const onDeleteRecord = useCallback(
+    async (record: DataRecord) => {
+      if (!selectedTable || !confirm('Supprimer cet enregistrement ?')) return;
 
-  const onSubmit = async (formData: any) => {
-    if (!selectedTable || !table) return;
+      // Sauvegarder l'état pour undo
+      setHistory((prev) => [...prev, { data }]);
 
-    // Convertir les valeurs selon le type de champ
-    const convertedData: Record<string, any> = {};
-    for (const field of table.fields) {
-      const value = formData[field.name];
+      const success = await deleteRecord(selectedTable, record.id);
+      if (!success) {
+        setShowAlerts(true);
+      }
+    },
+    [selectedTable, data, deleteRecord]
+  );
 
-      if (value === '' || value === undefined || value === null) {
-        convertedData[field.name] = null;
-        continue;
+  const onSaveRecord = useCallback(
+    async (record: DataRecord) => {
+      if (!selectedTable) return;
+
+      // Sauvegarder l'état pour undo
+      setHistory((prev) => [...prev, { data }]);
+
+      let result;
+      if (editingRecord) {
+        result = await updateRecord(selectedTable, record.id, record);
+      } else {
+        result = await createRecord(selectedTable, record);
       }
 
-      switch (field.type) {
-        case 'number':
-          convertedData[field.name] = parseFloat(value);
-          break;
-        case 'integer':
-          convertedData[field.name] = parseInt(value, 10);
-          break;
-        case 'boolean':
-          convertedData[field.name] = Boolean(value);
-          break;
-        case 'json':
-          try {
-            convertedData[field.name] = typeof value === 'string' ? JSON.parse(value) : value;
-          } catch {
-            convertedData[field.name] = value;
-          }
-          break;
-        default:
-          convertedData[field.name] = value;
+      if (result) {
+        setShowForm(false);
+        setEditingRecord(null);
+      } else {
+        setShowAlerts(true);
       }
-    }
+    },
+    [selectedTable, editingRecord, data, createRecord, updateRecord]
+  );
 
-    const record: DataRecord = {
-      id: editingRecord?.id || uuidv4(),
-      ...convertedData,
-    };
-
-    const newTableData = editingRecord
-      ? tableData.map((r) => (r.id === record.id ? record : r))
-      : [...tableData, record];
-
-    const newData = {
-      ...data,
-      [selectedTable]: newTableData,
-    };
-
-    await saveData(newData);
-    setShowForm(false);
-    reset();
-  };
-
-  const saveData = async (newData: TableData) => {
-    try {
-      setHistory([...history, { schema, data }]);
-
-      const response = await fetch('/api/apply-change', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'DATA_UPSERT',
-          target: { type: 'record', ref: selectedTable || 'unknown' },
-          before: data,
-          after: newData,
-          reason: 'Data enrichment',
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        console.error('Erreur de sauvegarde:', result);
-        alert('Erreur lors de la sauvegarde: ' + (result.alerts?.[0]?.message || 'Erreur inconnue'));
-        // Annuler le changement local
-        setHistory(history);
-        return;
-      }
-
-      setData(newData);
-    } catch (error) {
-      console.error('Erreur de sauvegarde:', error);
-      alert('Erreur de connexion lors de la sauvegarde');
-      // Annuler le changement local
-      setHistory(history);
-    }
-  };
-
-  const saveSchema = async (newSchema: Schema) => {
-    try {
-      setHistory([...history, { schema, data }]);
-
-      const response = await fetch('/api/apply-change', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'SCHEMA_UPDATE',
-          target: { type: 'schema', ref: 'schema' },
-          before: schema,
-          after: newSchema,
-          reason: 'Schema modification',
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        console.error('Erreur de sauvegarde du schéma:', result);
-        alert('Erreur lors de la sauvegarde du schéma: ' + (result.alerts?.[0]?.message || 'Erreur inconnue'));
-        setHistory(history);
-        return;
-      }
-
-      setSchema(newSchema);
-    } catch (error) {
-      console.error('Erreur de sauvegarde du schéma:', error);
-      alert('Erreur de connexion lors de la sauvegarde du schéma');
-      setHistory(history);
-    }
-  };
-
-  const handleUndo = () => {
+  const handleUndo = useCallback(() => {
     if (history.length === 0) return;
 
     const previousState = history[history.length - 1];
-    setSchema(previousState.schema);
-    setData(previousState.data);
-    setHistory(history.slice(0, -1));
-  };
+    // Note: Pour un vrai undo, il faudrait sauvegarder via l'API
+    // Pour l'instant, on recharge simplement les données
+    refresh(true);
+    setHistory((prev) => prev.slice(0, -1));
+  }, [history, refresh]);
 
-  const onAddField = async (fieldName: string, fieldType: string) => {
-    if (!table || !schema) return;
+  // Gestion des champs
+  const onAddField = useCallback(
+    async (fieldName: string, fieldType: string) => {
+      if (!table || !schema) return;
 
-    const newField: FieldDefinition = {
-      name: fieldName,
-      type: fieldType as any,
-      label: fieldName,
-      required: false,
+      const newField: FieldDefinition = {
+        name: fieldName,
+        type: fieldType as any,
+        label: fieldName,
+        required: false,
+      };
+
+      const updatedTable = {
+        ...table,
+        fields: [...table.fields, newField],
+      };
+
+      const newSchema = {
+        ...schema,
+        tables: schema.tables.map((t) =>
+          t.name === selectedTable ? updatedTable : t
+        ),
+      };
+
+      const success = await updateSchema(newSchema, `Ajout du champ ${fieldName}`);
+      if (!success) {
+        setShowAlerts(true);
+      }
+    },
+    [table, schema, selectedTable, updateSchema]
+  );
+
+  const onDeleteField = useCallback(
+    async (fieldName: string) => {
+      if (!table || !schema || !confirm(`Supprimer le champ "${fieldName}" ?`))
+        return;
+
+      const updatedTable = {
+        ...table,
+        fields: table.fields.filter((f) => f.name !== fieldName),
+      };
+
+      const newSchema = {
+        ...schema,
+        tables: schema.tables.map((t) =>
+          t.name === selectedTable ? updatedTable : t
+        ),
+      };
+
+      const success = await updateSchema(
+        newSchema,
+        `Suppression du champ ${fieldName}`
+      );
+      if (!success) {
+        setShowAlerts(true);
+      }
+    },
+    [table, schema, selectedTable, updateSchema]
+  );
+
+  const onRenameField = useCallback(
+    async (oldName: string, newName: string) => {
+      if (!table || !schema) return;
+
+      const updatedTable = {
+        ...table,
+        fields: table.fields.map((f) =>
+          f.name === oldName ? { ...f, name: newName } : f
+        ),
+      };
+
+      const newSchema = {
+        ...schema,
+        tables: schema.tables.map((t) =>
+          t.name === selectedTable ? updatedTable : t
+        ),
+      };
+
+      const success = await updateSchema(
+        newSchema,
+        `Renommage du champ ${oldName} en ${newName}`
+      );
+      if (!success) {
+        setShowAlerts(true);
+      }
+    },
+    [table, schema, selectedTable, updateSchema]
+  );
+
+  // Navigation vers un enregistrement lié
+  const handleNavigateToRelated = useCallback(
+    (tableName: string, recordId: string) => {
+      setSelectedTable(tableName);
+      setShowRelations(false);
+
+      // Trouver et éditer le record
+      const targetData = getTableData(data, tableName);
+      const record = targetData.find((r) => r.id === recordId);
+      if (record) {
+        setEditingRecord(record);
+        setShowForm(true);
+      }
+    },
+    [data]
+  );
+
+  // Sauvegarde depuis le graphe
+  const handleGraphSave = useCallback(
+    async (tblName: string, record: DataRecord) => {
+      setHistory((prev) => [...prev, { data }]);
+
+      const result = await updateRecord(tblName, record.id, record);
+      if (!result) {
+        setShowAlerts(true);
+      }
+    },
+    [data, updateRecord]
+  );
+
+  // Navigation dans le graphe (changer l'enregistrement central)
+  const handleGraphNavigate = useCallback(
+    (newTableName: string, recordId: string) => {
+      const tableRecords = getTableData(data, newTableName);
+      const newRecord = tableRecords.find((r) => r.id === recordId);
+      if (newRecord) {
+        setGraphRecord(newRecord);
+        setGraphTableName(newTableName);
+      }
+    },
+    [data]
+  );
+
+  // Fermer la vue graphique
+  const handleCloseGraph = useCallback(() => {
+    setShowGraphView(false);
+    setGraphRecord(null);
+    setGraphTableName(null);
+  }, []);
+
+  // Statistiques des alertes
+  const alertStats = useMemo(() => {
+    return {
+      errors: alerts.filter((a) => a.severity === 'error').length,
+      warnings: alerts.filter((a) => a.severity === 'warn').length,
+      infos: alerts.filter((a) => a.severity === 'info').length,
     };
-
-    const updatedTable = {
-      ...table,
-      fields: [...table.fields, newField],
-    };
-
-    const newSchema = {
-      ...schema,
-      tables: schema.tables.map((t) =>
-        t.name === selectedTable ? updatedTable : t
-      ),
-    };
-
-    await saveSchema(newSchema);
-  };
-
-  const onDeleteField = async (fieldName: string) => {
-    if (!table || !schema || !confirm(`Supprimer le champ "${fieldName}" ?`)) return;
-
-    const updatedTable = {
-      ...table,
-      fields: table.fields.filter((f) => f.name !== fieldName),
-    };
-
-    const newSchema = {
-      ...schema,
-      tables: schema.tables.map((t) =>
-        t.name === selectedTable ? updatedTable : t
-      ),
-    };
-
-    const newTableData = tableData.map((record) => {
-      const { [fieldName]: removed, ...rest } = record;
-      return rest;
-    });
-
-    const newData = {
-      ...data,
-      [selectedTable!]: newTableData,
-    };
-
-    await saveSchema(newSchema);
-    setData(newData);
-  };
-
-  const onRenameField = async (oldName: string, newName: string) => {
-    if (!table || !schema) return;
-
-    const updatedTable = {
-      ...table,
-      fields: table.fields.map((f) =>
-        f.name === oldName ? { ...f, name: newName } : f
-      ),
-    };
-
-    const newSchema = {
-      ...schema,
-      tables: schema.tables.map((t) =>
-        t.name === selectedTable ? updatedTable : t
-      ),
-    };
-
-    const newTableData = tableData.map((record) => {
-      const { [oldName]: value, ...rest } = record;
-      return { ...rest, [newName]: value };
-    });
-
-    const newData = {
-      ...data,
-      [selectedTable!]: newTableData,
-    };
-
-    await saveSchema(newSchema);
-    setData(newData);
-  };
+  }, [alerts]);
 
   if (loading) {
     return (
@@ -366,6 +447,25 @@ export default function DataEnrichment() {
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-dark-500">Chargement des données...</p>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-96">
+          <div className="text-center">
+            <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <p className="text-red-600">{error}</p>
+            <button
+              onClick={() => refresh(true)}
+              className="mt-4 btn btn-primary"
+            >
+              Réessayer
+            </button>
           </div>
         </div>
       </Layout>
@@ -384,20 +484,76 @@ export default function DataEnrichment() {
                 Gérez les données de vos tables avec validation automatique
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-6">
+              {/* Alertes résumées */}
+              {alerts.length > 0 && (
+                <button
+                  onClick={() => setShowAlerts(!showAlerts)}
+                  className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
+                >
+                  {alertStats.errors > 0 && (
+                    <span className="flex items-center gap-1 text-red-300">
+                      <AlertCircle size={16} />
+                      {alertStats.errors}
+                    </span>
+                  )}
+                  {alertStats.warnings > 0 && (
+                    <span className="flex items-center gap-1 text-yellow-300">
+                      <AlertCircle size={16} />
+                      {alertStats.warnings}
+                    </span>
+                  )}
+                  {alertStats.infos > 0 && (
+                    <span className="flex items-center gap-1 text-blue-300">
+                      <Info size={16} />
+                      {alertStats.infos}
+                    </span>
+                  )}
+                </button>
+              )}
               <div className="text-right">
-                <div className="text-3xl font-bold">{Object.values(data).reduce((acc, arr) => acc + arr.length, 0)}</div>
+                <div className="text-3xl font-bold">
+                  {Object.values(data).reduce((acc, arr) => acc + arr.length, 0)}
+                </div>
                 <div className="text-primary-200 text-sm">Enregistrements</div>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Panneau d'alertes */}
+        {showAlerts && alerts.length > 0 && (
+          <div className="mb-6 card p-4 border-l-4 border-l-yellow-500">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-semibold text-dark-800">
+                Alertes de validation
+              </h3>
+              <button
+                onClick={() => {
+                  clearAlerts();
+                  setShowAlerts(false);
+                }}
+                className="text-dark-400 hover:text-dark-600"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="space-y-2 max-h-48 overflow-y-auto">
+              {alerts.map((alert, index) => (
+                <AlertItem key={index} alert={alert} />
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Controls */}
         <div className="flex flex-col lg:flex-row gap-4 mb-6">
           <div className="flex-1 flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1 max-w-xs">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-dark-400" size={20} />
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-dark-400"
+                size={20}
+              />
               <input
                 type="text"
                 placeholder="Rechercher une table..."
@@ -408,13 +564,13 @@ export default function DataEnrichment() {
             </div>
             <select
               value={selectedTable || ''}
-              onChange={(e) => setSelectedTable(e.target.value)}
+              onChange={(e) => setSelectedTable(e.target.value || null)}
               className="select max-w-xs"
             >
               <option value="">Sélectionner une table...</option>
               {filteredTables.map((t) => (
                 <option key={t.name} value={t.name}>
-                  {t.label || t.name}
+                  {t.label || t.name} ({getTableData(data, t.name).length})
                 </option>
               ))}
             </select>
@@ -423,10 +579,7 @@ export default function DataEnrichment() {
           <div className="flex gap-3">
             {selectedTable && (
               <>
-                <button
-                  onClick={onAddRecord}
-                  className="btn btn-primary gap-2"
-                >
+                <button onClick={onAddRecord} className="btn btn-primary gap-2">
                   <Plus size={18} />
                   <span>Ajouter</span>
                 </button>
@@ -443,7 +596,9 @@ export default function DataEnrichment() {
               onClick={handleUndo}
               disabled={history.length === 0}
               className={`btn gap-2 ${
-                history.length === 0 ? 'btn-ghost opacity-50 cursor-not-allowed' : 'btn-secondary'
+                history.length === 0
+                  ? 'btn-ghost opacity-50 cursor-not-allowed'
+                  : 'btn-secondary'
               }`}
               title="Annuler la dernière action"
             >
@@ -453,10 +608,14 @@ export default function DataEnrichment() {
           </div>
         </div>
 
+        {/* Recherche dans les records */}
         {selectedTable && table && (
           <div className="mb-4">
             <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-dark-400" size={20} />
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-dark-400"
+                size={20}
+              />
               <input
                 type="text"
                 placeholder="Rechercher dans les enregistrements..."
@@ -468,6 +627,7 @@ export default function DataEnrichment() {
           </div>
         )}
 
+        {/* Grille de données */}
         {selectedTable && table ? (
           <div className="card overflow-hidden" style={{ height: '500px' }}>
             <div className="ag-theme-alpine h-full">
@@ -481,6 +641,8 @@ export default function DataEnrichment() {
                 }}
                 pagination={true}
                 paginationPageSize={20}
+                suppressCellFocus={true}
+                onRowDoubleClicked={(e) => onEditRecord(e.data)}
               />
             </div>
           </div>
@@ -498,100 +660,95 @@ export default function DataEnrichment() {
           </div>
         )}
 
-        {/* Record Form Modal */}
+        {/* Modal Formulaire d'édition */}
         {showForm && table && (
           <div className="modal-overlay">
-            <div className="modal-content w-full max-w-2xl p-6 animate-fade-in">
+            <div className="modal-content w-full max-w-3xl p-6 animate-fade-in max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-dark-900">
                   {editingRecord ? 'Éditer' : 'Ajouter'} un enregistrement
                 </h3>
                 <button
-                  onClick={() => setShowForm(false)}
+                  onClick={() => {
+                    setShowForm(false);
+                    setEditingRecord(null);
+                  }}
                   className="p-2 text-dark-500 hover:bg-dark-100 rounded-lg transition-colors"
                 >
                   <X size={24} />
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                {table.fields.map((field) => (
-                  <div key={field.name}>
-                    <label className="block text-sm font-medium text-dark-700 mb-1.5">
-                      {field.label || field.name}
-                      {field.required && <span className="text-red-500 ml-1">*</span>}
-                    </label>
+              <RecordForm
+                table={table}
+                record={editingRecord || undefined}
+                onSave={onSaveRecord}
+                onCancel={() => {
+                  setShowForm(false);
+                  setEditingRecord(null);
+                }}
+              />
 
-                    {field.type === 'boolean' ? (
-                      <input
-                        type="checkbox"
-                        {...register(field.name)}
-                        className="h-5 w-5 rounded border-dark-300 text-primary-600 focus:ring-primary-500"
-                      />
-                    ) : field.type === 'enum' && field.enumValues ? (
-                      <select
-                        {...register(field.name, { required: field.required })}
-                        className="select"
-                      >
-                        <option value="">Sélectionner...</option>
-                        {field.enumValues.map((val) => (
-                          <option key={val} value={val}>
-                            {val}
-                          </option>
-                        ))}
-                      </select>
-                    ) : field.type === 'number' || field.type === 'integer' ? (
-                      <input
-                        type="number"
-                        step={field.type === 'integer' ? '1' : 'any'}
-                        {...register(field.name, {
-                          required: field.required,
-                          min: field.min,
-                          max: field.max,
-                        })}
-                        className="input"
-                      />
-                    ) : field.type === 'date' || field.type === 'datetime' ? (
-                      <input
-                        type={field.type === 'date' ? 'date' : 'datetime-local'}
-                        {...register(field.name, { required: field.required })}
-                        className="input"
-                      />
-                    ) : (
-                      <input
-                        type="text"
-                        {...register(field.name, {
-                          required: field.required,
-                          pattern: field.regex ? new RegExp(field.regex) : undefined,
-                          minLength: field.min,
-                          maxLength: field.max,
-                        })}
-                        className="input"
-                      />
-                    )}
-
-                    {field.description && (
-                      <p className="text-xs text-dark-500 mt-1">{field.description}</p>
-                    )}
-                  </div>
-                ))}
-
-                <div className="flex justify-end gap-3 pt-4 border-t border-dark-100">
-                  <button
-                    type="button"
-                    onClick={() => setShowForm(false)}
-                    className="btn btn-secondary"
-                  >
-                    Annuler
-                  </button>
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                  >
-                    {editingRecord ? 'Mettre à jour' : 'Créer'}
-                  </button>
+              {/* Section Relations (en édition) */}
+              {editingRecord && schema && (
+                <div className="mt-6 pt-6 border-t border-dark-200">
+                  <RelatedRecords
+                    record={editingRecord}
+                    tableName={selectedTable!}
+                    schema={schema}
+                    data={data}
+                    onNavigate={handleNavigateToRelated}
+                  />
                 </div>
-              </form>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Modal Relations seules */}
+        {showRelations && editingRecord && selectedTable && schema && (
+          <div className="modal-overlay">
+            <div className="modal-content w-full max-w-2xl p-6 animate-fade-in max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-dark-900">
+                  Relations de l&apos;enregistrement
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowRelations(false);
+                    setEditingRecord(null);
+                  }}
+                  className="p-2 text-dark-500 hover:bg-dark-100 rounded-lg transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+
+              {/* Aperçu de l'enregistrement */}
+              <div className="mb-6 p-4 bg-dark-50 rounded-xl">
+                <div className="text-sm text-dark-500 mb-1">ID</div>
+                <div className="font-mono text-dark-800">{editingRecord.id}</div>
+              </div>
+
+              <RelatedRecords
+                record={editingRecord}
+                tableName={selectedTable}
+                schema={schema}
+                data={data}
+                onNavigate={handleNavigateToRelated}
+              />
+
+              <div className="flex justify-end mt-6 pt-4 border-t border-dark-100">
+                <button
+                  onClick={() => {
+                    setShowRelations(false);
+                    setEditingRecord(null);
+                  }}
+                  className="btn btn-secondary"
+                >
+                  Fermer
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -606,8 +763,72 @@ export default function DataEnrichment() {
             onRenameField={onRenameField}
           />
         )}
+
+        {/* Modal Vue Graphique centrée sur un enregistrement */}
+        {showGraphView && graphRecord && graphTableName && schema && (
+          <div className="fixed inset-0 z-50 bg-dark-900/80 backdrop-blur-sm">
+            <div className="absolute inset-4 bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+              <RecordGraph
+                schema={schema}
+                data={data}
+                record={graphRecord}
+                tableName={graphTableName}
+                onSaveRecord={handleGraphSave}
+                onNavigate={handleGraphNavigate}
+                onClose={handleCloseGraph}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
+  );
+}
+
+// ============================================================================
+// COMPOSANTS AUXILIAIRES
+// ============================================================================
+
+interface AlertItemProps {
+  alert: ValidationAlert;
+}
+
+function AlertItem({ alert }: AlertItemProps) {
+  const iconClass =
+    alert.severity === 'error'
+      ? 'text-red-500'
+      : alert.severity === 'warn'
+      ? 'text-yellow-500'
+      : 'text-blue-500';
+
+  const bgClass =
+    alert.severity === 'error'
+      ? 'bg-red-50'
+      : alert.severity === 'warn'
+      ? 'bg-yellow-50'
+      : 'bg-blue-50';
+
+  return (
+    <div className={`flex items-start gap-2 p-2 rounded-lg ${bgClass}`}>
+      {alert.severity === 'error' ? (
+        <AlertCircle className={`w-4 h-4 mt-0.5 ${iconClass}`} />
+      ) : alert.severity === 'warn' ? (
+        <AlertCircle className={`w-4 h-4 mt-0.5 ${iconClass}`} />
+      ) : (
+        <Info className={`w-4 h-4 mt-0.5 ${iconClass}`} />
+      )}
+      <div className="flex-1 min-w-0">
+        <div className="text-sm font-medium text-dark-800">{alert.message}</div>
+        {alert.suggestion && (
+          <div className="text-xs text-dark-500 mt-0.5">{alert.suggestion}</div>
+        )}
+        {alert.location && (
+          <div className="text-xs font-mono text-dark-400 mt-0.5">
+            {alert.location}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -662,7 +883,9 @@ function FieldManagerModal({
 
         {/* Add Field Section */}
         <div className="mb-6 p-4 bg-primary-50 rounded-xl border border-primary-100">
-          <h4 className="font-semibold text-dark-800 mb-3">Ajouter un nouveau champ</h4>
+          <h4 className="font-semibold text-dark-800 mb-3">
+            Ajouter un nouveau champ
+          </h4>
           <div className="flex gap-3">
             <input
               type="text"
@@ -685,10 +908,7 @@ function FieldManagerModal({
               <option value="enum">Énumération</option>
               <option value="json">JSON</option>
             </select>
-            <button
-              onClick={handleAddField}
-              className="btn btn-primary"
-            >
+            <button onClick={handleAddField} className="btn btn-primary">
               <Plus size={18} />
             </button>
           </div>
@@ -741,8 +961,12 @@ function FieldManagerModal({
                         </div>
                         <div className="text-xs text-dark-500 flex items-center gap-2">
                           <span className="badge badge-primary">{field.type}</span>
-                          {field.required && <span className="badge badge-warning">Requis</span>}
-                          {field.unique && <span className="badge badge-accent">Unique</span>}
+                          {field.required && (
+                            <span className="badge badge-warning">Requis</span>
+                          )}
+                          {field.unique && (
+                            <span className="badge badge-accent">Unique</span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -775,10 +999,7 @@ function FieldManagerModal({
         </div>
 
         <div className="flex justify-end mt-6 pt-4 border-t border-dark-100">
-          <button
-            onClick={onClose}
-            className="btn btn-secondary"
-          >
+          <button onClick={onClose} className="btn btn-secondary">
             Fermer
           </button>
         </div>
