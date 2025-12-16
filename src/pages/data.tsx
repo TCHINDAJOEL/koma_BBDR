@@ -145,9 +145,41 @@ export default function DataEnrichment() {
   const onSubmit = async (formData: any) => {
     if (!selectedTable || !table) return;
 
+    // Convertir les valeurs selon le type de champ
+    const convertedData: Record<string, any> = {};
+    for (const field of table.fields) {
+      const value = formData[field.name];
+
+      if (value === '' || value === undefined || value === null) {
+        convertedData[field.name] = null;
+        continue;
+      }
+
+      switch (field.type) {
+        case 'number':
+          convertedData[field.name] = parseFloat(value);
+          break;
+        case 'integer':
+          convertedData[field.name] = parseInt(value, 10);
+          break;
+        case 'boolean':
+          convertedData[field.name] = Boolean(value);
+          break;
+        case 'json':
+          try {
+            convertedData[field.name] = typeof value === 'string' ? JSON.parse(value) : value;
+          } catch {
+            convertedData[field.name] = value;
+          }
+          break;
+        default:
+          convertedData[field.name] = value;
+      }
+    }
+
     const record: DataRecord = {
       id: editingRecord?.id || uuidv4(),
-      ...formData,
+      ...convertedData,
     };
 
     const newTableData = editingRecord
@@ -168,7 +200,7 @@ export default function DataEnrichment() {
     try {
       setHistory([...history, { schema, data }]);
 
-      await fetch('/api/apply-change', {
+      const response = await fetch('/api/apply-change', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -179,9 +211,23 @@ export default function DataEnrichment() {
           reason: 'Data enrichment',
         }),
       });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        console.error('Erreur de sauvegarde:', result);
+        alert('Erreur lors de la sauvegarde: ' + (result.alerts?.[0]?.message || 'Erreur inconnue'));
+        // Annuler le changement local
+        setHistory(history);
+        return;
+      }
+
       setData(newData);
     } catch (error) {
       console.error('Erreur de sauvegarde:', error);
+      alert('Erreur de connexion lors de la sauvegarde');
+      // Annuler le changement local
+      setHistory(history);
     }
   };
 
@@ -189,7 +235,7 @@ export default function DataEnrichment() {
     try {
       setHistory([...history, { schema, data }]);
 
-      await fetch('/api/apply-change', {
+      const response = await fetch('/api/apply-change', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -200,9 +246,21 @@ export default function DataEnrichment() {
           reason: 'Schema modification',
         }),
       });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        console.error('Erreur de sauvegarde du schéma:', result);
+        alert('Erreur lors de la sauvegarde du schéma: ' + (result.alerts?.[0]?.message || 'Erreur inconnue'));
+        setHistory(history);
+        return;
+      }
+
       setSchema(newSchema);
     } catch (error) {
       console.error('Erreur de sauvegarde du schéma:', error);
+      alert('Erreur de connexion lors de la sauvegarde du schéma');
+      setHistory(history);
     }
   };
 

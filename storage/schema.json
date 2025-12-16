@@ -2,8 +2,7 @@
   "version": "1.0",
   "dictionary": {
     "owner": null,
-    "source": "KOMA Platform - export JSON",
-    "description": "Base de données normalisée pour la gestion de chantiers BTP - KOMA Platform",
+    "source": "KOMA BBDR Excel export (user transformations)",
     "sensitivity": null,
     "status": "imported"
   },
@@ -35,7 +34,7 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
@@ -50,8 +49,7 @@
         },
         "lot_id": {
           "type": "integer",
-          "required": true,
-          "fk": "lots.lot_id"
+          "required": true
         },
         "code_section": {
           "type": "string",
@@ -68,7 +66,7 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
@@ -83,8 +81,7 @@
         },
         "section_id": {
           "type": "integer",
-          "required": true,
-          "fk": "sections.section_id"
+          "required": true
         },
         "code_tache": {
           "type": "string",
@@ -125,7 +122,7 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
@@ -140,8 +137,7 @@
         },
         "tache_id": {
           "type": "integer",
-          "required": true,
-          "fk": "taches.tache_id"
+          "required": true
         },
         "code_operation": {
           "type": "string",
@@ -170,7 +166,7 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
@@ -210,350 +206,7 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "categories_materiaux": {
-      "description": "Catégories de matériaux",
-      "fields": {
-        "categorie_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "libelle": {
-          "type": "string",
-          "required": true
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "operation_materiaux": {
-      "description": "Liaison opérations-matériaux (consommation)",
-      "fields": {
-        "id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "operation_id": {
-          "type": "integer",
-          "required": true,
-          "fk": "operations.operation_id"
-        },
-        "materiau_id": {
-          "type": "integer",
-          "required": true,
-          "fk": "materiaux.materiau_id"
-        },
-        "quantite": {
-          "type": "number",
-          "required": false
-        },
-        "cout_unitaire": {
-          "type": "number",
-          "required": false
-        },
-        "cout_total": {
-          "type": "number",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "main_oeuvre": {
-      "description": "Profils main d'œuvre",
-      "fields": {
-        "mo_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "type_mo": {
-          "type": "string",
-          "required": true
-        },
-        "categorie_mo": {
-          "type": "string",
-          "required": false
-        },
-        "section_mo": {
-          "type": "string",
-          "required": true
-        },
-        "unite_facturation": {
-          "type": "string",
-          "required": true
-        },
-        "cout_unitaire": {
-          "type": "number",
-          "required": false
-        },
-        "variation": {
-          "type": "number",
-          "required": false
-        },
-        "cout_final": {
-          "type": "number",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "sections_main_oeuvre": {
-      "description": "Sections de main d'œuvre",
-      "fields": {
-        "section_mo_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "libelle": {
-          "type": "string",
-          "required": true
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "operation_main_oeuvre": {
-      "description": "Liaison opérations-main d'œuvre",
-      "fields": {
-        "id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "operation_id": {
-          "type": "integer",
-          "required": true,
-          "fk": "operations.operation_id"
-        },
-        "mo_id": {
-          "type": "integer",
-          "required": true,
-          "fk": "main_oeuvre.mo_id"
-        },
-        "quantite": {
-          "type": "number",
-          "required": false
-        },
-        "cout_total": {
-          "type": "number",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "engins": {
-      "description": "Engins et équipements",
-      "fields": {
-        "engin_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "nom_engin": {
-          "type": "string",
-          "required": true
-        },
-        "unite": {
-          "type": "string",
-          "required": true
-        },
-        "cout_journalier": {
-          "type": "number",
-          "required": false
-        },
-        "cout_final": {
-          "type": "number",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "operation_engins": {
-      "description": "Liaison opérations-engins",
-      "fields": {
-        "id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "operation_id": {
-          "type": "integer",
-          "required": true,
-          "fk": "operations.operation_id"
-        },
-        "engin_id": {
-          "type": "integer",
-          "required": true,
-          "fk": "engins.engin_id"
-        },
-        "duree_utilisation": {
-          "type": "number",
-          "required": false
-        },
-        "cout_total": {
-          "type": "number",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "utilitaires_materiel": {
-      "description": "Utilitaires matériel (carburant, eau, électricité)",
-      "fields": {
-        "utilitaire_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "designation": {
-          "type": "string",
-          "required": true
-        },
-        "unite": {
-          "type": "string",
-          "required": true
-        },
-        "cout_unitaire": {
-          "type": "number",
-          "required": false
-        },
-        "cout_final": {
-          "type": "number",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "metres": {
-      "description": "Métrés (calcul quantitatif)",
-      "fields": {
-        "metre_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "tache_id": {
-          "type": "integer",
-          "required": true,
-          "fk": "taches.tache_id"
-        },
-        "type_calcul": {
-          "type": "string",
-          "required": true
-        },
-        "quantite_calculee": {
-          "type": "number",
-          "required": false
-        },
-        "unite": {
-          "type": "string",
-          "required": true
-        },
-        "formule": {
-          "type": "string",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "etudes": {
-      "description": "Études techniques et architecturales",
-      "fields": {
-        "etude_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "numero": {
-          "type": "integer",
-          "required": true
-        },
-        "nom_etude": {
-          "type": "string",
-          "required": true
-        },
-        "type_etude": {
-          "type": "string",
-          "required": true
-        },
-        "details": {
-          "type": "array",
-          "required": false
-        },
-        "unite": {
-          "type": "string",
-          "required": true
-        },
-        "quantite": {
-          "type": "integer",
-          "required": true
-        },
-        "cout_unitaire": {
-          "type": "integer",
-          "required": true
-        },
-        "cout_total": {
-          "type": "integer",
-          "required": true
-        },
-        "date_livraison": {
-          "type": "date",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
@@ -597,71 +250,307 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "echeancier": {
-      "description": "Échéancier de paiement",
+    "categories_materiaux": {
+      "description": "Catégories de matériaux",
       "fields": {
-        "echeance_id": {
+        "categorie_id": {
           "type": "integer",
           "required": true,
           "pk": true
         },
-        "tranche": {
+        "libelle": {
           "type": "string",
           "required": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "operation_materiaux": {
+      "description": "Liaison opérations-matériaux (consommation)",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
         },
-        "description": {
-          "type": "string",
-          "required": true
-        },
-        "duree_jours": {
+        "operation_id": {
           "type": "integer",
           "required": true
         },
-        "pourcentage": {
+        "materiau_id": {
+          "type": "integer",
+          "required": true
+        },
+        "quantite": {
           "type": "number",
-          "required": true
+          "required": false
         },
-        "montant": {
-          "type": "integer",
-          "required": true
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "cout_total": {
+          "type": "number",
+          "required": false
         }
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
     },
-    "modes_paiement": {
-      "description": "Modes de paiement acceptés",
+    "main_oeuvre": {
+      "description": "Profils main d'œuvre",
       "fields": {
-        "mode_paiement_id": {
+        "mo_id": {
           "type": "integer",
           "required": true,
           "pk": true
         },
-        "type": {
+        "type_mo": {
           "type": "string",
           "required": true
         },
-        "numero_compte": {
+        "categorie_mo": {
+          "type": "string",
+          "required": false
+        },
+        "section_mo": {
           "type": "string",
           "required": true
         },
-        "nom_compte": {
+        "unite_facturation": {
+          "type": "string",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "variation": {
+          "type": "number",
+          "required": false
+        },
+        "cout_final": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "sections_main_oeuvre": {
+      "description": "Sections de main d'œuvre",
+      "fields": {
+        "section_mo_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "libelle": {
           "type": "string",
           "required": true
         }
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "operation_main_oeuvre": {
+      "description": "Liaison opérations-main d'œuvre",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "operation_id": {
+          "type": "integer",
+          "required": true
+        },
+        "mo_id": {
+          "type": "integer",
+          "required": true
+        },
+        "quantite": {
+          "type": "number",
+          "required": false
+        },
+        "cout_total": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "engins": {
+      "description": "Engins et équipements",
+      "fields": {
+        "engin_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "nom_engin": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "cout_journalier": {
+          "type": "number",
+          "required": false
+        },
+        "cout_final": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "operation_engins": {
+      "description": "Liaison opérations-engins",
+      "fields": {
+        "id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "operation_id": {
+          "type": "integer",
+          "required": true
+        },
+        "engin_id": {
+          "type": "integer",
+          "required": true
+        },
+        "duree_utilisation": {
+          "type": "number",
+          "required": false
+        },
+        "cout_total": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "utilitaires_materiel": {
+      "description": "Utilitaires matériel (carburant, eau, électricité)",
+      "fields": {
+        "utilitaire_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "designation": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "cout_final": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "etudes": {
+      "description": "Études techniques et architecturales",
+      "fields": {
+        "etude_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "numero": {
+          "type": "integer",
+          "required": true
+        },
+        "nom_etude": {
+          "type": "string",
+          "required": true
+        },
+        "type_etude": {
+          "type": "string",
+          "required": true
+        },
+        "details": {
+          "type": "string",
+          "required": false
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "quantite": {
+          "type": "integer",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "integer",
+          "required": true
+        },
+        "cout_total": {
+          "type": "integer",
+          "required": true
+        },
+        "date_livraison": {
+          "type": "date",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
@@ -693,7 +582,7 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
@@ -713,7 +602,7 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
@@ -741,7 +630,7 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
@@ -765,34 +654,108 @@
       },
       "dictionary": {
         "owner": null,
-        "source": "KOMA Platform - export JSON",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "lexique": {
-      "description": "Lexique des termes métier",
-      "fields": {
-        "terme_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "terme": {
-          "type": "string",
-          "required": true
-        },
-        "definition": {
-          "type": "string",
-          "required": true
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA Platform - export JSON",
+        "source": "KOMA BBDR - Excel",
         "sensitivity": null,
         "status": "imported"
       }
     }
-  }
+  },
+  "relations": [
+    {
+      "from": "sections.lot_id",
+      "to": "lots.lot_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "taches.section_id",
+      "to": "sections.section_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "operations.tache_id",
+      "to": "taches.tache_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "operation_materiaux.operation_id",
+      "to": "operations.operation_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "operation_materiaux.materiau_id",
+      "to": "materiaux.materiau_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "operation_metiers.operation_id",
+      "to": "operations.operation_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "operation_metiers.metier_id",
+      "to": "metiers.metier_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "operation_engins.operation_id",
+      "to": "operations.operation_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "operation_engins.engin_id",
+      "to": "engins.engin_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "metiers.categorie_metier_id",
+      "to": "categories_metiers.categorie_metier_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "metiers.sous_categorie_metier_id",
+      "to": "categories_metiers.categorie_metier_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    },
+    {
+      "from": "categories_metiers.parent_id",
+      "to": "categories_metiers.categorie_metier_id",
+      "cardinality": "n-1",
+      "onDelete": "restrict",
+      "onUpdate": "restrict",
+      "note": "Relation importée depuis database_schema.json (KOMA)."
+    }
+  ]
 }

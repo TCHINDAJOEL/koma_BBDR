@@ -11,6 +11,12 @@ export default async function handler(
   }
 
   try {
+    // Paramètre pour forcer le rechargement (bypass cache)
+    const forceReload = req.query.reload === 'true';
+    if (forceReload) {
+      storage.invalidateCache('all');
+    }
+
     const state = await storage.loadState();
     res.status(200).json(state);
   } catch (error: any) {

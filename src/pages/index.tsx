@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Layout from '@/components/Layout';
-import { Schema, TableDefinition, FieldDefinition } from '@/types/schema';
+import { Schema, TableDefinition, FieldDefinition, ValidationAlert, ApplyChangeResponse } from '@/types/schema';
 import dynamic from 'next/dynamic';
 import {
   Edit2,
@@ -17,7 +17,10 @@ import {
   Layers,
   Database,
   X,
-  Save
+  Save,
+  AlertCircle,
+  CheckCircle,
+  XCircle
 } from 'lucide-react';
 import { getTables, findTable } from '@/lib/data-helpers';
 
@@ -25,10 +28,15 @@ const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false 
 
 export default function SchemaExplorer() {
   const [schema, setSchema] = useState<Schema | null>(null);
+  const [pendingSchema, setPendingSchema] = useState<Schema | null>(null);
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [jsonMode, setJsonMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [jsonError, setJsonError] = useState<string | null>(null);
+  const [alerts, setAlerts] = useState<ValidationAlert[]>([]);
+  const [showAlerts, setShowAlerts] = useState(false);
 
   // Modal states
   const [showTableModal, setShowTableModal] = useState(false);
@@ -45,6 +53,7 @@ export default function SchemaExplorer() {
       const res = await fetch('/api/state');
       const state = await res.json();
       setSchema(state.schema);
+      setPendingSchema(null);
       setLoading(false);
     } catch (error) {
       console.error('Erreur de chargement:', error);
@@ -52,9 +61,11 @@ export default function SchemaExplorer() {
     }
   };
 
-  const saveSchema = async (newSchema: Schema) => {
+  const saveSchema = async (newSchema: Schema): Promise<boolean> => {
+    setSaving(true);
+    setAlerts([]);
     try {
-      await fetch('/api/apply-change', {
+      const res = await fetch('/api/apply-change', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -65,9 +76,37 @@ export default function SchemaExplorer() {
           reason: 'Manual schema update',
         }),
       });
-      setSchema(newSchema);
+
+      const result: ApplyChangeResponse = await res.json();
+
+      // Toujours afficher les alertes retournées
+      if (result.alerts && result.alerts.length > 0) {
+        setAlerts(result.alerts);
+        setShowAlerts(true);
+      }
+
+      if (result.success) {
+        // Mettre à jour l'état local SEULEMENT si le backend a réussi
+        setSchema(result.newState?.schema || newSchema);
+        setPendingSchema(null);
+        return true;
+      } else {
+        // En cas d'erreur, ne pas mettre à jour l'état local
+        console.error('Erreur de sauvegarde:', result.alerts);
+        return false;
+      }
     } catch (error) {
       console.error('Erreur de sauvegarde:', error);
+      setAlerts([{
+        severity: 'error',
+        code: 'NETWORK_ERROR',
+        location: '/api/apply-change',
+        message: 'Erreur réseau lors de la sauvegarde',
+      }]);
+      setShowAlerts(true);
+      return false;
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -190,22 +229,135 @@ export default function SchemaExplorer() {
     setShowFieldModal(false);
   };
 
-  const handleJsonChange = (value: string | undefined) => {
-    if (!value) return;
+  const validateJsonSchema = useCallback((value: string): { valid: boolean; schema?: Schema; error?: string } => {
     try {
       const parsed = JSON.parse(value);
-      setSchema(parsed);
-    } catch (e) {
-      // Invalid JSON, ignore
-    }
-  };
 
-  const handleSaveJson = () => {
-    if (schema) {
-      saveSchema(schema);
+      // Validation structurelle de base
+      if (typeof parsed !== 'object' || parsed === null) {
+        return { valid: false, error: 'Le JSON doit être un objet' };
+      }
+      if (!parsed.version || typeof parsed.version !== 'string') {
+        return { valid: false, error: 'Le champ "version" est requis et doit être une chaîne' };
+      }
+      if (!parsed.tables || !Array.isArray(parsed.tables)) {
+        return { valid: false, error: 'Le champ "tables" est requis et doit être un tableau' };
+      }
+      if (!parsed.relations || !Array.isArray(parsed.relations)) {
+        return { valid: false, error: 'Le champ "relations" est requis et doit être un tableau' };
+      }
+
+      // Validation des tables
+      for (const table of parsed.tables) {
+        if (!table.name || typeof table.name !== 'string') {
+          return { valid: false, error: `Chaque table doit avoir un nom (string)` };
+        }
+        if (!table.fields || !Array.isArray(table.fields)) {
+          return { valid: false, error: `La table "${table.name}" doit avoir un champ "fields" (tableau)` };
+        }
+        if (!table.primaryKey) {
+          return { valid: false, error: `La table "${table.name}" doit avoir une primaryKey` };
+        }
+      }
+
+      return { valid: true, schema: parsed as Schema };
+    } catch (e: any) {
+      return { valid: false, error: `JSON invalide: ${e.message}` };
+    }
+  }, []);
+
+  const handleJsonChange = useCallback((value: string | undefined) => {
+    if (!value) return;
+
+    const result = validateJsonSchema(value);
+    if (result.valid && result.schema) {
+      setPendingSchema(result.schema);
+      setJsonError(null);
+    } else {
+      setJsonError(result.error || 'JSON invalide');
+      // Ne pas mettre à jour pendingSchema si invalide
+    }
+  }, [validateJsonSchema]);
+
+  const handleSaveJson = async () => {
+    if (pendingSchema) {
+      const success = await saveSchema(pendingSchema);
+      if (success) {
+        setJsonMode(false);
+        setJsonError(null);
+      }
+    } else if (schema && !jsonError) {
+      // Si aucune modification n'a été faite, juste fermer le mode JSON
       setJsonMode(false);
     }
   };
+
+  const handleExitJsonMode = () => {
+    setJsonMode(false);
+    setPendingSchema(null);
+    setJsonError(null);
+  };
+
+  // Pagination
+  const TABLES_PER_PAGE = 20;
+  const FIELDS_PER_PAGE = 50;
+  const [tablePage, setTablePage] = useState(0);
+  const [fieldPage, setFieldPage] = useState(0);
+
+  // Reset pagination when search changes
+  useEffect(() => {
+    setTablePage(0);
+  }, [searchQuery]);
+
+  // Reset field pagination when selected table changes
+  useEffect(() => {
+    setFieldPage(0);
+  }, [selectedTable]);
+
+  // Mémoïsation des calculs coûteux
+  const tables = useMemo(() => {
+    if (!schema) return [];
+    return getTables(schema);
+  }, [schema]);
+
+  const filteredTables = useMemo(() => {
+    if (!searchQuery) return tables;
+    const query = searchQuery.toLowerCase();
+    return tables.filter(t =>
+      t.name.toLowerCase().includes(query) ||
+      (t.label?.toLowerCase() || '').includes(query)
+    );
+  }, [tables, searchQuery]);
+
+  const paginatedTables = useMemo(() => {
+    const start = tablePage * TABLES_PER_PAGE;
+    return filteredTables.slice(start, start + TABLES_PER_PAGE);
+  }, [filteredTables, tablePage]);
+
+  const totalTablePages = useMemo(() => {
+    return Math.ceil(filteredTables.length / TABLES_PER_PAGE);
+  }, [filteredTables.length]);
+
+  const tableStats = useMemo(() => ({
+    totalTables: tables.length,
+    totalFields: tables.reduce((acc, t) => acc + t.fields.length, 0),
+  }), [tables]);
+
+  const currentTable = useMemo(() => {
+    if (!selectedTable || !schema) return null;
+    return findTable(schema, selectedTable);
+  }, [schema, selectedTable]);
+
+  const paginatedFields = useMemo(() => {
+    if (!currentTable) return [];
+    const start = fieldPage * FIELDS_PER_PAGE;
+    return currentTable.fields.slice(start, start + FIELDS_PER_PAGE);
+  }, [currentTable, fieldPage]);
+
+  const totalFieldPages = useMemo(() => {
+    if (!currentTable) return 0;
+    return Math.ceil(currentTable.fields.length / FIELDS_PER_PAGE);
+  }, [currentTable]);
 
   if (loading) {
     return (
@@ -234,15 +386,6 @@ export default function SchemaExplorer() {
     );
   }
 
-  const tables = getTables(schema);
-  const filteredTables = searchQuery
-    ? tables.filter(t =>
-      t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (t.label?.toLowerCase() || '').includes(searchQuery.toLowerCase())
-    )
-    : tables;
-  const table = selectedTable ? findTable(schema, selectedTable) : null;
-
   return (
     <Layout>
       <div className="animate-fade-in">
@@ -257,14 +400,12 @@ export default function SchemaExplorer() {
             </div>
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <div className="text-3xl font-bold">{tables.length}</div>
+                <div className="text-3xl font-bold">{tableStats.totalTables}</div>
                 <div className="text-primary-200 text-sm">Tables</div>
               </div>
               <div className="w-px h-12 bg-white/20"></div>
               <div className="text-right">
-                <div className="text-3xl font-bold">
-                  {tables.reduce((acc, t) => acc + t.fields.length, 0)}
-                </div>
+                <div className="text-3xl font-bold">{tableStats.totalFields}</div>
                 <div className="text-primary-200 text-sm">Champs</div>
               </div>
             </div>
@@ -292,13 +433,59 @@ export default function SchemaExplorer() {
           </button>
         </div>
 
+        {/* Affichage des alertes de validation */}
+        {showAlerts && alerts.length > 0 && (
+          <div className="mb-6 card overflow-hidden">
+            <div className="p-4 border-b border-dark-100 bg-dark-50 flex items-center justify-between">
+              <h3 className="font-semibold text-dark-800 flex items-center gap-2">
+                <AlertCircle size={18} />
+                Alertes de validation ({alerts.length})
+              </h3>
+              <button
+                onClick={() => setShowAlerts(false)}
+                className="btn btn-ghost p-2"
+              >
+                <XCircle size={18} />
+              </button>
+            </div>
+            <div className="max-h-64 overflow-y-auto divide-y divide-dark-100">
+              {alerts.map((alert, index) => (
+                <div
+                  key={index}
+                  className={`p-3 flex items-start gap-3 ${
+                    alert.severity === 'error' ? 'bg-red-50' :
+                    alert.severity === 'warn' ? 'bg-yellow-50' : 'bg-blue-50'
+                  }`}
+                >
+                  {alert.severity === 'error' ? (
+                    <XCircle size={18} className="text-red-500 flex-shrink-0 mt-0.5" />
+                  ) : alert.severity === 'warn' ? (
+                    <AlertCircle size={18} className="text-yellow-500 flex-shrink-0 mt-0.5" />
+                  ) : (
+                    <CheckCircle size={18} className="text-blue-500 flex-shrink-0 mt-0.5" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-dark-800">{alert.message}</div>
+                    <div className="text-xs text-dark-500 mt-1">
+                      <code>{alert.location}</code> - {alert.code}
+                    </div>
+                    {alert.suggestion && (
+                      <div className="text-xs text-dark-600 mt-1 italic">{alert.suggestion}</div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {jsonMode ? (
           <div className="card overflow-hidden">
             <div className="h-[600px]">
               <MonacoEditor
                 height="100%"
                 defaultLanguage="json"
-                value={JSON.stringify(schema, null, 2)}
+                value={JSON.stringify(pendingSchema || schema, null, 2)}
                 onChange={handleJsonChange}
                 theme="vs-dark"
                 options={{
@@ -309,13 +496,36 @@ export default function SchemaExplorer() {
                 }}
               />
             </div>
-            <div className="p-4 border-t border-dark-100 bg-dark-50">
-              <button
-                onClick={handleSaveJson}
-                className="btn btn-primary"
-              >
-                Sauvegarder les modifications
-              </button>
+            {jsonError && (
+              <div className="p-3 bg-red-50 border-t border-red-200 flex items-center gap-2">
+                <XCircle size={18} className="text-red-500" />
+                <span className="text-sm text-red-700">{jsonError}</span>
+              </div>
+            )}
+            <div className="p-4 border-t border-dark-100 bg-dark-50 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {pendingSchema && !jsonError && (
+                  <span className="text-sm text-green-600 flex items-center gap-1">
+                    <CheckCircle size={14} />
+                    Modifications en attente
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleExitJsonMode}
+                  className="btn btn-secondary"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={handleSaveJson}
+                  disabled={!!jsonError || saving || (!pendingSchema && !schema)}
+                  className="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {saving ? 'Sauvegarde...' : 'Sauvegarder les modifications'}
+                </button>
+              </div>
             </div>
           </div>
         ) : (
@@ -334,14 +544,14 @@ export default function SchemaExplorer() {
                     </button>
                   </div>
                 </div>
-                <div className="max-h-[600px] overflow-y-auto">
+                <div className="max-h-[500px] overflow-y-auto">
                   {filteredTables.length === 0 ? (
                     <div className="p-8 text-center text-dark-500">
                       Aucune table trouvée
                     </div>
                   ) : (
                     <div className="divide-y divide-dark-100">
-                      {filteredTables.map((t) => (
+                      {paginatedTables.map((t) => (
                         <button
                           key={t.name}
                           onClick={() => setSelectedTable(t.name)}
@@ -379,29 +589,56 @@ export default function SchemaExplorer() {
                     </div>
                   )}
                 </div>
+                {/* Pagination des tables */}
+                {totalTablePages > 1 && (
+                  <div className="p-3 border-t border-dark-100 bg-dark-50 flex items-center justify-between">
+                    <span className="text-xs text-dark-500">
+                      {filteredTables.length} table{filteredTables.length > 1 ? 's' : ''}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setTablePage(p => Math.max(0, p - 1))}
+                        disabled={tablePage === 0}
+                        className="btn btn-ghost p-1 disabled:opacity-50"
+                      >
+                        <ChevronRight size={16} className="rotate-180" />
+                      </button>
+                      <span className="text-xs text-dark-600">
+                        {tablePage + 1} / {totalTablePages}
+                      </span>
+                      <button
+                        onClick={() => setTablePage(p => Math.min(totalTablePages - 1, p + 1))}
+                        disabled={tablePage >= totalTablePages - 1}
+                        className="btn btn-ghost p-1 disabled:opacity-50"
+                      >
+                        <ChevronRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Table details */}
             <div className="lg:col-span-2">
-              {table ? (
+              {currentTable ? (
                 <div className="card animate-fade-in">
                   {/* Header */}
                   <div className="p-6 border-b border-dark-100">
                     <div className="flex items-start justify-between">
                       <div>
                         <h2 className="text-2xl font-bold text-dark-900 mb-1">
-                          {table.label || table.name}
+                          {currentTable.label || currentTable.name}
                         </h2>
-                        {table.description && (
-                          <p className="text-dark-500">{table.description}</p>
+                        {currentTable.description && (
+                          <p className="text-dark-500">{currentTable.description}</p>
                         )}
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => handleEditTable(table)} className="btn btn-ghost p-2" title="Éditer la table">
+                        <button onClick={() => handleEditTable(currentTable!)} className="btn btn-ghost p-2" title="Éditer la table">
                           <Edit2 size={18} />
                         </button>
-                        <button onClick={() => handleDeleteTable(table.name)} className="btn btn-ghost p-2 text-red-500 hover:bg-red-50" title="Supprimer la table">
+                        <button onClick={() => handleDeleteTable(currentTable!.name)} className="btn btn-ghost p-2 text-red-500 hover:bg-red-50" title="Supprimer la table">
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -409,28 +646,28 @@ export default function SchemaExplorer() {
 
                     {/* Meta badges */}
                     <div className="flex flex-wrap gap-2 mt-4">
-                      {table.primaryKey && (
+                      {currentTable.primaryKey && (
                         <span className="badge badge-primary flex items-center gap-1">
                           <Key size={12} />
-                          PK: {Array.isArray(table.primaryKey) ? table.primaryKey.join(', ') : table.primaryKey}
+                          PK: {Array.isArray(currentTable.primaryKey) ? currentTable.primaryKey.join(', ') : currentTable.primaryKey}
                         </span>
                       )}
-                      {table.owner && (
+                      {currentTable.owner && (
                         <span className="badge badge-gray flex items-center gap-1">
                           <User size={12} />
-                          {table.owner}
+                          {currentTable.owner}
                         </span>
                       )}
-                      {table.sensitivity && (
+                      {currentTable.sensitivity && (
                         <span className="badge badge-warning flex items-center gap-1">
                           <Shield size={12} />
-                          {table.sensitivity}
+                          {currentTable.sensitivity}
                         </span>
                       )}
-                      {table.status && (
+                      {currentTable.status && (
                         <span className="badge badge-accent flex items-center gap-1">
                           <Clock size={12} />
-                          {table.status}
+                          {currentTable.status}
                         </span>
                       )}
                     </div>
@@ -454,7 +691,7 @@ export default function SchemaExplorer() {
                         </tr>
                       </thead>
                       <tbody>
-                        {table.fields.map((field, index) => (
+                        {paginatedFields.map((field, index) => (
                           <tr
                             key={field.name}
                             className={`hover:bg-dark-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-dark-50/50'
@@ -506,6 +743,33 @@ export default function SchemaExplorer() {
                       </tbody>
                     </table>
                   </div>
+                  {/* Pagination des champs */}
+                  {totalFieldPages > 1 && (
+                    <div className="p-3 border-t border-dark-100 bg-dark-50 flex items-center justify-between">
+                      <span className="text-xs text-dark-500">
+                        {currentTable.fields.length} champ{currentTable.fields.length > 1 ? 's' : ''}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setFieldPage(p => Math.max(0, p - 1))}
+                          disabled={fieldPage === 0}
+                          className="btn btn-ghost p-1 disabled:opacity-50"
+                        >
+                          <ChevronRight size={16} className="rotate-180" />
+                        </button>
+                        <span className="text-xs text-dark-600">
+                          {fieldPage + 1} / {totalFieldPages}
+                        </span>
+                        <button
+                          onClick={() => setFieldPage(p => Math.min(totalFieldPages - 1, p + 1))}
+                          disabled={fieldPage >= totalFieldPages - 1}
+                          className="btn btn-ghost p-1 disabled:opacity-50"
+                        >
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="card h-[600px] flex items-center justify-center">
