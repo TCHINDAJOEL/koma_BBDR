@@ -129,6 +129,9 @@ export default async function handler(
       await storage.writeFile('audit.ndjson', auditContent);
     }
 
+    // Invalider tout le cache pour forcer le rechargement
+    storage.invalidateCache('all');
+
     // Créer un événement d'audit pour l'import
     const importEvent = storage.createAuditEvent(
       'IMPORT',

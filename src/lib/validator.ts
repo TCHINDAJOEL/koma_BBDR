@@ -114,10 +114,11 @@ export class Validator {
    */
   private generateTableSchema(table: TableDefinition): any {
     const properties: any = {
-      id: { type: 'string' },
+      // id peut être string ou number
+      id: { type: ['string', 'number', 'integer'] },
     };
 
-    const requiredSet = new Set(['id']);
+    const requiredSet = new Set<string>(['id']);
 
     table.fields.forEach((field) => {
       properties[field.name] = this.fieldToJsonSchema(field);
@@ -130,7 +131,7 @@ export class Validator {
       type: 'object',
       properties,
       required: Array.from(requiredSet),
-      additionalProperties: false,
+      additionalProperties: true, // Permettre les propriétés additionnelles pour plus de flexibilité
     };
   }
 
@@ -140,40 +141,49 @@ export class Validator {
   private fieldToJsonSchema(field: FieldDefinition): any {
     const schema: any = {};
 
+    // Fonction pour ajouter null aux types si le champ n'est pas requis
+    const makeNullable = (types: string | string[]): string | string[] => {
+      if (field.required) return types;
+      if (Array.isArray(types)) {
+        return [...types, 'null'];
+      }
+      return [types, 'null'];
+    };
+
     switch (field.type) {
       case 'string':
-        schema.type = 'string';
+        schema.type = makeNullable('string');
         if (field.regex) schema.pattern = field.regex;
         if (field.min !== undefined) schema.minLength = field.min;
         if (field.max !== undefined) schema.maxLength = field.max;
         break;
 
       case 'number':
-        schema.type = 'number';
+        schema.type = makeNullable('number');
         if (field.min !== undefined) schema.minimum = field.min;
         if (field.max !== undefined) schema.maximum = field.max;
         break;
 
       case 'integer':
-        schema.type = 'integer';
+        schema.type = makeNullable('integer');
         if (field.min !== undefined) schema.minimum = field.min;
         if (field.max !== undefined) schema.maximum = field.max;
         break;
 
       case 'boolean':
-        schema.type = 'boolean';
+        schema.type = makeNullable('boolean');
         break;
 
       case 'date':
       case 'datetime':
-        schema.type = 'string';
-        schema.format = field.type === 'date' ? 'date' : 'date-time';
+        schema.type = makeNullable('string');
+        // Ne pas appliquer le format strict pour plus de flexibilité
         break;
 
       case 'enum':
-        schema.type = 'string';
+        schema.type = makeNullable('string');
         if (field.enumValues) {
-          schema.enum = field.enumValues;
+          schema.enum = field.required ? field.enumValues : [...field.enumValues, null];
         }
         break;
 
@@ -182,11 +192,7 @@ export class Validator {
         break;
 
       default:
-        schema.type = 'string';
-    }
-
-    if (!field.required) {
-      schema.nullable = true;
+        schema.type = makeNullable('string');
     }
 
     return schema;

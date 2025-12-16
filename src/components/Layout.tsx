@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
@@ -12,7 +12,9 @@ import {
   Menu,
   X,
   ChevronDown,
-  ExternalLink
+  ExternalLink,
+  FileArchive,
+  FileSpreadsheet
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -22,6 +24,24 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
+  const [importMenuOpen, setImportMenuOpen] = useState(false);
+  const exportMenuRef = useRef<HTMLDivElement>(null);
+  const importMenuRef = useRef<HTMLDivElement>(null);
+
+  // Fermer les menus quand on clique ailleurs
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (exportMenuRef.current && !exportMenuRef.current.contains(event.target as Node)) {
+        setExportMenuOpen(false);
+      }
+      if (importMenuRef.current && !importMenuRef.current.contains(event.target as Node)) {
+        setImportMenuOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const navItems = [
     { href: '/', label: 'Schema', icon: Database },
@@ -71,20 +91,95 @@ export default function Layout({ children }: LayoutProps) {
 
             {/* Actions */}
             <div className="hidden md:flex items-center gap-3">
-              <button
-                onClick={() => router.push('/import')}
-                className="btn btn-ghost gap-2"
-              >
-                <Upload size={18} />
-                <span>Import</span>
-              </button>
-              <button
-                onClick={() => window.open('/api/export', '_blank')}
-                className="btn btn-primary gap-2"
-              >
-                <Download size={18} />
-                <span>Export</span>
-              </button>
+              {/* Import Dropdown */}
+              <div className="relative" ref={importMenuRef}>
+                <button
+                  onClick={() => {
+                    setImportMenuOpen(!importMenuOpen);
+                    setExportMenuOpen(false);
+                  }}
+                  className="btn btn-ghost gap-2"
+                >
+                  <Upload size={18} />
+                  <span>Import</span>
+                  <ChevronDown size={16} className={`transition-transform ${importMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {importMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-dark-100 py-2 animate-fade-in z-50">
+                    <button
+                      onClick={() => {
+                        router.push('/import');
+                        setImportMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-dark-50 transition-colors text-left"
+                    >
+                      <FileArchive size={20} className="text-primary-600" />
+                      <div>
+                        <div className="font-medium text-dark-900">Import Archive</div>
+                        <div className="text-xs text-dark-500">ZIP, TAR, TAR.GZ...</div>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        router.push('/import-excel');
+                        setImportMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-dark-50 transition-colors text-left"
+                    >
+                      <FileSpreadsheet size={20} className="text-green-600" />
+                      <div>
+                        <div className="font-medium text-dark-900">Import Excel</div>
+                        <div className="text-xs text-dark-500">XLSX, XLS</div>
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Export Dropdown */}
+              <div className="relative" ref={exportMenuRef}>
+                <button
+                  onClick={() => {
+                    setExportMenuOpen(!exportMenuOpen);
+                    setImportMenuOpen(false);
+                  }}
+                  className="btn btn-primary gap-2"
+                >
+                  <Download size={18} />
+                  <span>Export</span>
+                  <ChevronDown size={16} className={`transition-transform ${exportMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {exportMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-dark-100 py-2 animate-fade-in z-50">
+                    <button
+                      onClick={() => {
+                        window.open('/api/export', '_blank');
+                        setExportMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-dark-50 transition-colors text-left"
+                    >
+                      <FileArchive size={20} className="text-primary-600" />
+                      <div>
+                        <div className="font-medium text-dark-900">Export Archive</div>
+                        <div className="text-xs text-dark-500">ZIP avec toutes les données</div>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        window.open('/api/export-excel', '_blank');
+                        setExportMenuOpen(false);
+                      }}
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-dark-50 transition-colors text-left"
+                    >
+                      <FileSpreadsheet size={20} className="text-green-600" />
+                      <div>
+                        <div className="font-medium text-dark-900">Export Excel</div>
+                        <div className="text-xs text-dark-500">XLSX stylisé</div>
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Mobile menu button */}
@@ -118,6 +213,7 @@ export default function Layout({ children }: LayoutProps) {
                 );
               })}
               <div className="pt-4 border-t border-dark-100 space-y-2">
+                <p className="px-3 text-xs font-semibold text-dark-500 uppercase tracking-wider">Import</p>
                 <button
                   onClick={() => {
                     router.push('/import');
@@ -125,15 +221,33 @@ export default function Layout({ children }: LayoutProps) {
                   }}
                   className="sidebar-item w-full"
                 >
-                  <Upload size={20} />
-                  <span>Import ZIP</span>
+                  <FileArchive size={20} />
+                  <span>Import Archive</span>
                 </button>
+                <button
+                  onClick={() => {
+                    router.push('/import-excel');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="sidebar-item w-full"
+                >
+                  <FileSpreadsheet size={20} />
+                  <span>Import Excel</span>
+                </button>
+                <p className="px-3 pt-2 text-xs font-semibold text-dark-500 uppercase tracking-wider">Export</p>
                 <button
                   onClick={() => window.open('/api/export', '_blank')}
                   className="sidebar-item w-full"
                 >
-                  <Download size={20} />
-                  <span>Export ZIP</span>
+                  <FileArchive size={20} />
+                  <span>Export Archive (ZIP)</span>
+                </button>
+                <button
+                  onClick={() => window.open('/api/export-excel', '_blank')}
+                  className="sidebar-item w-full"
+                >
+                  <FileSpreadsheet size={20} />
+                  <span>Export Excel (XLSX)</span>
                 </button>
               </div>
             </div>
@@ -205,15 +319,29 @@ export default function Layout({ children }: LayoutProps) {
                   onClick={() => router.push('/import')}
                   className="flex items-center gap-2 text-dark-400 hover:text-white transition-colors text-sm"
                 >
-                  <Upload size={16} />
-                  <span>Import Project</span>
+                  <FileArchive size={16} />
+                  <span>Import Archive</span>
+                </button>
+                <button
+                  onClick={() => router.push('/import-excel')}
+                  className="flex items-center gap-2 text-dark-400 hover:text-white transition-colors text-sm"
+                >
+                  <FileSpreadsheet size={16} />
+                  <span>Import Excel</span>
                 </button>
                 <button
                   onClick={() => window.open('/api/export', '_blank')}
                   className="flex items-center gap-2 text-dark-400 hover:text-white transition-colors text-sm"
                 >
-                  <Download size={16} />
-                  <span>Export Project</span>
+                  <FileArchive size={16} />
+                  <span>Export Archive (ZIP)</span>
+                </button>
+                <button
+                  onClick={() => window.open('/api/export-excel', '_blank')}
+                  className="flex items-center gap-2 text-dark-400 hover:text-white transition-colors text-sm"
+                >
+                  <FileSpreadsheet size={16} />
+                  <span>Export Excel (XLSX)</span>
                 </button>
               </div>
             </div>

@@ -71,7 +71,8 @@ export default function Import() {
           details: data.details
         });
         setTimeout(() => {
-          router.push('/');
+          // Forcer un rechargement complet pour vider le cache côté client
+          window.location.href = '/';
         }, 3000);
       } else {
         setResult({ success: false, message: data.error || 'Erreur lors de l\'import' });
