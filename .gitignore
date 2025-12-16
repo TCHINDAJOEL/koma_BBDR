@@ -36,3 +36,6 @@ next-env.d.ts
 # Décommenter si vous ne voulez pas versionner les données
 # /storage/*.json
 # /storage/*.ndjson
+
+# GitHub workflows (nécessite scope workflow pour OAuth)
+.github/
