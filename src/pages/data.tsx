@@ -21,11 +21,14 @@ import {
   Table,
   GitBranch,
   LayoutGrid,
+  History,
 } from 'lucide-react';
 import { getTableData } from '@/lib/data-helpers';
 import useAppState from '@/lib/useAppState';
 import RecordForm from '@/components/RecordForm';
 import RelatedRecords from '@/components/RelatedRecords';
+import AuditPanel from '@/components/AuditPanel';
+import { useToast } from '@/components/Toast';
 
 // Import dynamique pour éviter les erreurs SSR avec ReactFlow
 const RecordGraph = dynamic(() => import('@/components/RecordGraph'), { ssr: false });
@@ -45,7 +48,11 @@ export default function DataEnrichment() {
     deleteRecord,
     updateSchema,
     refresh,
+    audit,
   } = useAppState();
+
+  // Hook pour les notifications
+  const toast = useToast();
 
   // État local UI
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -61,6 +68,7 @@ export default function DataEnrichment() {
   const [graphRecord, setGraphRecord] = useState<DataRecord | null>(null);
   const [graphTableName, setGraphTableName] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'table' | 'graph'>('table');
+  const [showAuditPanel, setShowAuditPanel] = useState(false);
 
   // Tables filtrées
   const filteredTables = useMemo(() => {
@@ -251,11 +259,14 @@ export default function DataEnrichment() {
       setHistory((prev) => [...prev, { data }]);
 
       const success = await deleteRecord(selectedTable, record.id);
-      if (!success) {
+      if (success) {
+        toast.success('Enregistrement supprimé', `ID: ${record.id.slice(0, 8)}...`);
+      } else {
+        toast.error('Erreur de suppression', 'Vérifiez les alertes pour plus de détails');
         setShowAlerts(true);
       }
     },
-    [selectedTable, data, deleteRecord]
+    [selectedTable, data, deleteRecord, toast]
   );
 
   const onSaveRecord = useCallback(
@@ -275,11 +286,17 @@ export default function DataEnrichment() {
       if (result) {
         setShowForm(false);
         setEditingRecord(null);
+        if (editingRecord) {
+          toast.success('Enregistrement mis à jour', `Les modifications ont été sauvegardées`);
+        } else {
+          toast.success('Enregistrement créé', `ID: ${result.id.slice(0, 8)}...`);
+        }
       } else {
+        toast.error('Erreur de sauvegarde', 'Vérifiez les alertes pour plus de détails');
         setShowAlerts(true);
       }
     },
-    [selectedTable, editingRecord, data, createRecord, updateRecord]
+    [selectedTable, editingRecord, data, createRecord, updateRecord, toast]
   );
 
   const handleUndo = useCallback(() => {
@@ -404,11 +421,14 @@ export default function DataEnrichment() {
       setHistory((prev) => [...prev, { data }]);
 
       const result = await updateRecord(tblName, record.id, record);
-      if (!result) {
+      if (result) {
+        toast.success('Enregistrement mis à jour', `Table: ${tblName}`);
+      } else {
+        toast.error('Erreur de sauvegarde', 'Vérifiez les alertes pour plus de détails');
         setShowAlerts(true);
       }
     },
-    [data, updateRecord]
+    [data, updateRecord, toast]
   );
 
   // Navigation dans le graphe (changer l'enregistrement central)
@@ -605,6 +625,19 @@ export default function DataEnrichment() {
               <Undo size={18} />
               <span className="hidden sm:inline">Annuler</span>
             </button>
+            <button
+              onClick={() => setShowAuditPanel(true)}
+              className="btn btn-secondary gap-2"
+              title="Voir l'historique des modifications"
+            >
+              <History size={18} />
+              <span className="hidden sm:inline">Historique</span>
+              {audit.length > 0 && (
+                <span className="bg-primary-600 text-white text-xs px-1.5 py-0.5 rounded-full">
+                  {audit.length}
+                </span>
+              )}
+            </button>
           </div>
         </div>
 
@@ -779,6 +812,15 @@ export default function DataEnrichment() {
               />
             </div>
           </div>
+        )}
+
+        {/* Panneau d'audit */}
+        {showAuditPanel && (
+          <AuditPanel
+            audit={audit}
+            onClose={() => setShowAuditPanel(false)}
+            onRefresh={() => refresh(true)}
+          />
         )}
       </div>
     </Layout>
