@@ -40,7 +40,17 @@ export default async function handler(
     // Ajouter une feuille par table
     for (const table of schema.tables) {
       const tableName = table.name;
-      const tableData = data[tableName] || [];
+      const rawTableData = data[tableName];
+
+      // Normaliser les données en tableau
+      let tableData: any[] = [];
+      if (Array.isArray(rawTableData)) {
+        tableData = rawTableData;
+      } else if (rawTableData && typeof rawTableData === 'object') {
+        // Si c'est un objet, le traiter comme un seul enregistrement
+        tableData = [rawTableData];
+      }
+
       addTableSheet(workbook, table, tableData);
     }
 
@@ -116,7 +126,8 @@ function addSummarySheet(
   let rowIndex = 5;
   for (const table of schema.tables) {
     const row = sheet.getRow(rowIndex);
-    const recordCount = data[table.name]?.length || 0;
+    const rawData = data[table.name];
+    const recordCount = Array.isArray(rawData) ? rawData.length : (rawData ? 1 : 0);
 
     row.getCell(1).value = table.label || table.name;
     row.getCell(2).value = table.description || '-';

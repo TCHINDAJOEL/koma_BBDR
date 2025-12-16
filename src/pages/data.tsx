@@ -19,6 +19,7 @@ import {
   Layers
 } from 'lucide-react';
 import { getTables, findTable, getTableData } from '@/lib/data-helpers';
+import { fetchWithCacheBusting } from '@/lib/cache-helper';
 
 export default function DataEnrichment() {
   const [schema, setSchema] = useState<Schema | null>(null);
@@ -40,7 +41,7 @@ export default function DataEnrichment() {
 
   const loadState = async () => {
     try {
-      const res = await fetch('/api/state');
+      const res = await fetchWithCacheBusting('/api/state');
       const state = await res.json();
       setSchema(state.schema);
       setData(state.data);

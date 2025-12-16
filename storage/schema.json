@@ -311,70 +311,6 @@
         "status": "imported"
       }
     },
-    "main_oeuvre": {
-      "description": "Profils main d'œuvre",
-      "fields": {
-        "mo_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "type_mo": {
-          "type": "string",
-          "required": true
-        },
-        "categorie_mo": {
-          "type": "string",
-          "required": false
-        },
-        "section_mo": {
-          "type": "string",
-          "required": true
-        },
-        "unite_facturation": {
-          "type": "string",
-          "required": true
-        },
-        "cout_unitaire": {
-          "type": "number",
-          "required": false
-        },
-        "variation": {
-          "type": "number",
-          "required": false
-        },
-        "cout_final": {
-          "type": "number",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA BBDR - Excel",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "sections_main_oeuvre": {
-      "description": "Sections de main d'œuvre",
-      "fields": {
-        "section_mo_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "libelle": {
-          "type": "string",
-          "required": true
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA BBDR - Excel",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
     "operation_main_oeuvre": {
       "description": "Liaison opérations-main d'œuvre",
       "fields": {
@@ -503,90 +439,6 @@
         "status": "imported"
       }
     },
-    "etudes": {
-      "description": "Études techniques et architecturales",
-      "fields": {
-        "etude_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "numero": {
-          "type": "integer",
-          "required": true
-        },
-        "nom_etude": {
-          "type": "string",
-          "required": true
-        },
-        "type_etude": {
-          "type": "string",
-          "required": true
-        },
-        "details": {
-          "type": "string",
-          "required": false
-        },
-        "unite": {
-          "type": "string",
-          "required": true
-        },
-        "quantite": {
-          "type": "integer",
-          "required": true
-        },
-        "cout_unitaire": {
-          "type": "integer",
-          "required": true
-        },
-        "cout_total": {
-          "type": "integer",
-          "required": true
-        },
-        "date_livraison": {
-          "type": "date",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA BBDR - Excel",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
-    "tarifs_koma": {
-      "description": "Tarifs des prestations KOMA",
-      "fields": {
-        "tarif_id": {
-          "type": "integer",
-          "required": true,
-          "pk": true
-        },
-        "categorie": {
-          "type": "string",
-          "required": true
-        },
-        "prestation": {
-          "type": "string",
-          "required": true
-        },
-        "prix_fcfa": {
-          "type": "integer",
-          "required": true
-        },
-        "conditions": {
-          "type": "string",
-          "required": false
-        }
-      },
-      "dictionary": {
-        "owner": null,
-        "source": "KOMA BBDR - Excel",
-        "sensitivity": null,
-        "status": "imported"
-      }
-    },
     "types_projet": {
       "description": "Types de projets",
       "fields": {
@@ -655,6 +507,274 @@
       "dictionary": {
         "owner": null,
         "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "categories_metiers": {
+      "description": "Catégories et sous-catégories de métiers BTP",
+      "fields": {
+        "categorie_metier_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code": {
+          "type": "string",
+          "required": true
+        },
+        "libelle": {
+          "type": "string",
+          "required": true
+        },
+        "parent_id": {
+          "type": "integer",
+          "required": false
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "metiers": {
+      "description": "Métiers et main d'œuvre (fusion main_oeuvre + personnel)",
+      "fields": {
+        "metier_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code_metier": {
+          "type": "string",
+          "required": true
+        },
+        "designation": {
+          "type": "string",
+          "required": true
+        },
+        "categorie_metier_id": {
+          "type": "integer",
+          "required": true
+        },
+        "sous_categorie_metier_id": {
+          "type": "integer",
+          "required": false
+        },
+        "type_metier": {
+          "type": "string",
+          "required": false
+        },
+        "unite_facturation": {
+          "type": "string",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "variation": {
+          "type": "number",
+          "required": false
+        },
+        "cout_final": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "documents_chantier": {
+      "description": "Documents et plans de chantier",
+      "fields": {
+        "document_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code_document": {
+          "type": "string",
+          "required": true
+        },
+        "designation": {
+          "type": "string",
+          "required": true
+        },
+        "type_document": {
+          "type": "string",
+          "required": true
+        },
+        "format": {
+          "type": "string",
+          "required": false
+        },
+        "quantite": {
+          "type": "integer",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "cout_total": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "equipements_securite": {
+      "description": "Équipements de protection individuelle et sécurité",
+      "fields": {
+        "equipement_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code_equipement": {
+          "type": "string",
+          "required": true
+        },
+        "designation": {
+          "type": "string",
+          "required": true
+        },
+        "type_equipement": {
+          "type": "string",
+          "required": true
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "quantite": {
+          "type": "number",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "cout_total": {
+          "type": "number",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "prestations": {
+      "description": "Prestations et services techniques",
+      "fields": {
+        "prestation_id": {
+          "type": "integer",
+          "required": true,
+          "pk": true
+        },
+        "code_prestation": {
+          "type": "string",
+          "required": true
+        },
+        "numero": {
+          "type": "integer",
+          "required": false
+        },
+        "nom_prestation": {
+          "type": "string",
+          "required": true
+        },
+        "categorie": {
+          "type": "string",
+          "required": false
+        },
+        "type_prestation": {
+          "type": "string",
+          "required": false
+        },
+        "details": {
+          "type": "string",
+          "required": false
+        },
+        "unite": {
+          "type": "string",
+          "required": true
+        },
+        "quantite": {
+          "type": "integer",
+          "required": true
+        },
+        "cout_unitaire": {
+          "type": "number",
+          "required": false
+        },
+        "cout_total": {
+          "type": "number",
+          "required": false
+        },
+        "conditions": {
+          "type": "string",
+          "required": false
+        },
+        "date_livraison": {
+          "type": "date",
+          "required": false
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "KOMA BBDR - Excel",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "database_schema": {
+      "description": "Schéma de la base de données (métadonnées)",
+      "fields": {
+        "id": {
+          "type": "string",
+          "required": false,
+          "pk": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Generated metadata",
+        "sensitivity": null,
+        "status": "imported"
+      }
+    },
+    "migration_summary": {
+      "description": "Résumé de la migration des données",
+      "fields": {
+        "id": {
+          "type": "string",
+          "required": false,
+          "pk": true
+        }
+      },
+      "dictionary": {
+        "owner": null,
+        "source": "Generated metadata",
         "sensitivity": null,
         "status": "imported"
       }
@@ -757,5 +877,6 @@
       "onUpdate": "restrict",
       "note": "Relation importée depuis database_schema.json (KOMA)."
     }
-  ]
+  ],
+  "updatedAt": "2025-12-16T01:50:01.196Z"
 }

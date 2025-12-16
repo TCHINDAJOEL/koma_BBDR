@@ -13,6 +13,7 @@ import {
   Wand2,
   Loader2
 } from 'lucide-react';
+import { fetchWithCacheBusting } from '@/lib/cache-helper';
 
 export default function ValidationCenter() {
   const [report, setReport] = useState<ValidationReport | null>(null);
@@ -28,7 +29,7 @@ export default function ValidationCenter() {
   const runValidation = async () => {
     setValidating(true);
     try {
-      const stateRes = await fetch('/api/state');
+      const stateRes = await fetchWithCacheBusting('/api/state');
       const state = await stateRes.json();
 
       const validateRes = await fetch('/api/validate', {

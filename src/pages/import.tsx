@@ -12,6 +12,7 @@ import {
   File
 } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { updateCacheVersion } from '@/lib/cache-helper';
 
 // Formats supportés
 const SUPPORTED_FORMATS = [
@@ -33,6 +34,7 @@ interface ImportResult {
     format: string;
     filesExtracted: number;
     tablesImported: number;
+    tableNames?: string[];
     hasSchema: boolean;
     hasRules: boolean;
     hasAudit: boolean;
@@ -65,14 +67,17 @@ export default function Import() {
       const data = await res.json();
 
       if (res.ok) {
+        // Mettre à jour la version du cache pour forcer le rechargement sur toutes les pages
+        updateCacheVersion();
+
         setResult({
           success: true,
           message: 'Import réussi ! Redirection...',
           details: data.details
         });
         setTimeout(() => {
-          // Forcer un rechargement complet pour vider le cache côté client
-          window.location.href = '/';
+          // Forcer un rechargement complet avec invalidation du cache
+          window.location.href = '/?reload=true';
         }, 3000);
       } else {
         setResult({ success: false, message: data.error || 'Erreur lors de l\'import' });
@@ -232,23 +237,37 @@ export default function Import() {
                   </p>
 
                   {result.success && result.details && (
-                    <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-600">Format:</span>
-                        <span className="font-mono">{result.details.format.toUpperCase()}</span>
+                    <div className="mt-3 space-y-2 text-sm">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-green-600">Format:</span>
+                          <span className="font-mono">{result.details.format.toUpperCase()}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-green-600">Fichiers extraits:</span>
+                          <span className="font-semibold">{result.details.filesExtracted}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-green-600">Tables importées:</span>
+                          <span className="font-semibold">{result.details.tablesImported}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-green-600">Schéma:</span>
+                          <span>{result.details.hasSchema ? '✓' : '✗'}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-600">Fichiers extraits:</span>
-                        <span className="font-semibold">{result.details.filesExtracted}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-600">Tables importées:</span>
-                        <span className="font-semibold">{result.details.tablesImported}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-600">Schéma:</span>
-                        <span>{result.details.hasSchema ? '✓' : '✗'}</span>
-                      </div>
+                      {result.details.tableNames && result.details.tableNames.length > 0 && (
+                        <div className="pt-2 border-t border-green-200">
+                          <span className="text-green-600 font-medium">Tables:</span>
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            {result.details.tableNames.map((name) => (
+                              <span key={name} className="bg-green-100 text-green-800 px-2 py-0.5 rounded text-xs font-mono">
+                                {name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

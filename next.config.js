@@ -3,10 +3,10 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const nextConfig = {
   reactStrictMode: true,
-  output: 'export',
+  // output: 'export', // Désactivé pour permettre les API routes (import/export)
   // Remplacer 'koma_BBDR' par le nom exact de votre repo GitHub
-  basePath: isProd ? '/koma_BBDR' : '',
-  assetPrefix: isProd ? '/koma_BBDR/' : '',
+  // basePath: isProd ? '/koma_BBDR' : '', // Désactivé en mode serveur
+  // assetPrefix: isProd ? '/koma_BBDR/' : '', // Désactivé en mode serveur
   images: {
     unoptimized: true,
   },

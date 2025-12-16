@@ -154,6 +154,7 @@ export default async function handler(
         format: extension,
         filesExtracted: extractedFiles.length,
         tablesImported: Object.keys(allTableData).length,
+        tableNames: Object.keys(allTableData), // Noms des tables importées
         hasSchema: !!schemaContent,
         hasRules: !!rulesContent,
         hasAudit: !!auditContent,

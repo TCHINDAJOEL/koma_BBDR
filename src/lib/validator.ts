@@ -25,6 +25,20 @@ export class Validator {
   }
 
   /**
+   * Normalise les données d'une table en tableau
+   * Gère les cas où les données sont un objet au lieu d'un tableau
+   */
+  private normalizeTableData(rawData: any): any[] {
+    if (Array.isArray(rawData)) {
+      return rawData;
+    } else if (rawData && typeof rawData === 'object') {
+      // Si c'est un objet, le traiter comme un seul enregistrement
+      return [rawData];
+    }
+    return [];
+  }
+
+  /**
    * Validation complète (3 niveaux)
    */
   public validate(
@@ -83,7 +97,7 @@ export class Validator {
 
     // 2. Valider les données contre le schéma
     schema.tables.forEach((table) => {
-      const tableData = data[table.name] || [];
+      const tableData = this.normalizeTableData(data[table.name]);
       const tableSchema = this.generateTableSchema(table);
       const dataValidator = this.ajv.compile(tableSchema);
 
@@ -225,7 +239,7 @@ export class Validator {
 
     // 1. Valider les clés primaires
     schema.tables.forEach((table) => {
-      const tableData = data[table.name] || [];
+      const tableData = this.normalizeTableData(data[table.name]);
       const pkFields = Array.isArray(table.primaryKey)
         ? table.primaryKey
         : [table.primaryKey];
@@ -439,7 +453,7 @@ export class Validator {
 
     rules.forEach((rule) => {
       if (rule.scope === 'table' && rule.table) {
-        const tableData = data[rule.table] || [];
+        const tableData = this.normalizeTableData(data[rule.table]);
         tableData.forEach((record, index) => {
           if (this.evaluateConditions(record, rule.when)) {
             alerts.push({

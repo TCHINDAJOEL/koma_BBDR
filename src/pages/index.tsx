@@ -23,6 +23,7 @@ import {
   XCircle
 } from 'lucide-react';
 import { getTables, findTable } from '@/lib/data-helpers';
+import { fetchWithCacheBusting } from '@/lib/cache-helper';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -50,11 +51,22 @@ export default function SchemaExplorer() {
 
   const loadSchema = async () => {
     try {
-      const res = await fetch('/api/state');
+      // Vérifier si on doit forcer le rechargement via les paramètres URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const shouldReload = urlParams.get('reload') === 'true';
+
+      const res = await fetchWithCacheBusting(
+        shouldReload ? '/api/state?reload=true' : '/api/state'
+      );
       const state = await res.json();
       setSchema(state.schema);
       setPendingSchema(null);
       setLoading(false);
+
+      // Nettoyer les paramètres URL après le rechargement
+      if (shouldReload) {
+        window.history.replaceState({}, '', '/');
+      }
     } catch (error) {
       console.error('Erreur de chargement:', error);
       setLoading(false);

@@ -13,6 +13,7 @@ import {
   Clock,
   User
 } from 'lucide-react';
+import { fetchWithCacheBusting } from '@/lib/cache-helper';
 
 export default function AuditLog() {
   const [audit, setAudit] = useState<AuditEvent[]>([]);
@@ -26,7 +27,7 @@ export default function AuditLog() {
 
   const loadAudit = async () => {
     try {
-      const res = await fetch('/api/state');
+      const res = await fetchWithCacheBusting('/api/state');
       const state = await res.json();
       setAudit(state.audit.reverse());
       setLoading(false);

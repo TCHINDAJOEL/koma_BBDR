@@ -12,6 +12,7 @@ import {
   Info
 } from 'lucide-react';
 import { useRouter } from 'next/router';
+import { updateCacheVersion } from '@/lib/cache-helper';
 
 // Formats supportés
 const SUPPORTED_FORMATS = [
@@ -68,6 +69,11 @@ export default function ImportExcel() {
       const data = await res.json();
 
       if (res.ok) {
+        // Mettre à jour la version du cache pour forcer le rechargement sur toutes les pages
+        if (data.details?.tablesUpdated > 0) {
+          updateCacheVersion();
+        }
+
         setResult({
           success: true,
           message: data.message,

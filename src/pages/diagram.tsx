@@ -15,6 +15,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { getTables, getRelations } from '@/lib/data-helpers';
 import { GitBranch, ArrowRight, Trash2, Link2 } from 'lucide-react';
+import { fetchWithCacheBusting } from '@/lib/cache-helper';
 
 export default function ERDiagram() {
   const [schema, setSchema] = useState<Schema | null>(null);
@@ -34,7 +35,7 @@ export default function ERDiagram() {
 
   const loadSchema = async () => {
     try {
-      const res = await fetch('/api/state');
+      const res = await fetchWithCacheBusting('/api/state');
       const state = await res.json();
       setSchema(state.schema);
       setLoading(false);

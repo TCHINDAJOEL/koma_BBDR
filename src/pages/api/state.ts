@@ -18,6 +18,12 @@ export default async function handler(
     }
 
     const state = await storage.loadState();
+
+    // Ajouter des headers pour empêcher le cache navigateur
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
     res.status(200).json(state);
   } catch (error: any) {
     res.status(500).json({ error: error.message || 'Erreur lors du chargement de l\'état' });
