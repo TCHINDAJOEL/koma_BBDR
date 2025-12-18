@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-16T16:07:47.880Z",
+  "updatedAt": "2025-12-18T08:26:57.609Z",
   "data": {
     "categories_materiaux": [
       {
@@ -232,7 +232,7 @@
         "charge_id": 1,
         "designation": "Eau",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 120,
         "amortissement": 0.25,
@@ -242,7 +242,7 @@
         "charge_id": 2,
         "designation": "Electricité",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 500,
         "amortissement": 0.25,
@@ -252,7 +252,7 @@
         "charge_id": 3,
         "designation": "Internet",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 1000,
         "amortissement": 0.25,
@@ -262,7 +262,7 @@
         "charge_id": 4,
         "designation": "Communication téléphonique",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 1000,
         "amortissement": 0.25,
@@ -272,9 +272,9 @@
         "charge_id": 5,
         "designation": "Loyer",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
-        "cout_unitaire": 6666.666667,
+        "cout_unitaire": 6667,
         "amortissement": 0.25,
         "id": "5"
       },
@@ -282,7 +282,7 @@
         "charge_id": 6,
         "designation": "Taxes et régularisations",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": null,
         "amortissement": 0.25,
@@ -292,7 +292,7 @@
         "charge_id": 7,
         "designation": "Alimentation et entretien du personnel",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 500,
         "amortissement": 0.25,
@@ -302,7 +302,7 @@
         "charge_id": 8,
         "designation": "Carburant véhicules internes",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 0,
         "amortissement": 0.25,
@@ -312,7 +312,7 @@
         "charge_id": 9,
         "designation": "Déplacement du personnel",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 3000,
         "amortissement": 0.25,
@@ -322,7 +322,7 @@
         "charge_id": 10,
         "designation": "Impressions administration",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 200,
         "amortissement": 0.25,
@@ -332,7 +332,7 @@
         "charge_id": 11,
         "designation": "Impressions projet",
         "categorie": "Utilitaires chantier",
-        "unite": "Ens",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 154900,
         "amortissement": 1,
@@ -342,7 +342,7 @@
         "charge_id": 12,
         "designation": "Maquette chantier",
         "categorie": "Utilitaires chantier",
-        "unite": "A0",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 2000,
         "amortissement": null,
@@ -352,7 +352,7 @@
         "charge_id": 13,
         "designation": "Détails ouvrages spéciaux",
         "categorie": "Utilitaires chantier",
-        "unite": "A3",
+        "unite": null,
         "quantite": 5,
         "cout_unitaire": 500,
         "amortissement": null,
@@ -362,7 +362,7 @@
         "charge_id": 14,
         "designation": "Consommables projet",
         "categorie": "Consommables",
-        "unite": "Ens",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 651000,
         "amortissement": 0.5,
@@ -372,7 +372,7 @@
         "charge_id": 15,
         "designation": "Frais de deplacement",
         "categorie": "mois",
-        "unite": "mois",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 200000,
         "amortissement": 0.5,
@@ -382,7 +382,7 @@
         "charge_id": 16,
         "designation": "Carburant / essence",
         "categorie": "Utilitaires chantier",
-        "unite": "jour",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 4000,
         "amortissement": null,
@@ -1252,199 +1252,199 @@
     },
     "documents_chantier": [
       {
-        "document_id": 1,
+        "document_id": null,
         "code_document": "DOC-001",
         "designation": "Plan installation chantier",
         "type_document": "plan",
         "format": "A1",
         "cout_unitaire": 1200,
-        "id": "1"
+        "id": "254d8f76-5209-4552-bddb-05df6cbf28b8"
       },
       {
-        "document_id": 2,
+        "document_id": null,
         "code_document": "DOC-002",
         "designation": "Plan d'implantation",
         "type_document": "plan",
         "format": "A1",
         "cout_unitaire": 1200,
-        "id": "2"
+        "id": "56615d0a-efdf-4508-aacf-52009e7077c8"
       },
       {
-        "document_id": 3,
+        "document_id": null,
         "code_document": "DOC-003",
         "designation": "Plan de fondation",
         "type_document": "plan",
         "format": "A1",
         "cout_unitaire": 1200,
-        "id": "3"
+        "id": "e28a6039-49da-433c-9915-5adf6e4784fa"
       },
       {
-        "document_id": 4,
+        "document_id": null,
         "code_document": "DOC-004",
         "designation": "Plan RDC",
         "type_document": "plan",
         "format": "A1",
         "cout_unitaire": 1200,
-        "id": "4"
+        "id": "d946664e-2383-4b12-a66d-3aacdec742bd"
       },
       {
-        "document_id": 5,
+        "document_id": null,
         "code_document": "DOC-005",
         "designation": "Plan Etage courant",
         "type_document": "plan",
         "format": "A1",
         "cout_unitaire": 1200,
-        "id": "5"
+        "id": "91caa4ed-161a-4d09-ba45-a84805b4f8d8"
       },
       {
-        "document_id": 6,
+        "document_id": null,
         "code_document": "DOC-006",
         "designation": "Plan des appartements",
         "type_document": "plan",
         "format": "A2",
         "cout_unitaire": 1000,
-        "id": "6"
+        "id": "85ed8227-332f-448a-9f1d-dd3308112e4b"
       },
       {
-        "document_id": 7,
+        "document_id": null,
         "code_document": "DOC-007",
         "designation": "Plan toiture",
         "type_document": "plan",
         "format": "A1",
         "cout_unitaire": 1200,
-        "id": "7"
+        "id": "ea775137-c80d-4877-b2a0-bfd723913cbf"
       },
       {
-        "document_id": 8,
+        "document_id": null,
         "code_document": "DOC-008",
         "designation": "Plan façades",
         "type_document": "plan",
         "format": "A2",
         "cout_unitaire": 1000,
-        "id": "8"
+        "id": "a86d6d2f-85be-462c-b87f-6827980a9f01"
       },
       {
-        "document_id": 9,
+        "document_id": null,
         "code_document": "DOC-009",
         "designation": "Plan de coupes",
         "type_document": "plan",
         "format": "A1",
         "cout_unitaire": 1200,
-        "id": "9"
+        "id": "e635f31c-5162-47d3-9b2d-ebe4f7b20bb7"
       },
       {
-        "document_id": 10,
+        "document_id": null,
         "code_document": "DOC-010",
         "designation": "Plan coffrage",
         "type_document": "plan",
         "format": "A1",
         "cout_unitaire": 1200,
-        "id": "10"
+        "id": "4b522599-aa4d-4b08-a88a-6ec73db1ee7c"
       },
       {
-        "document_id": 11,
+        "document_id": null,
         "code_document": "DOC-011",
         "designation": "Plan de plomberie RDC",
         "type_document": "plan",
         "format": "A2",
         "cout_unitaire": 1000,
-        "id": "11"
+        "id": "14d86a71-65da-476a-b945-c56a37ec1d1d"
       },
       {
-        "document_id": 12,
+        "document_id": null,
         "code_document": "DOC-012",
         "designation": "Plan de plomberie Etage courant",
         "type_document": "plan",
         "format": "A2",
         "cout_unitaire": 1000,
-        "id": "12"
+        "id": "7d79605e-b7a9-480c-989b-337807113e62"
       },
       {
-        "document_id": 13,
+        "document_id": null,
         "code_document": "DOC-013",
         "designation": "Plan d'électricité RDC",
         "type_document": "plan",
         "format": "A2",
         "cout_unitaire": 1000,
-        "id": "13"
+        "id": "cfce99f3-4f02-4f98-8e86-ef8f25cb4544"
       },
       {
-        "document_id": 14,
+        "document_id": null,
         "code_document": "DOC-014",
         "designation": "Plan d'électricité Etage courant",
         "type_document": "plan",
         "format": "A2",
         "cout_unitaire": 1000,
-        "id": "14"
+        "id": "aed46852-949b-456b-9b07-41466d5f9399"
       },
       {
-        "document_id": 15,
+        "document_id": null,
         "code_document": "DOC-015",
         "designation": "Cahier d'ensemble",
         "type_document": "document",
         "format": "Ens",
         "cout_unitaire": 5000,
-        "id": "15"
+        "id": "1289f0fd-808e-4d95-b7cd-66f258b7b1af"
       },
       {
-        "document_id": 16,
+        "document_id": null,
         "code_document": "DOC-016",
         "designation": "Planning des travaux",
         "type_document": "plan",
         "format": "A0",
         "cout_unitaire": 2000,
-        "id": "16"
+        "id": "4bef7883-0e93-4c5e-8b94-fa5058f97fe8"
       },
       {
-        "document_id": 17,
+        "document_id": null,
         "code_document": "DOC-017",
         "designation": "Fiches de présence",
         "type_document": "fiche",
         "format": "A4",
         "cout_unitaire": 100,
-        "id": "17"
+        "id": "1763c058-c7b4-4bea-8b08-29cce7294be8"
       },
       {
-        "document_id": 18,
+        "document_id": null,
         "code_document": "DOC-018",
         "designation": "Fiches de gestion de stock",
         "type_document": "fiche",
         "format": "A4",
         "cout_unitaire": 100,
-        "id": "18"
+        "id": "f1258203-a969-4529-98c7-b1bc3d7f8968"
       },
       {
-        "document_id": 19,
+        "document_id": null,
         "code_document": "DOC-019",
         "designation": "Journal de chantier",
         "type_document": "document",
         "format": "Ens",
         "cout_unitaire": 5000,
-        "id": "19"
+        "id": "bfce63bc-f21f-43a9-811f-b4c46ce717fa"
       },
       {
-        "document_id": 20,
+        "document_id": null,
         "code_document": "DOC-020",
         "designation": "Fiches d'inspection des ouvrages",
         "type_document": "fiche",
         "format": "A4",
         "cout_unitaire": 100,
-        "id": "20"
+        "id": "0951a375-127c-457e-a940-a6f81ae76d9c"
       },
       {
-        "document_id": 21,
+        "document_id": null,
         "code_document": "DOC-021",
         "designation": "Rapport des travaux",
         "type_document": "document",
         "format": "Ens",
         "cout_unitaire": 5000,
-        "id": "21"
+        "id": "492c245c-5631-4079-9271-decdeb4e3315"
       }
     ],
     "engins": [
       {
         "engin_id": null,
-        "id": "a9d6dcd9-3c0a-4947-8890-ad5509280c44"
+        "id": "023ad1b9-7bf8-47f3-b441-8181a604ff8f"
       }
     ],
     "equipements_securite": [
@@ -1573,3150 +1573,190 @@
     "lots": [
       {
         "lot_id": 1,
-        "code_lot": "LOT-I",
-        "nom_lot": "TRAVAUX PRÉPARATOIRES",
-        "description": "LOT I : TRAVAUX PREPARATOIRES",
-        "budget_previsionnel": null,
+        "code_lot": "LOT I",
+        "nom_lot": "TRAVAUX PREPARATOIRES",
         "id": "1"
       },
       {
         "lot_id": 2,
-        "code_lot": "LOT-II",
-        "nom_lot": "GROS ŒUVRE",
-        "description": "LOT II. GROS ŒUVRE",
-        "budget_previsionnel": null,
+        "code_lot": "LOT II",
+        "nom_lot": "GROS ŒUVRE ET SECOND ŒUVRE",
         "id": "2"
-      },
-      {
-        "lot_id": 4,
-        "code_lot": "LOT-IV",
-        "nom_lot": "FINITIONS",
-        "description": "LOT IV FINITIONS",
-        "budget_previsionnel": null,
-        "id": "4"
       },
       {
         "lot_id": 3,
         "code_lot": "LOT III",
-        "nom_lot": "SECOND ŒUVRE",
-        "description": "LOT III. SECOND ŒUVRE",
-        "budget_previsionnel": null,
+        "nom_lot": "FINITIONS",
         "id": "3"
       }
     ],
     "materiaux": [
       {
-        "materiau_id": 1,
-        "code_materiau": "TRP-PT-01",
         "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 3500,
-        "id": "1"
+        "code_materiau": "PT",
+        "id": "fa23976a-c2b6-4f09-bc45-dd2452a32d38"
       },
       {
-        "materiau_id": 2,
-        "code_materiau": "TRP-PT-02",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1200,
-        "id": "2"
-      },
-      {
-        "materiau_id": 3,
-        "code_materiau": "TRP-PT-03",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 15000,
-        "id": "3"
-      },
-      {
-        "materiau_id": 4,
-        "code_materiau": "TRP-PT-04",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 32000,
-        "id": "4"
-      },
-      {
-        "materiau_id": 5,
-        "code_materiau": "TRP-PT-05",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "5"
-      },
-      {
-        "materiau_id": 6,
-        "code_materiau": "TRP-PT-06",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "6"
-      },
-      {
-        "materiau_id": 7,
-        "code_materiau": "TRP-PT-07",
-        "categorie": "1",
-        "unite": "2",
-        "prix_unitaire": 4000,
-        "id": "7"
-      },
-      {
-        "materiau_id": 8,
-        "code_materiau": "TRP-PT-08",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "8"
-      },
-      {
-        "materiau_id": 9,
-        "code_materiau": "TRP-PT-09",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 70000,
-        "id": "9"
-      },
-      {
-        "materiau_id": 10,
-        "code_materiau": "TRP-PT-10",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "10"
-      },
-      {
-        "materiau_id": 11,
-        "code_materiau": "TRP-PT-11",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "11"
-      },
-      {
-        "materiau_id": 12,
-        "code_materiau": "TRP-PT-12",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "12"
-      },
-      {
-        "materiau_id": 13,
-        "code_materiau": "TRP-PT-13",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "13"
-      },
-      {
-        "materiau_id": 14,
-        "code_materiau": "TRP-PT-14",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "14"
-      },
-      {
-        "materiau_id": 15,
-        "code_materiau": "TRP-PT-15",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 10000,
-        "id": "15"
-      },
-      {
-        "materiau_id": 16,
-        "code_materiau": "TRP-PT-16",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "16"
-      },
-      {
-        "materiau_id": 17,
-        "code_materiau": "TRP-PT-17",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "17"
-      },
-      {
-        "materiau_id": 18,
-        "code_materiau": "TRP-PT-18",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "18"
-      },
-      {
-        "materiau_id": 19,
-        "code_materiau": "TRP-PT-19",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 300,
-        "id": "19"
-      },
-      {
-        "materiau_id": 20,
-        "code_materiau": "TRP-PT-20",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 7000,
-        "id": "20"
-      },
-      {
-        "materiau_id": 21,
-        "code_materiau": "TRP-PT-21",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "21"
-      },
-      {
-        "materiau_id": 22,
-        "code_materiau": "TRP-PT-22",
-        "categorie": "1",
-        "unite": "12",
-        "prix_unitaire": 1000,
-        "id": "22"
-      },
-      {
-        "materiau_id": 23,
-        "code_materiau": "TRP-PT-23",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 5000,
-        "id": "23"
-      },
-      {
-        "materiau_id": 24,
-        "code_materiau": "TRP-PT-24",
-        "categorie": "1",
-        "unite": "2",
-        "prix_unitaire": 600,
-        "id": "24"
-      },
-      {
-        "materiau_id": 25,
-        "code_materiau": "TRP-PT-25",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "25"
-      },
-      {
-        "materiau_id": 26,
-        "code_materiau": "TRP-PT-26",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "26"
-      },
-      {
-        "materiau_id": 27,
-        "code_materiau": "TRP-PT-27",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "27"
-      },
-      {
-        "materiau_id": 28,
-        "code_materiau": "TRP-PT-28",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "28"
-      },
-      {
-        "materiau_id": 29,
-        "code_materiau": "TRP-PT-29",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1500,
-        "id": "29"
-      },
-      {
-        "materiau_id": 30,
-        "code_materiau": "TRP-PT-30",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 600,
-        "id": "30"
-      },
-      {
-        "materiau_id": 31,
-        "code_materiau": "TRP-PT-31",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1500,
-        "id": "31"
-      },
-      {
-        "materiau_id": 32,
-        "code_materiau": "TRP-PT-32",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "32"
-      },
-      {
-        "materiau_id": 33,
-        "code_materiau": "TRP-PT-33",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 6000,
-        "id": "33"
-      },
-      {
-        "materiau_id": 34,
-        "code_materiau": "TRP-PT-34",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "34"
-      },
-      {
-        "materiau_id": 35,
-        "code_materiau": "TRP-PT-35",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "35"
-      },
-      {
-        "materiau_id": 36,
-        "code_materiau": "TRP-PT-36",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "36"
-      },
-      {
-        "materiau_id": 37,
-        "code_materiau": "TRP-PT-37",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 3500,
-        "id": "37"
-      },
-      {
-        "materiau_id": 38,
-        "code_materiau": "TRP-PT-38",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "38"
-      },
-      {
-        "materiau_id": 39,
-        "code_materiau": "TRP-PT-39",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "39"
-      },
-      {
-        "materiau_id": 40,
-        "code_materiau": "TRP-PT-40",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "40"
-      },
-      {
-        "materiau_id": 41,
-        "code_materiau": "TRP-PT-41",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "41"
-      },
-      {
-        "materiau_id": 42,
-        "code_materiau": "TRP-PT-42",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "42"
-      },
-      {
-        "materiau_id": 43,
-        "code_materiau": "TRP-PT-43",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 35000,
-        "id": "43"
-      },
-      {
-        "materiau_id": 44,
-        "code_materiau": "TRP-PT-44",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "44"
-      },
-      {
-        "materiau_id": 45,
-        "code_materiau": "TRP-PT-45",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "45"
-      },
-      {
-        "materiau_id": 46,
-        "code_materiau": "TRP-PT-46",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "46"
-      },
-      {
-        "materiau_id": 47,
-        "code_materiau": "TRP-PT-47",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "47"
-      },
-      {
-        "materiau_id": 48,
-        "code_materiau": "TRP-PT-48",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "48"
-      },
-      {
-        "materiau_id": 49,
-        "code_materiau": "TRP-PT-49",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 5000,
-        "id": "49"
-      },
-      {
-        "materiau_id": 50,
-        "code_materiau": "TRP-PT-50",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "50"
-      },
-      {
-        "materiau_id": 51,
-        "code_materiau": "TRP-PT-51",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "51"
-      },
-      {
-        "materiau_id": 52,
-        "code_materiau": "TRP-PT-52",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "52"
-      },
-      {
-        "materiau_id": 53,
-        "code_materiau": "TRP-PT-53",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 9000,
-        "id": "53"
-      },
-      {
-        "materiau_id": 54,
-        "code_materiau": "TRP-PT-54",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "54"
-      },
-      {
-        "materiau_id": 55,
-        "code_materiau": "TRP-PT-55",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "55"
-      },
-      {
-        "materiau_id": 56,
-        "code_materiau": "TRP-PT-56",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "56"
-      },
-      {
-        "materiau_id": 57,
-        "code_materiau": "TRP-PT-57",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "57"
-      },
-      {
-        "materiau_id": 58,
-        "code_materiau": "TRP-PT-58",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 800,
-        "id": "58"
-      },
-      {
-        "materiau_id": 59,
-        "code_materiau": "TRP-PT-59",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "59"
-      },
-      {
-        "materiau_id": 60,
-        "code_materiau": "TRP-PT-60",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "60"
-      },
-      {
-        "materiau_id": 61,
-        "code_materiau": "TRP-PT-61",
-        "categorie": "1",
-        "unite": "2",
-        "prix_unitaire": null,
-        "id": "61"
-      },
-      {
-        "materiau_id": 62,
-        "code_materiau": "TRP-PT-62",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "62"
-      },
-      {
-        "materiau_id": 63,
-        "code_materiau": "TRP-PT-63",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "63"
-      },
-      {
-        "materiau_id": 64,
-        "code_materiau": "TRP-PT-64",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "64"
-      },
-      {
-        "materiau_id": 65,
-        "code_materiau": "TRP-PT-65",
-        "categorie": "1",
-        "unite": "1",
-        "prix_unitaire": 22000,
-        "id": "65"
-      },
-      {
-        "materiau_id": 66,
-        "code_materiau": "TRP-BRICKS-01",
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 201,
-        "id": "66"
-      },
-      {
-        "materiau_id": 67,
-        "code_materiau": "TRP-BRICKS-02",
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 233,
-        "id": "67"
-      },
-      {
-        "materiau_id": 68,
-        "code_materiau": "TRP-BRICKS-03",
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 300,
-        "id": "68"
-      },
-      {
-        "materiau_id": 69,
-        "code_materiau": "TRP-BRICKS-04",
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 400,
-        "id": "69"
-      },
-      {
-        "materiau_id": 70,
-        "code_materiau": "TRP-BRICKS-04",
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 250,
-        "id": "70"
-      },
-      {
-        "materiau_id": 71,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 3200,
-        "id": "71"
-      },
-      {
-        "materiau_id": 72,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 2600,
-        "id": "72"
-      },
-      {
-        "materiau_id": 73,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "8",
-        "prix_unitaire": 2200,
-        "id": "73"
-      },
-      {
-        "materiau_id": 74,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "9",
-        "prix_unitaire": 6750,
-        "id": "74"
-      },
-      {
-        "materiau_id": 75,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "9",
-        "prix_unitaire": 4250,
-        "id": "75"
-      },
-      {
-        "materiau_id": 76,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "9",
-        "prix_unitaire": 4850,
-        "id": "76"
-      },
-      {
-        "materiau_id": 77,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "77"
-      },
-      {
-        "materiau_id": 78,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 3500,
-        "id": "78"
-      },
-      {
-        "materiau_id": 79,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 7000,
-        "id": "79"
-      },
-      {
-        "materiau_id": 80,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "80"
-      },
-      {
-        "materiau_id": 81,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 2400,
-        "id": "81"
-      },
-      {
-        "materiau_id": 82,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "12",
-        "prix_unitaire": 600,
-        "id": "82"
-      },
-      {
-        "materiau_id": 83,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 150,
-        "id": "83"
-      },
-      {
-        "materiau_id": 84,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 7000,
-        "id": "84"
-      },
-      {
-        "materiau_id": 85,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 2250,
-        "id": "85"
-      },
-      {
-        "materiau_id": 86,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 5300,
-        "id": "86"
-      },
-      {
-        "materiau_id": 87,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 5300,
-        "id": "87"
-      },
-      {
-        "materiau_id": 88,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 5300,
-        "id": "88"
-      },
-      {
-        "materiau_id": 89,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 5300,
-        "id": "89"
-      },
-      {
-        "materiau_id": 90,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 5300,
-        "id": "90"
-      },
-      {
-        "materiau_id": 91,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 5300,
-        "id": "91"
-      },
-      {
-        "materiau_id": 92,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "11",
-        "prix_unitaire": 2758,
-        "id": "92"
-      },
-      {
-        "materiau_id": 93,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "11",
-        "prix_unitaire": 4237,
-        "id": "93"
-      },
-      {
-        "materiau_id": 94,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "11",
-        "prix_unitaire": 6085,
-        "id": "94"
-      },
-      {
-        "materiau_id": 95,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "11",
-        "prix_unitaire": 8906,
-        "id": "95"
-      },
-      {
-        "materiau_id": 96,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "11",
-        "prix_unitaire": 10500,
-        "id": "96"
-      },
-      {
-        "materiau_id": 97,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "11",
-        "prix_unitaire": 1500,
-        "id": "97"
-      },
-      {
-        "materiau_id": 98,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "98"
-      },
-      {
-        "materiau_id": 99,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "2",
-        "prix_unitaire": null,
-        "id": "99"
-      },
-      {
-        "materiau_id": 100,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "6",
-        "prix_unitaire": 15000,
-        "id": "100"
-      },
-      {
-        "materiau_id": 101,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "6",
-        "prix_unitaire": 15000,
-        "id": "101"
-      },
-      {
-        "materiau_id": 102,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "6",
-        "prix_unitaire": 13000,
-        "id": "102"
-      },
-      {
-        "materiau_id": 103,
-        "code_materiau": "TRP-BRICKS-04",
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 400,
-        "id": "103"
-      },
-      {
-        "materiau_id": 104,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 1300,
-        "id": "104"
-      },
-      {
-        "materiau_id": 105,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 2400,
-        "id": "105"
-      },
-      {
-        "materiau_id": 106,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 2400,
-        "id": "106"
-      },
-      {
-        "materiau_id": 107,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "107"
-      },
-      {
-        "materiau_id": 108,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "108"
-      },
-      {
-        "materiau_id": 109,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "109"
-      },
-      {
-        "materiau_id": 110,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 375,
-        "id": "110"
-      },
-      {
-        "materiau_id": 111,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 4800,
-        "id": "111"
-      },
-      {
-        "materiau_id": 112,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 5300,
-        "id": "112"
-      },
-      {
-        "materiau_id": 113,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": null,
-        "id": "113"
-      },
-      {
-        "materiau_id": 114,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 5000,
-        "id": "114"
-      },
-      {
-        "materiau_id": 115,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 5000,
-        "id": "115"
-      },
-      {
-        "materiau_id": 116,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 4500,
-        "id": "116"
-      },
-      {
-        "materiau_id": 117,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": null,
-        "id": "117"
-      },
-      {
-        "materiau_id": 118,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 4200,
-        "id": "118"
-      },
-      {
-        "materiau_id": 119,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 4200,
-        "id": "119"
-      },
-      {
-        "materiau_id": 120,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 4200,
-        "id": "120"
-      },
-      {
-        "materiau_id": 121,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 4200,
-        "id": "121"
-      },
-      {
-        "materiau_id": 122,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 1000,
-        "id": "122"
-      },
-      {
-        "materiau_id": 123,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 1200,
-        "id": "123"
-      },
-      {
-        "materiau_id": 124,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 1000,
-        "id": "124"
-      },
-      {
-        "materiau_id": 125,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 1000,
-        "id": "125"
-      },
-      {
-        "materiau_id": 126,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "13",
-        "prix_unitaire": 3500,
-        "id": "126"
-      },
-      {
-        "materiau_id": 127,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "127"
-      },
-      {
-        "materiau_id": 128,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "14",
-        "prix_unitaire": null,
-        "id": "128"
-      },
-      {
-        "materiau_id": 129,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "129"
-      },
-      {
-        "materiau_id": 130,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "130"
-      },
-      {
-        "materiau_id": 131,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "131"
-      },
-      {
-        "materiau_id": 132,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "132"
-      },
-      {
-        "materiau_id": 133,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "14",
-        "prix_unitaire": 30000,
-        "id": "133"
-      },
-      {
-        "materiau_id": 134,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "134"
-      },
-      {
-        "materiau_id": 135,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "135"
-      },
-      {
-        "materiau_id": 136,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "6",
-        "prix_unitaire": null,
-        "id": "136"
-      },
-      {
-        "materiau_id": 137,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "6",
-        "prix_unitaire": 5500,
-        "id": "137"
-      },
-      {
-        "materiau_id": 138,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "6",
-        "prix_unitaire": 5500,
-        "id": "138"
-      },
-      {
-        "materiau_id": 139,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "14",
-        "prix_unitaire": null,
-        "id": "139"
-      },
-      {
-        "materiau_id": 140,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "2",
-        "prix_unitaire": 5600,
-        "id": "140"
-      },
-      {
-        "materiau_id": 141,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "2",
-        "prix_unitaire": 4675,
-        "id": "141"
-      },
-      {
-        "materiau_id": 142,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "142"
-      },
-      {
-        "materiau_id": 143,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "143"
-      },
-      {
-        "materiau_id": 144,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "2",
-        "prix_unitaire": null,
-        "id": "144"
-      },
-      {
-        "materiau_id": 145,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "145"
-      },
-      {
-        "materiau_id": 146,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "146"
-      },
-      {
-        "materiau_id": 147,
-        "code_materiau": null,
-        "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": 6000,
-        "id": "147"
-      },
-      {
-        "materiau_id": 148,
-        "code_materiau": null,
         "categorie": "2",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "148"
+        "code_materiau": "GO",
+        "id": "320807a3-1bbc-4780-b411-c4f3488b4963"
       },
       {
-        "materiau_id": 149,
-        "code_materiau": null,
         "categorie": "3",
-        "unite": "15",
-        "prix_unitaire": 85000,
-        "id": "149"
+        "code_materiau": "ET",
+        "id": "0f33cb2a-4bd9-4feb-a129-631493c93189"
       },
       {
-        "materiau_id": 150,
-        "code_materiau": null,
-        "categorie": "3",
-        "unite": "15",
-        "prix_unitaire": 26600,
-        "id": "150"
-      },
-      {
-        "materiau_id": 151,
-        "code_materiau": null,
-        "categorie": "3",
-        "unite": "3",
-        "prix_unitaire": 400,
-        "id": "151"
-      },
-      {
-        "materiau_id": 152,
-        "code_materiau": null,
-        "categorie": "3",
-        "unite": "7",
-        "prix_unitaire": null,
-        "id": "152"
-      },
-      {
-        "materiau_id": 153,
-        "code_materiau": null,
-        "categorie": "3",
-        "unite": "12",
-        "prix_unitaire": 36000,
-        "id": "153"
-      },
-      {
-        "materiau_id": 154,
-        "code_materiau": null,
-        "categorie": "3",
-        "unite": "16",
-        "prix_unitaire": 6500,
-        "id": "154"
-      },
-      {
-        "materiau_id": 155,
-        "code_materiau": null,
-        "categorie": "3",
-        "unite": "10",
-        "prix_unitaire": 17000,
-        "id": "155"
-      },
-      {
-        "materiau_id": 156,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "156"
-      },
-      {
-        "materiau_id": 157,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "157"
-      },
-      {
-        "materiau_id": 158,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "158"
-      },
-      {
-        "materiau_id": 159,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 45000,
-        "id": "159"
-      },
-      {
-        "materiau_id": 160,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 35000,
-        "id": "160"
-      },
-      {
-        "materiau_id": 161,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 50000,
-        "id": "161"
-      },
-      {
-        "materiau_id": 162,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 150000,
-        "id": "162"
-      },
-      {
-        "materiau_id": 163,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 5000,
-        "id": "163"
-      },
-      {
-        "materiau_id": 164,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 5000,
-        "id": "164"
-      },
-      {
-        "materiau_id": 165,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 5000,
-        "id": "165"
-      },
-      {
-        "materiau_id": 166,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 2000,
-        "id": "166"
-      },
-      {
-        "materiau_id": 167,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 10000,
-        "id": "167"
-      },
-      {
-        "materiau_id": 168,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "168"
-      },
-      {
-        "materiau_id": 169,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "169"
-      },
-      {
-        "materiau_id": 170,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "170"
-      },
-      {
-        "materiau_id": 171,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "171"
-      },
-      {
-        "materiau_id": 172,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "172"
-      },
-      {
-        "materiau_id": 173,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "173"
-      },
-      {
-        "materiau_id": 174,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "174"
-      },
-      {
-        "materiau_id": 175,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "175"
-      },
-      {
-        "materiau_id": 176,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "176"
-      },
-      {
-        "materiau_id": 177,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "177"
-      },
-      {
-        "materiau_id": 178,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "178"
-      },
-      {
-        "materiau_id": 179,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "13",
-        "prix_unitaire": null,
-        "id": "179"
-      },
-      {
-        "materiau_id": 180,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "180"
-      },
-      {
-        "materiau_id": 181,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "181"
-      },
-      {
-        "materiau_id": 182,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "182"
-      },
-      {
-        "materiau_id": 183,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "183"
-      },
-      {
-        "materiau_id": 184,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "184"
-      },
-      {
-        "materiau_id": 185,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "185"
-      },
-      {
-        "materiau_id": 186,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "186"
-      },
-      {
-        "materiau_id": 187,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "187"
-      },
-      {
-        "materiau_id": 188,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "188"
-      },
-      {
-        "materiau_id": 189,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "189"
-      },
-      {
-        "materiau_id": 190,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "190"
-      },
-      {
-        "materiau_id": 191,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "191"
-      },
-      {
-        "materiau_id": 192,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "192"
-      },
-      {
-        "materiau_id": 193,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "193"
-      },
-      {
-        "materiau_id": 194,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "194"
-      },
-      {
-        "materiau_id": 195,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "195"
-      },
-      {
-        "materiau_id": 196,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "196"
-      },
-      {
-        "materiau_id": 197,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 1300,
-        "id": "197"
-      },
-      {
-        "materiau_id": 198,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "198"
-      },
-      {
-        "materiau_id": 199,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "199"
-      },
-      {
-        "materiau_id": 200,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "200"
-      },
-      {
-        "materiau_id": 201,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "201"
-      },
-      {
-        "materiau_id": 202,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "2",
-        "prix_unitaire": 950,
-        "id": "202"
-      },
-      {
-        "materiau_id": 203,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "203"
-      },
-      {
-        "materiau_id": 204,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "204"
-      },
-      {
-        "materiau_id": 205,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "205"
-      },
-      {
-        "materiau_id": 206,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "206"
-      },
-      {
-        "materiau_id": 207,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "207"
-      },
-      {
-        "materiau_id": 208,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "208"
-      },
-      {
-        "materiau_id": 209,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "209"
-      },
-      {
-        "materiau_id": 210,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "210"
-      },
-      {
-        "materiau_id": 211,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "211"
-      },
-      {
-        "materiau_id": 212,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "212"
-      },
-      {
-        "materiau_id": 213,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "213"
-      },
-      {
-        "materiau_id": 214,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "214"
-      },
-      {
-        "materiau_id": 215,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "215"
-      },
-      {
-        "materiau_id": 216,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "216"
-      },
-      {
-        "materiau_id": 217,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "217"
-      },
-      {
-        "materiau_id": 218,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "218"
-      },
-      {
-        "materiau_id": 219,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "219"
-      },
-      {
-        "materiau_id": 220,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "220"
-      },
-      {
-        "materiau_id": 221,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "221"
-      },
-      {
-        "materiau_id": 222,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "222"
-      },
-      {
-        "materiau_id": 223,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "223"
-      },
-      {
-        "materiau_id": 224,
-        "code_materiau": null,
         "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "224"
-      },
-      {
-        "materiau_id": 225,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "225"
-      },
-      {
-        "materiau_id": 226,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "226"
-      },
-      {
-        "materiau_id": 227,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "227"
-      },
-      {
-        "materiau_id": 228,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "228"
-      },
-      {
-        "materiau_id": 229,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "229"
-      },
-      {
-        "materiau_id": 230,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "230"
-      },
-      {
-        "materiau_id": 231,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "231"
-      },
-      {
-        "materiau_id": 232,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "232"
-      },
-      {
-        "materiau_id": 233,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "233"
-      },
-      {
-        "materiau_id": 234,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "234"
-      },
-      {
-        "materiau_id": 235,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "235"
-      },
-      {
-        "materiau_id": 236,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "236"
-      },
-      {
-        "materiau_id": 237,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "237"
-      },
-      {
-        "materiau_id": 238,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "238"
-      },
-      {
-        "materiau_id": 239,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "239"
-      },
-      {
-        "materiau_id": 240,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "240"
-      },
-      {
-        "materiau_id": 241,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "241"
-      },
-      {
-        "materiau_id": 242,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "242"
-      },
-      {
-        "materiau_id": 243,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "243"
-      },
-      {
-        "materiau_id": 244,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "244"
-      },
-      {
-        "materiau_id": 245,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "245"
-      },
-      {
-        "materiau_id": 246,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "246"
-      },
-      {
-        "materiau_id": 247,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "247"
-      },
-      {
-        "materiau_id": 248,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "248"
-      },
-      {
-        "materiau_id": 249,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "249"
-      },
-      {
-        "materiau_id": 250,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "250"
-      },
-      {
-        "materiau_id": 251,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 5500,
-        "id": "251"
-      },
-      {
-        "materiau_id": 252,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "252"
-      },
-      {
-        "materiau_id": 253,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": 4000,
-        "id": "253"
-      },
-      {
-        "materiau_id": 254,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "254"
-      },
-      {
-        "materiau_id": 255,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "255"
-      },
-      {
-        "materiau_id": 256,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "256"
-      },
-      {
-        "materiau_id": 257,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "257"
-      },
-      {
-        "materiau_id": 258,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "258"
-      },
-      {
-        "materiau_id": 259,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "259"
-      },
-      {
-        "materiau_id": 260,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "260"
-      },
-      {
-        "materiau_id": 261,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "261"
-      },
-      {
-        "materiau_id": 262,
-        "code_materiau": null,
-        "categorie": "4",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "262"
-      },
-      {
-        "materiau_id": 263,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 8500,
-        "id": "263"
-      },
-      {
-        "materiau_id": 264,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "264"
-      },
-      {
-        "materiau_id": 265,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "265"
-      },
-      {
-        "materiau_id": 266,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "266"
-      },
-      {
-        "materiau_id": 267,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "267"
-      },
-      {
-        "materiau_id": 268,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "268"
-      },
-      {
-        "materiau_id": 269,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "269"
-      },
-      {
-        "materiau_id": 270,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "270"
-      },
-      {
-        "materiau_id": 271,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 2500,
-        "id": "271"
-      },
-      {
-        "materiau_id": 272,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "272"
-      },
-      {
-        "materiau_id": 273,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "273"
-      },
-      {
-        "materiau_id": 274,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "274"
-      },
-      {
-        "materiau_id": 275,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 150000,
-        "id": "275"
-      },
-      {
-        "materiau_id": 276,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "276"
-      },
-      {
-        "materiau_id": 277,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "277"
-      },
-      {
-        "materiau_id": 278,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "278"
-      },
-      {
-        "materiau_id": 279,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "279"
-      },
-      {
-        "materiau_id": 280,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "280"
-      },
-      {
-        "materiau_id": 281,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "281"
-      },
-      {
-        "materiau_id": 282,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "282"
-      },
-      {
-        "materiau_id": 283,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "283"
-      },
-      {
-        "materiau_id": 284,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "284"
-      },
-      {
-        "materiau_id": 285,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "285"
-      },
-      {
-        "materiau_id": 286,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "286"
-      },
-      {
-        "materiau_id": 287,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "287"
-      },
-      {
-        "materiau_id": 288,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "288"
-      },
-      {
-        "materiau_id": 289,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "289"
-      },
-      {
-        "materiau_id": 290,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "290"
-      },
-      {
-        "materiau_id": 291,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "291"
-      },
-      {
-        "materiau_id": 292,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "292"
-      },
-      {
-        "materiau_id": 293,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "293"
-      },
-      {
-        "materiau_id": 294,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "294"
-      },
-      {
-        "materiau_id": 295,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "12",
-        "prix_unitaire": 27000,
-        "id": "295"
-      },
-      {
-        "materiau_id": 296,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "12",
-        "prix_unitaire": 36000,
-        "id": "296"
-      },
-      {
-        "materiau_id": 297,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "12",
-        "prix_unitaire": 36000,
-        "id": "297"
-      },
-      {
-        "materiau_id": 298,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "298"
-      },
-      {
-        "materiau_id": 299,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "299"
-      },
-      {
-        "materiau_id": 300,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "300"
-      },
-      {
-        "materiau_id": 301,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "301"
-      },
-      {
-        "materiau_id": 302,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "302"
-      },
-      {
-        "materiau_id": 303,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "303"
-      },
-      {
-        "materiau_id": 304,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "304"
-      },
-      {
-        "materiau_id": 305,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "305"
-      },
-      {
-        "materiau_id": 306,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "306"
-      },
-      {
-        "materiau_id": 307,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "307"
-      },
-      {
-        "materiau_id": 308,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "308"
-      },
-      {
-        "materiau_id": 309,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 24000,
-        "id": "309"
-      },
-      {
-        "materiau_id": 310,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 10000,
-        "id": "310"
-      },
-      {
-        "materiau_id": 311,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 2800,
-        "id": "311"
-      },
-      {
-        "materiau_id": 312,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 3000,
-        "id": "312"
-      },
-      {
-        "materiau_id": 313,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 5000,
-        "id": "313"
+        "code_materiau": "PL",
+        "id": "74b6d61c-904d-4b92-a331-704d76b0d033"
       },
       {
-        "materiau_id": 314,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "314"
+        "categorie": "5",
+        "code_materiau": "EL",
+        "id": "82b87ba1-9fee-4d0f-93b8-c3b34a0bcd10"
       },
       {
-        "materiau_id": 315,
-        "code_materiau": null,
         "categorie": "6",
-        "unite": "3",
-        "prix_unitaire": 4000,
-        "id": "315"
+        "code_materiau": "CA",
+        "id": "e1698f28-5a79-43e3-b0a6-515eaa109986"
       },
       {
-        "materiau_id": 316,
-        "code_materiau": null,
-        "categorie": "6",
-        "unite": "3",
-        "prix_unitaire": 4000,
-        "id": "316"
-      },
-      {
-        "materiau_id": 317,
-        "code_materiau": null,
-        "categorie": "6",
-        "unite": "3",
-        "prix_unitaire": 5000,
-        "id": "317"
-      },
-      {
-        "materiau_id": 318,
-        "code_materiau": null,
-        "categorie": "6",
-        "unite": "3",
-        "prix_unitaire": 6500,
-        "id": "318"
-      },
-      {
-        "materiau_id": 319,
-        "code_materiau": null,
-        "categorie": "6",
-        "unite": "3",
-        "prix_unitaire": null,
-        "id": "319"
-      },
-      {
-        "materiau_id": 320,
-        "code_materiau": null,
-        "categorie": "6",
-        "unite": "3",
-        "prix_unitaire": null,
-        "id": "320"
-      },
-      {
-        "materiau_id": 321,
-        "code_materiau": null,
-        "categorie": "6",
-        "unite": "3",
-        "prix_unitaire": 7500,
-        "id": "321"
-      },
-      {
-        "materiau_id": 322,
-        "code_materiau": null,
-        "categorie": "6",
-        "unite": "3",
-        "prix_unitaire": null,
-        "id": "322"
-      },
-      {
-        "materiau_id": 323,
-        "code_materiau": null,
-        "categorie": "6",
-        "unite": "3",
-        "prix_unitaire": null,
-        "id": "323"
-      },
-      {
-        "materiau_id": 324,
-        "code_materiau": null,
-        "categorie": "6",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "324"
-      },
-      {
-        "materiau_id": 325,
-        "code_materiau": null,
         "categorie": "7",
-        "unite": "1",
-        "prix_unitaire": 1500,
-        "id": "325"
+        "code_materiau": "PE",
+        "id": "6f8f5acb-383f-4065-b22b-f95deb34ae08"
       },
       {
-        "materiau_id": 326,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "7",
-        "prix_unitaire": 1000,
-        "id": "326"
-      },
-      {
-        "materiau_id": 327,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": 92000,
-        "id": "327"
-      },
-      {
-        "materiau_id": 328,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": null,
-        "id": "328"
-      },
-      {
-        "materiau_id": 329,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "18",
-        "prix_unitaire": null,
-        "id": "329"
-      },
-      {
-        "materiau_id": 330,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": null,
-        "id": "330"
-      },
-      {
-        "materiau_id": 331,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": 67300,
-        "id": "331"
-      },
-      {
-        "materiau_id": 332,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": null,
-        "id": "332"
-      },
-      {
-        "materiau_id": 333,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": 46700,
-        "id": "333"
-      },
-      {
-        "materiau_id": 334,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": 35000,
-        "id": "334"
-      },
-      {
-        "materiau_id": 335,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": null,
-        "id": "335"
-      },
-      {
-        "materiau_id": 336,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": null,
-        "id": "336"
-      },
-      {
-        "materiau_id": 337,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": 71000,
-        "id": "337"
-      },
-      {
-        "materiau_id": 338,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "12",
-        "prix_unitaire": 20000,
-        "id": "338"
-      },
-      {
-        "materiau_id": 339,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "12",
-        "prix_unitaire": 20000,
-        "id": "339"
-      },
-      {
-        "materiau_id": 340,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "12",
-        "prix_unitaire": null,
-        "id": "340"
-      },
-      {
-        "materiau_id": 341,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": 45000,
-        "id": "341"
-      },
-      {
-        "materiau_id": 342,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": 17000,
-        "id": "342"
-      },
-      {
-        "materiau_id": 343,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": 50000,
-        "id": "343"
-      },
-      {
-        "materiau_id": 344,
-        "code_materiau": null,
-        "categorie": "7",
-        "unite": "17",
-        "prix_unitaire": 22000,
-        "id": "344"
-      },
-      {
-        "materiau_id": 345,
-        "code_materiau": null,
         "categorie": "8",
-        "unite": "3",
-        "prix_unitaire": 10000,
-        "id": "345"
+        "code_materiau": "MB",
+        "id": "f776c91e-e4a6-47f1-b944-f02e7556d24d"
       },
       {
-        "materiau_id": 346,
-        "code_materiau": null,
-        "categorie": "8",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "346"
-      },
-      {
-        "materiau_id": 347,
-        "code_materiau": null,
-        "categorie": "8",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "347"
-      },
-      {
-        "materiau_id": 348,
-        "code_materiau": null,
-        "categorie": "8",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "348"
-      },
-      {
-        "materiau_id": 349,
-        "code_materiau": null,
-        "categorie": "8",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "349"
-      },
-      {
-        "materiau_id": 350,
-        "code_materiau": null,
-        "categorie": "8",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "350"
-      },
-      {
-        "materiau_id": 351,
-        "code_materiau": null,
-        "categorie": "8",
-        "unite": "1",
-        "prix_unitaire": null,
-        "id": "351"
-      },
-      {
-        "materiau_id": 352,
-        "code_materiau": null,
-        "categorie": "8",
-        "unite": "3",
-        "prix_unitaire": null,
-        "id": "352"
-      },
-      {
-        "materiau_id": 353,
-        "code_materiau": null,
-        "categorie": "8",
-        "unite": "2",
-        "prix_unitaire": null,
-        "id": "353"
-      },
-      {
-        "materiau_id": 354,
-        "code_materiau": null,
         "categorie": "9",
-        "unite": "3",
-        "prix_unitaire": 30000,
-        "id": "354"
+        "code_materiau": "MM",
+        "id": "dfee9b24-b976-49f8-b6dd-ff57c604c6d9"
       },
       {
-        "materiau_id": 355,
-        "code_materiau": null,
         "categorie": "10",
-        "unite": "3",
-        "prix_unitaire": 35000,
-        "id": "355"
+        "code_materiau": "MA",
+        "id": "9fed6826-4fdd-4d5d-85f8-4a056e8e5fb9"
       },
       {
-        "materiau_id": 356,
-        "code_materiau": null,
         "categorie": "11",
-        "unite": "3",
-        "prix_unitaire": null,
-        "id": "356"
+        "code_materiau": "AE",
+        "id": "c02bf19f-d65f-44f4-86a0-b9593d3ce63a"
       },
       {
-        "materiau_id": 357,
-        "code_materiau": null,
-        "categorie": "11",
-        "unite": "3",
-        "prix_unitaire": null,
-        "id": "357"
-      },
-      {
-        "materiau_id": 358,
-        "code_materiau": null,
         "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 700,
-        "id": "358"
+        "code_materiau": "DV",
+        "id": "ab3121fb-8709-4466-b803-e1cc3e14e7a8"
       },
       {
-        "materiau_id": 359,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "10",
-        "prix_unitaire": 10000,
-        "id": "359"
-      },
-      {
-        "materiau_id": 360,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "7",
-        "prix_unitaire": 650,
-        "id": "360"
-      },
-      {
-        "materiau_id": 361,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "19",
-        "prix_unitaire": 6500,
-        "id": "361"
-      },
-      {
-        "materiau_id": 362,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "7",
-        "prix_unitaire": null,
-        "id": "362"
-      },
-      {
-        "materiau_id": 363,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "10",
-        "prix_unitaire": 3800,
-        "id": "363"
-      },
-      {
-        "materiau_id": 364,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "7",
-        "prix_unitaire": 3275,
-        "id": "364"
-      },
-      {
-        "materiau_id": 365,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "15",
-        "prix_unitaire": 7500,
-        "id": "365"
-      },
-      {
-        "materiau_id": 366,
-        "code_materiau": null,
         "categorie": "13",
-        "unite": "3",
-        "prix_unitaire": 10000,
-        "id": "366"
+        "code_materiau": "ST",
+        "id": "352763f3-d024-42b3-806c-0fb6aa226c0b"
       },
       {
-        "materiau_id": 367,
-        "code_materiau": null,
-        "categorie": "13",
-        "unite": "3",
-        "prix_unitaire": 7000,
-        "id": "367"
-      },
-      {
-        "materiau_id": 368,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 12000,
-        "id": "368"
-      },
-      {
-        "materiau_id": 369,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 200000,
-        "id": "369"
-      },
-      {
-        "materiau_id": 370,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 3500,
-        "id": "370"
-      },
-      {
-        "materiau_id": 371,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 3000,
-        "id": "371"
-      },
-      {
-        "materiau_id": 372,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 5000,
-        "id": "372"
-      },
-      {
-        "materiau_id": 373,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 5000,
-        "id": "373"
-      },
-      {
-        "materiau_id": 374,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 6500,
-        "id": "374"
-      },
-      {
-        "materiau_id": 375,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 25000,
-        "id": "375"
-      },
-      {
-        "materiau_id": 376,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "3",
-        "prix_unitaire": 2500,
-        "id": "376"
-      },
-      {
-        "materiau_id": 377,
-        "code_materiau": null,
-        "categorie": "12",
-        "unite": "1",
-        "prix_unitaire": 1000,
-        "id": "377"
+        "categorie": "14",
+        "code_materiau": "CO",
+        "id": "7737699c-a33e-4ba2-993b-b4bce4d5b3ad"
       }
     ],
     "metiers": [
       {
         "categorie_metier_id": 1,
         "code_metier": "GO",
-        "id": "9363ef9a-1d85-416f-948d-9776ee317bb1"
+        "id": "574d8c09-92ee-4859-ad12-19adc3b4cf9a"
       },
       {
         "categorie_metier_id": 2,
         "code_metier": "FIN",
-        "id": "8df4f02a-d0cc-4d63-916e-bf1bbf5dfabc"
+        "id": "60b77a62-9fb1-4dd1-af8b-f17db7298bd8"
       },
       {
         "categorie_metier_id": 3,
         "code_metier": "EXT",
-        "id": "e4b37ab1-0229-478d-a478-982550a8623b"
+        "id": "79b6191f-aa54-4713-bcb1-7211d0b74cc9"
       },
       {
         "categorie_metier_id": 4,
         "code_metier": "ADM",
-        "id": "9f52e7f0-e358-4fa4-aea3-e64d8de0110a"
+        "id": "846e4528-dd2a-432b-b8a9-f4f7abdf1a73"
       },
       {
         "categorie_metier_id": 5,
         "code_metier": "TECH",
-        "id": "57b16917-a42c-4c86-becc-b20093849e8c"
+        "id": "2b8d61d9-d6b7-4550-a5e0-a7c8662445e3"
       },
       {
         "categorie_metier_id": 10,
         "code_metier": "GO-TER",
-        "id": "8726faa7-83b0-4d14-ba8d-d7af3d58d09f"
+        "id": "976cb4d3-1a11-4844-84da-6d76e6bf1670"
       },
       {
         "categorie_metier_id": 11,
         "code_metier": "GO-FER",
-        "id": "14e79db1-60d9-4e70-bb1b-b9ff5be47329"
+        "id": "7ba973ca-b6a9-442c-820f-61a930982e30"
       },
       {
         "categorie_metier_id": 12,
         "code_metier": "GO-COF",
-        "id": "8318b56a-9499-484a-a819-dd9d02fc375b"
+        "id": "b82d3be2-86ed-4c55-885a-a008b26053e5"
       },
       {
         "categorie_metier_id": 13,
         "code_metier": "GO-BET",
-        "id": "f09fb8b3-96f9-4f2b-9655-2669debb9301"
+        "id": "7de453c0-5bd0-4d70-856e-c6a6b85f2d56"
       },
       {
         "categorie_metier_id": 14,
         "code_metier": "GO-MAC",
-        "id": "8f4d36fe-73da-47d6-8a74-46af2c9b0f54"
+        "id": "2192e168-c7c7-48a9-b71c-862e550407a5"
       },
       {
         "categorie_metier_id": 15,
         "code_metier": "GO-END",
-        "id": "fb004f15-3a6a-4dd1-9f29-1f10189dc819"
+        "id": "4ca23f03-8d8e-44d2-9639-c6882e05beb1"
       },
       {
         "categorie_metier_id": 16,
         "code_metier": "GO-CHA",
-        "id": "4258ce24-f5fc-4b68-b0e0-8444087e44a2"
+        "id": "ae16bbc0-59ed-4711-8985-89e7ee79ba19"
       },
       {
         "categorie_metier_id": 17,
         "code_metier": "GO-MAN",
-        "id": "8010af97-148d-4449-86d3-918f2bc7e528"
+        "id": "1ddad18f-9709-40be-b7b8-115ccb96658a"
       },
       {
         "categorie_metier_id": 20,
         "code_metier": "FIN-PLA",
-        "id": "e5f5b6e4-3f83-4164-be0a-02d10e51a7fd"
+        "id": "cfe5d796-c196-4e58-a17a-ddaa542ff326"
       },
       {
         "categorie_metier_id": 21,
         "code_metier": "FIN-CAR",
-        "id": "5ab8ed76-6e34-4fda-a6b5-d99e4b2d8469"
+        "id": "d1cbb5a2-e189-45c8-8cab-93a2f9daf5da"
       },
       {
         "categorie_metier_id": 22,
         "code_metier": "FIN-PEI",
-        "id": "d7b29132-1bc5-4389-a0c1-d6ccf95e1673"
+        "id": "915fdc40-6888-4837-a677-aa660b6d1ca5"
       },
       {
         "categorie_metier_id": 23,
         "code_metier": "FIN-MEN",
-        "id": "d3782a7f-c3ef-4593-8c61-2fa8f036de56"
+        "id": "56c06061-384b-4777-815d-bdadbea34f3d"
       },
       {
         "categorie_metier_id": 24,
         "code_metier": "FIN-PLB",
-        "id": "cc140664-0fce-4442-93d3-156e0a8e93d2"
+        "id": "c93d691b-a2a6-4642-b60d-cf7b0da354fc"
       },
       {
         "categorie_metier_id": 25,
         "code_metier": "FIN-ELE",
-        "id": "2246110f-6a0c-4843-9456-73d7472da5ff"
+        "id": "78e6e06f-c63d-40be-9852-8c940aa52bb6"
       }
     ],
     "migration_summary": {
@@ -4751,1074 +1791,836 @@
     "operations": [
       {
         "operation_id": 1,
-        "tache_id": 1,
-        "code_operation": "I.1.1.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Amené et repli du matériel",
-        "description": null,
-        "avancement": null,
         "id": "1"
       },
       {
         "operation_id": 2,
-        "tache_id": 1,
-        "code_operation": "I.1.1.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Construction d'une clôture de chantier",
-        "description": null,
-        "avancement": null,
         "id": "2"
       },
       {
         "operation_id": 3,
-        "tache_id": 1,
-        "code_operation": "I.1.1.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Construction de baraque de chantier y compris bureaux du chantier et charges diverses",
-        "description": null,
-        "avancement": null,
         "id": "3"
       },
       {
         "operation_id": 4,
-        "tache_id": 1,
-        "code_operation": "I.1.1.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Gardiennage du chantier",
-        "description": null,
-        "avancement": null,
         "id": "4"
       },
       {
         "operation_id": 5,
-        "tache_id": 1,
-        "code_operation": "I.1.1.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Alimentation provisoire en Eau",
-        "description": null,
-        "avancement": null,
         "id": "5"
       },
       {
         "operation_id": 6,
-        "tache_id": 1,
-        "code_operation": "I.1.1.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Alimentation provisoire en Electricité",
-        "description": null,
-        "avancement": null,
         "id": "6"
       },
       {
         "operation_id": 7,
-        "tache_id": 1,
-        "code_operation": "I.1.1.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Petit matériel",
-        "description": null,
-        "avancement": null,
         "id": "7"
       },
       {
         "operation_id": 8,
-        "tache_id": 1,
-        "code_operation": "I.1.1.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "8"
       },
       {
         "operation_id": 9,
-        "tache_id": 2,
-        "code_operation": "I.1.2.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Implantation du bâtiment",
-        "description": null,
-        "avancement": null,
         "id": "9"
       },
       {
         "operation_id": 10,
-        "tache_id": 2,
-        "code_operation": "I.1.2.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Fouilles en grande masse",
-        "description": null,
-        "avancement": null,
         "id": "10"
       },
       {
         "operation_id": 11,
-        "tache_id": 2,
-        "code_operation": "I.1.2.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Fouille en rigole",
-        "description": null,
-        "avancement": null,
         "id": "11"
       },
       {
         "operation_id": 12,
-        "tache_id": 2,
-        "code_operation": "I.1.2.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Remblai autour des fondations",
-        "description": null,
-        "avancement": null,
         "id": "12"
       },
       {
         "operation_id": 13,
-        "tache_id": 2,
-        "code_operation": "I.1.2.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Désherbage et dessouchage arbres et arbustes, y compris évacuation hors du site",
-        "description": null,
-        "avancement": null,
         "id": "13"
       },
       {
         "operation_id": 14,
-        "tache_id": 2,
-        "code_operation": "I.1.2.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "14"
       },
       {
         "operation_id": 15,
-        "tache_id": 3,
-        "code_operation": "II.1.1.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton de propreté d'ép. 5cm dosé à 150 kg/m³ y/c toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "15"
       },
       {
         "operation_id": 16,
-        "tache_id": 3,
-        "code_operation": "II.1.1.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour radier général dosé à 350 kg/m³  y/c toute sujétion de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "16"
       },
       {
         "operation_id": 17,
-        "tache_id": 3,
-        "code_operation": "II.1.1.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour amorces de poteaux dosé à 350kg /m³ y/c toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "17"
       },
       {
         "operation_id": 18,
-        "tache_id": 3,
-        "code_operation": "II.1.1.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour longrines dosé à 350 kg/m³  y/c toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "18"
       },
       {
         "operation_id": 19,
-        "tache_id": 3,
-        "code_operation": "II.1.1.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour massifs d'escaliers dosé à 350 kg/m³ y/c toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "19"
       },
       {
         "operation_id": 20,
-        "tache_id": 3,
-        "code_operation": "II.1.1.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Murs voiles",
-        "description": null,
-        "avancement": null,
         "id": "20"
       },
       {
         "operation_id": 21,
-        "tache_id": 3,
-        "code_operation": "II.1.1.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Plancher corps creux (hourdis, nervures et dalle de compression)",
-        "description": null,
-        "avancement": null,
         "id": "21"
       },
       {
         "operation_id": 22,
-        "tache_id": 3,
-        "code_operation": "II.1.1.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "22"
       },
       {
         "operation_id": 23,
-        "tache_id": 4,
-        "code_operation": "II.2.1.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poteaux dosé à 350 kg/m3 y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "23"
       },
       {
         "operation_id": 24,
-        "tache_id": 4,
-        "code_operation": "II.2.1.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Maçonnerie en agglos creux de 15x20x40cm pour élévation des murs",
-        "description": null,
-        "avancement": null,
         "id": "24"
       },
       {
         "operation_id": 25,
-        "tache_id": 4,
-        "code_operation": "II.2.1.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poutres y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "25"
       },
       {
         "operation_id": 26,
-        "tache_id": 4,
-        "code_operation": "II.2.1.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour escalier dosé à 350 kg/m³ y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "26"
       },
       {
         "operation_id": 27,
-        "tache_id": 4,
-        "code_operation": "II.2.1.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour linteaux y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "27"
       },
       {
         "operation_id": 28,
-        "tache_id": 4,
-        "code_operation": "II.2.1.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sur mur ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "28"
       },
       {
         "operation_id": 29,
-        "tache_id": 4,
-        "code_operation": "II.2.1.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sous dalle ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "29"
       },
       {
         "operation_id": 30,
-        "tache_id": 4,
-        "code_operation": "II.2.1.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Plancher corps creux (hourdis, nervures et dalle de compression)",
-        "description": null,
-        "avancement": null,
         "id": "30"
       },
       {
         "operation_id": 31,
-        "tache_id": 4,
-        "code_operation": "II.2.1.9",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Etanchéité multicouche",
-        "description": null,
-        "avancement": null,
         "id": "31"
       },
       {
         "operation_id": 32,
-        "tache_id": 4,
-        "code_operation": "II.2.1.10",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Murs voiles",
-        "description": null,
-        "avancement": null,
         "id": "32"
       },
       {
         "operation_id": 33,
-        "tache_id": 4,
-        "code_operation": "II.2.1.11",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "33"
       },
       {
         "operation_id": 34,
-        "tache_id": 5,
-        "code_operation": "II.2.2.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poteaux dosé à 350 kg/m3 y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "34"
       },
       {
         "operation_id": 35,
-        "tache_id": 5,
-        "code_operation": "II.2.2.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Maçonnerie en agglos creux de 15x20x40cm pour élévation des murs",
-        "description": null,
-        "avancement": null,
         "id": "35"
       },
       {
         "operation_id": 36,
-        "tache_id": 5,
-        "code_operation": "II.2.2.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour linteaux y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "36"
       },
       {
         "operation_id": 37,
-        "tache_id": 5,
-        "code_operation": "II.2.2.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour escalier dosé à 350 kg/m³ y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "37"
       },
       {
         "operation_id": 38,
-        "tache_id": 5,
-        "code_operation": "II.2.2.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poutres y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "38"
       },
       {
         "operation_id": 39,
-        "tache_id": 5,
-        "code_operation": "II.2.2.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sur mur ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "39"
       },
       {
         "operation_id": 40,
-        "tache_id": 5,
-        "code_operation": "II.2.2.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sous dalle ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "40"
       },
       {
         "operation_id": 41,
-        "tache_id": 5,
-        "code_operation": "II.2.2.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Plancher corps creux (hourdis, nervures et dalle de compression)",
-        "description": null,
-        "avancement": null,
         "id": "41"
       },
       {
         "operation_id": 42,
-        "tache_id": 5,
-        "code_operation": "II.2.2.9",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Etanchéité multicouche",
-        "description": null,
-        "avancement": null,
         "id": "42"
       },
       {
         "operation_id": 43,
-        "tache_id": 5,
-        "code_operation": "II.2.2.10",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Murs voiles",
-        "description": null,
-        "avancement": null,
         "id": "43"
       },
       {
         "operation_id": 44,
-        "tache_id": 5,
-        "code_operation": "II.2.2.11",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "44"
       },
       {
         "operation_id": 45,
-        "tache_id": 6,
-        "code_operation": "II.2.3.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poteaux dosé à 350 kg/m3 y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "45"
       },
       {
         "operation_id": 46,
-        "tache_id": 6,
-        "code_operation": "II.2.3.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Maçonnerie en agglos creux de 15x20x40cm pour élévation des murs",
-        "description": null,
-        "avancement": null,
         "id": "46"
       },
       {
         "operation_id": 47,
-        "tache_id": 6,
-        "code_operation": "II.2.3.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour linteaux y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "47"
       },
       {
         "operation_id": 48,
-        "tache_id": 6,
-        "code_operation": "II.2.3.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour escalier dosé à 350 kg/m³ y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "48"
       },
       {
         "operation_id": 49,
-        "tache_id": 6,
-        "code_operation": "II.2.3.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poutres y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "49"
       },
       {
         "operation_id": 50,
-        "tache_id": 6,
-        "code_operation": "II.2.3.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sur mur ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "50"
       },
       {
         "operation_id": 51,
-        "tache_id": 6,
-        "code_operation": "II.2.3.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sous dalle ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "51"
       },
       {
         "operation_id": 52,
-        "tache_id": 6,
-        "code_operation": "II.2.3.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Plancher corps creux (hourdis, nervures et dalle de compression)",
-        "description": null,
-        "avancement": null,
         "id": "52"
       },
       {
         "operation_id": 53,
-        "tache_id": 6,
-        "code_operation": "II.2.3.9",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Etanchéité multicouche",
-        "description": null,
-        "avancement": null,
         "id": "53"
       },
       {
         "operation_id": 54,
-        "tache_id": 6,
-        "code_operation": "II.2.3.10",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Murs voiles",
-        "description": null,
-        "avancement": null,
         "id": "54"
       },
       {
         "operation_id": 55,
-        "tache_id": 6,
-        "code_operation": "II.2.3.11",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "55"
       },
       {
         "operation_id": 56,
-        "tache_id": 7,
-        "code_operation": "II.2.4.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poteaux dosé à 350 kg/m3 y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "56"
       },
       {
         "operation_id": 57,
-        "tache_id": 7,
-        "code_operation": "II.2.4.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Maçonnerie en agglos creux de 15x20x40cm pour élévation des murs",
-        "description": null,
-        "avancement": null,
         "id": "57"
       },
       {
         "operation_id": 58,
-        "tache_id": 7,
-        "code_operation": "II.2.4.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour linteaux y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "58"
       },
       {
         "operation_id": 59,
-        "tache_id": 7,
-        "code_operation": "II.2.4.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour escalier dosé à 350 kg/m³ y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "59"
       },
       {
         "operation_id": 60,
-        "tache_id": 7,
-        "code_operation": "II.2.4.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poutres y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "60"
       },
       {
         "operation_id": 61,
-        "tache_id": 7,
-        "code_operation": "II.2.4.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sur mur ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "61"
       },
       {
         "operation_id": 62,
-        "tache_id": 7,
-        "code_operation": "II.2.4.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sous dalle ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "62"
       },
       {
         "operation_id": 63,
-        "tache_id": 7,
-        "code_operation": "II.2.4.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Plancher corps creux (hourdis, nervures et dalle de compression)",
-        "description": null,
-        "avancement": null,
         "id": "63"
       },
       {
         "operation_id": 64,
-        "tache_id": 7,
-        "code_operation": "II.2.4.9",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Etanchéité multicouche",
-        "description": null,
-        "avancement": null,
         "id": "64"
       },
       {
         "operation_id": 65,
-        "tache_id": 7,
-        "code_operation": "II.2.4.10",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Murs voiles",
-        "description": null,
-        "avancement": null,
         "id": "65"
       },
       {
         "operation_id": 66,
-        "tache_id": 7,
-        "code_operation": "II.2.4.11",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "66"
       },
       {
         "operation_id": 67,
-        "tache_id": 8,
-        "code_operation": "II.2.5.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poteaux dosé à 350 kg/m3 y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "67"
       },
       {
         "operation_id": 68,
-        "tache_id": 8,
-        "code_operation": "II.2.5.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Maçonnerie en agglos creux de 15x20x40cm pour élévation des murs",
-        "description": null,
-        "avancement": null,
         "id": "68"
       },
       {
         "operation_id": 69,
-        "tache_id": 8,
-        "code_operation": "II.2.5.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour linteaux y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "69"
       },
       {
         "operation_id": 70,
-        "tache_id": 8,
-        "code_operation": "II.2.5.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour escalier dosé à 350 kg/m³ y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "70"
       },
       {
         "operation_id": 71,
-        "tache_id": 8,
-        "code_operation": "II.2.5.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poutres y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "71"
       },
       {
         "operation_id": 72,
-        "tache_id": 8,
-        "code_operation": "II.2.5.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sur mur ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "72"
       },
       {
         "operation_id": 73,
-        "tache_id": 8,
-        "code_operation": "II.2.5.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sous dalle ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "73"
       },
       {
         "operation_id": 74,
-        "tache_id": 8,
-        "code_operation": "II.2.5.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Plancher corps creux (hourdis, nervures et dalle de compression)",
-        "description": null,
-        "avancement": null,
         "id": "74"
       },
       {
         "operation_id": 75,
-        "tache_id": 8,
-        "code_operation": "II.2.5.9",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Etanchéité multicouche",
-        "description": null,
-        "avancement": null,
         "id": "75"
       },
       {
         "operation_id": 76,
-        "tache_id": 8,
-        "code_operation": "II.2.5.10",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Murs voiles",
-        "description": null,
-        "avancement": null,
         "id": "76"
       },
       {
         "operation_id": 77,
-        "tache_id": 8,
-        "code_operation": "II.2.5.11",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "77"
       },
       {
         "operation_id": 78,
-        "tache_id": 9,
-        "code_operation": "II.2.6.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poteaux dosé à 350 kg/m3 y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "78"
       },
       {
         "operation_id": 79,
-        "tache_id": 9,
-        "code_operation": "II.2.6.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Maçonnerie en agglos creux de 15x20x40cm pour élévation des murs",
-        "description": null,
-        "avancement": null,
         "id": "79"
       },
       {
         "operation_id": 80,
-        "tache_id": 9,
-        "code_operation": "II.2.6.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour linteaux y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "80"
       },
       {
         "operation_id": 81,
-        "tache_id": 9,
-        "code_operation": "II.2.6.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour escalier dosé à 350 kg/m³ y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "81"
       },
       {
         "operation_id": 82,
-        "tache_id": 9,
-        "code_operation": "II.2.6.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poutres y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "82"
       },
       {
         "operation_id": 83,
-        "tache_id": 9,
-        "code_operation": "II.2.6.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sur mur ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "83"
       },
       {
         "operation_id": 84,
-        "tache_id": 9,
-        "code_operation": "II.2.6.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sous dalle ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "84"
       },
       {
         "operation_id": 85,
-        "tache_id": 9,
-        "code_operation": "II.2.6.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Plancher corps creux (hourdis, nervures et dalle de compression)",
-        "description": null,
-        "avancement": null,
         "id": "85"
       },
       {
         "operation_id": 86,
-        "tache_id": 9,
-        "code_operation": "II.2.6.9",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Etanchéité multicouche",
-        "description": null,
-        "avancement": null,
         "id": "86"
       },
       {
         "operation_id": 87,
-        "tache_id": 9,
-        "code_operation": "II.2.6.10",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Murs voiles",
-        "description": null,
-        "avancement": null,
         "id": "87"
       },
       {
         "operation_id": 88,
-        "tache_id": 9,
-        "code_operation": "II.2.6.11",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "88"
       },
       {
         "operation_id": 89,
-        "tache_id": 10,
-        "code_operation": "II.2.7.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poteaux dosé à 350 kg/m3 y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "89"
       },
       {
         "operation_id": 90,
-        "tache_id": 10,
-        "code_operation": "II.2.7.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Maçonnerie en agglos creux de 15x20x40cm pour élévation des murs",
-        "description": null,
-        "avancement": null,
         "id": "90"
       },
       {
         "operation_id": 91,
-        "tache_id": 10,
-        "code_operation": "II.2.7.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour linteaux y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "91"
       },
       {
         "operation_id": 92,
-        "tache_id": 10,
-        "code_operation": "II.2.7.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour escalier dosé à 350 kg/m³ y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "92"
       },
       {
         "operation_id": 93,
-        "tache_id": 10,
-        "code_operation": "II.2.7.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poutres y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "93"
       },
       {
         "operation_id": 94,
-        "tache_id": 10,
-        "code_operation": "II.2.7.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sur mur ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "94"
       },
       {
         "operation_id": 95,
-        "tache_id": 10,
-        "code_operation": "II.2.7.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sous dalle ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "95"
       },
       {
         "operation_id": 96,
-        "tache_id": 10,
-        "code_operation": "II.2.7.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Dalle pleine pour toiture terrasse",
-        "description": null,
-        "avancement": null,
         "id": "96"
       },
       {
         "operation_id": 97,
-        "tache_id": 10,
-        "code_operation": "II.2.7.9",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Etanchéité multicouche",
-        "description": null,
-        "avancement": null,
         "id": "97"
       },
       {
         "operation_id": 98,
-        "tache_id": 10,
-        "code_operation": "II.2.7.10",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Murs voiles",
-        "description": null,
-        "avancement": null,
         "id": "98"
       },
       {
         "operation_id": 99,
-        "tache_id": 10,
-        "code_operation": "II.2.7.11",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "99"
       },
       {
         "operation_id": 100,
-        "tache_id": 11,
-        "code_operation": "II.3.1.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poteaux  dosé à 350 kg/m3 y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "100"
       },
       {
         "operation_id": 101,
-        "tache_id": 11,
-        "code_operation": "II.3.1.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Maçonnerie en agglos creux de 15x20x40cm pour élévation des murs",
-        "description": null,
-        "avancement": null,
         "id": "101"
       },
       {
         "operation_id": 102,
-        "tache_id": 11,
-        "code_operation": "II.3.1.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour poutres y compris toutes sujétions de mise en œuvre",
-        "description": null,
-        "avancement": null,
         "id": "102"
       },
       {
         "operation_id": 103,
-        "tache_id": 11,
-        "code_operation": "II.3.1.4",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Béton armé pour toiture terrasse en dalle pleine",
-        "description": null,
-        "avancement": null,
         "id": "103"
       },
       {
         "operation_id": 104,
-        "tache_id": 11,
-        "code_operation": "II.3.1.5",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m  sur mur ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "104"
       },
       {
         "operation_id": 105,
-        "tache_id": 11,
-        "code_operation": "II.3.1.6",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Enduit au mortier de ciment dosé à 400 kg / m3  sous dalle ép. 1,5 cm",
-        "description": null,
-        "avancement": null,
         "id": "105"
       },
       {
         "operation_id": 106,
-        "tache_id": 11,
-        "code_operation": "II.3.1.7",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Couverture",
-        "description": null,
-        "avancement": null,
         "id": "106"
       },
       {
         "operation_id": 107,
-        "tache_id": 11,
-        "code_operation": "II.3.1.8",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Charpente",
-        "description": null,
-        "avancement": null,
         "id": "107"
       },
       {
         "operation_id": 108,
-        "tache_id": 11,
-        "code_operation": "II.3.1.9",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "108"
       },
       {
         "operation_id": 109,
-        "tache_id": 12,
-        "code_operation": "II.4.1.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Prise de terre",
-        "description": null,
-        "avancement": null,
         "id": "109"
       },
       {
         "operation_id": 110,
-        "tache_id": 12,
-        "code_operation": "II.4.1.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Fourreautage électrique",
-        "description": null,
-        "avancement": null,
         "id": "110"
       },
       {
         "operation_id": 111,
-        "tache_id": 12,
-        "code_operation": "II.4.1.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "111"
       },
       {
         "operation_id": 112,
-        "tache_id": 13,
-        "code_operation": "II.4.2.1",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Construction d'une fosse septique, puisards et regards y/compris toutes suggestion\nde mise en œuvre.",
-        "description": null,
-        "avancement": null,
         "id": "112"
       },
       {
         "operation_id": 113,
-        "tache_id": 13,
-        "code_operation": "II.4.2.2",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Alimentation  et évacuation",
-        "description": null,
-        "avancement": null,
         "id": "113"
       },
       {
         "operation_id": 114,
-        "tache_id": 13,
-        "code_operation": "II.4.2.3",
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
         "id": "114"
       },
       {
-        "operation_id": 129,
-        "tache_id": 20,
-        "code_operation": "III.3.1.2",
+        "operation_id": 115,
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Appareillage et équipement  sanitaire",
-        "description": null,
-        "avancement": null,
-        "id": "129"
+        "id": "115"
       },
       {
-        "operation_id": 130,
-        "tache_id": 21,
-        "code_operation": "II.4.3.1",
+        "operation_id": 116,
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Passage des câbles, scellage des boitier, des coffrets et des boites de dérivations",
-        "description": null,
-        "avancement": null,
-        "id": "130"
+        "id": "116"
       },
       {
-        "operation_id": 131,
-        "tache_id": 21,
-        "code_operation": "II.4.3.2",
+        "operation_id": 117,
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Connexion et protection",
-        "description": null,
-        "avancement": null,
-        "id": "131"
+        "id": "117"
       },
       {
-        "operation_id": 132,
-        "tache_id": 21,
-        "code_operation": "II.4.3.3",
+        "operation_id": 118,
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Appareillage",
-        "description": null,
-        "avancement": null,
-        "id": "132"
+        "id": "118"
       },
       {
-        "operation_id": 133,
-        "tache_id": 21,
-        "code_operation": "II.4.3.4",
+        "operation_id": 119,
+        "tache_id": null,
+        "code_operation": null,
         "nom_operation": "Transport et manutention",
-        "description": null,
-        "avancement": null,
-        "id": "133"
+        "id": "119"
       }
     ],
     "operation_engins": [
@@ -6298,7 +3100,7 @@
         "categorie": "technique",
         "type_prestation": "etude",
         "details": null,
-        "unite": "ff",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 25000,
         "cout_total": 25000,
@@ -6314,7 +3116,7 @@
         "categorie": "technique",
         "type_prestation": "etude",
         "details": "[\"Conception architecturale\",\"Réalisation des plans architecturaux (plans de distribution, implantation et toiture, coupes, façades, plan de fosse septique et autres plans necessaires pour le permis de construire)\",\"Réalisation de la maquette numérique 3D avec production des rendus futuristes du projet\",\"Plan d'aménagment extérieur et 3D\"]",
-        "unite": "ff",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 400000,
         "cout_total": 400000,
@@ -6330,7 +3132,7 @@
         "categorie": "technique",
         "type_prestation": "etude",
         "details": "[\"Conception du modèle structural du bâtiment\",\"Note de calculs\",\"Plans d'exécution des ouvrages\"]",
-        "unite": "Ens",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 350000,
         "cout_total": 350000,
@@ -6346,7 +3148,7 @@
         "categorie": "technique",
         "type_prestation": "etude",
         "details": "[\"Electricité (plans d'électricité luminaires et prises en courant fort et faible, plans de climatisation, bilan de puissance et principe de câblage)\",\"Plomberie (plans d'évacuation et alimentation, plan d'assainissement, plan d'appareillage)\"]",
-        "unite": "Ens",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 250000,
         "cout_total": 250000,
@@ -6362,7 +3164,7 @@
         "categorie": "technique",
         "type_prestation": "etude",
         "details": "[\"Devis quantitatif estimatif\",\"Calendrier des travaux (planning)\",\"CCTP\"]",
-        "unite": "Ens",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 200000,
         "cout_total": 200000,
@@ -6378,7 +3180,7 @@
         "categorie": "technique",
         "type_prestation": "etude",
         "details": "[\"Etudes in-situ du sol avec 3 points au pénétromètre et un point au pressiomètre\",\"Production d'un rapport d'études de sol\"]",
-        "unite": "Ens",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 1500000,
         "cout_total": 1500000,
@@ -6394,7 +3196,7 @@
         "categorie": "Foncier",
         "type_prestation": "tarif",
         "details": null,
-        "unite": "ff",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 20000,
         "cout_total": 20000,
@@ -6410,7 +3212,7 @@
         "categorie": "Foncier",
         "type_prestation": "tarif",
         "details": null,
-        "unite": "ff",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 50000,
         "cout_total": 50000,
@@ -6426,7 +3228,7 @@
         "categorie": "Etudes géotechniques",
         "type_prestation": "tarif",
         "details": null,
-        "unite": "ff",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 300000,
         "cout_total": 300000,
@@ -6442,7 +3244,7 @@
         "categorie": "Etudes géotechniques",
         "type_prestation": "tarif",
         "details": null,
-        "unite": "ff",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 1500000,
         "cout_total": 1500000,
@@ -6458,7 +3260,7 @@
         "categorie": "Etudes architecturales",
         "type_prestation": "tarif",
         "details": null,
-        "unite": "ff",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 200000,
         "cout_total": 200000,
@@ -6474,7 +3276,7 @@
         "categorie": "Etudes architecturales",
         "type_prestation": "tarif",
         "details": null,
-        "unite": "ff",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 350000,
         "cout_total": 350000,
@@ -6490,7 +3292,7 @@
         "categorie": "Etudes architecturales",
         "type_prestation": "tarif",
         "details": null,
-        "unite": "ff",
+        "unite": null,
         "quantite": 1,
         "cout_unitaire": 500000,
         "cout_total": 500000,
@@ -6553,308 +3355,215 @@
     "sections": [
       {
         "section_id": 1,
-        "lot_id": 1,
+        "lot_id": null,
         "code_section": "I.1",
-        "nom_section": "PRÉPARATION DU SITE",
-        "description": "Installation et terrassement",
+        "nom_section": "INSTALLATION DE CHANTIER",
         "id": "1"
       },
       {
         "section_id": 2,
-        "lot_id": 2,
-        "code_section": "II.1",
-        "nom_section": "INFRASTRUCTURE",
-        "description": "Fondations et travaux souterrains",
+        "lot_id": null,
+        "code_section": "I.2",
+        "nom_section": "TERRASSEMENT",
         "id": "2"
       },
       {
         "section_id": 3,
-        "lot_id": 2,
-        "code_section": "II.2",
-        "nom_section": "SUPERSTRUCTURE",
-        "description": "Élévations des différents niveaux",
+        "lot_id": null,
+        "code_section": "II.1",
+        "nom_section": "FONDATION",
         "id": "3"
       },
       {
         "section_id": 4,
-        "lot_id": 2,
-        "code_section": "II.3",
-        "nom_section": "COUVERTURE",
-        "description": "Charpente et toiture",
+        "lot_id": null,
+        "code_section": "II.10",
+        "nom_section": "ELECTRICITE",
         "id": "4"
       },
       {
         "section_id": 5,
-        "lot_id": 2,
-        "code_section": "II.4",
-        "nom_section": "RÉSEAUX PRIMAIRES",
-        "description": "Électricité et plomberie gros œuvre",
+        "lot_id": null,
+        "code_section": "II.11",
+        "nom_section": "PLOMBERIE D'EVACUATION",
         "id": "5"
       },
       {
         "section_id": 6,
-        "lot_id": 3,
-        "code_section": "III.1",
-        "nom_section": "REVÊTEMENTS",
-        "description": "Faux plafond, carrelage, peinture",
+        "lot_id": null,
+        "code_section": "II.2",
+        "nom_section": "ELEVATIONS SOUS-SOL",
         "id": "6"
       },
       {
         "section_id": 7,
-        "lot_id": 3,
-        "code_section": "III.2",
-        "nom_section": "MENUISERIES",
-        "description": "Aluminium, bois, métallique",
+        "lot_id": null,
+        "code_section": "II.3",
+        "nom_section": "ELEVATIONS RDC",
         "id": "7"
       },
       {
         "section_id": 8,
-        "lot_id": 3,
-        "code_section": "III.3",
-        "nom_section": "RÉSEAUX SECONDAIRES",
-        "description": "Plomberie sanitaires, électricité finition",
+        "lot_id": null,
+        "code_section": "II.4",
+        "nom_section": "ELEVATIONS R+1",
         "id": "8"
       },
       {
         "section_id": 9,
-        "lot_id": 4,
-        "code_section": "IV.1",
-        "nom_section": "FINITIONS GÉNÉRALES",
-        "description": "Travaux de finition",
+        "lot_id": null,
+        "code_section": "II.5",
+        "nom_section": "ELEVATIONS R+2",
         "id": "9"
+      },
+      {
+        "section_id": 10,
+        "lot_id": null,
+        "code_section": "II.6",
+        "nom_section": "ELEVATIONS R+3",
+        "id": "10"
+      },
+      {
+        "section_id": 11,
+        "lot_id": null,
+        "code_section": "II.7",
+        "nom_section": "ELEVATIONS R+4",
+        "id": "11"
+      },
+      {
+        "section_id": 12,
+        "lot_id": null,
+        "code_section": "II.8",
+        "nom_section": "ELEVATIONS R+5",
+        "id": "12"
+      },
+      {
+        "section_id": 13,
+        "lot_id": null,
+        "code_section": "II.9",
+        "nom_section": "EDICULE CHARPENTE ET TOITURE",
+        "id": "13"
+      },
+      {
+        "section_id": 14,
+        "lot_id": null,
+        "code_section": "III.1",
+        "nom_section": "FAUX PLAFOND",
+        "id": "14"
+      },
+      {
+        "section_id": 15,
+        "lot_id": null,
+        "code_section": "III.2",
+        "nom_section": "CARRELAGE",
+        "id": "15"
+      },
+      {
+        "section_id": 16,
+        "lot_id": null,
+        "code_section": "III.3",
+        "nom_section": "PEINTURE",
+        "id": "16"
+      },
+      {
+        "section_id": 17,
+        "lot_id": null,
+        "code_section": "III.4",
+        "nom_section": "MENUISERIE ALUMINIUM-VITRERIE",
+        "id": "17"
+      },
+      {
+        "section_id": 18,
+        "lot_id": null,
+        "code_section": "III.5",
+        "nom_section": "MENUISERIE BOIS",
+        "id": "18"
+      },
+      {
+        "section_id": 19,
+        "lot_id": null,
+        "code_section": "III.6",
+        "nom_section": "MENUISERIE METALLIQUE",
+        "id": "19"
+      },
+      {
+        "section_id": 20,
+        "lot_id": null,
+        "code_section": "III.7",
+        "nom_section": "PLOMBERIE-SANITAIRES",
+        "id": "20"
+      },
+      {
+        "section_id": 21,
+        "lot_id": null,
+        "code_section": "III.8",
+        "nom_section": "ELECTRICITE",
+        "id": "21"
       }
     ],
     "taches": [
       {
         "tache_id": 1,
         "section_id": null,
-        "code_tache": "I.1.1",
-        "nom_tache": "INSTALLATION DE CHANTIER",
-        "description": "Zone d'intervention: INSTALLATION DE CHANTIER",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
+        "code_tache": null,
+        "nom_tache": "SOUS-SOL",
         "id": "1"
       },
       {
         "tache_id": 2,
         "section_id": null,
-        "code_tache": "I.1.2",
-        "nom_tache": "TERRASSEMENT",
-        "description": "Zone d'intervention: TERRASSEMENT",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
+        "code_tache": null,
+        "nom_tache": "RDC",
         "id": "2"
       },
       {
         "tache_id": 3,
         "section_id": null,
-        "code_tache": "II.1.1",
-        "nom_tache": "FONDATION",
-        "description": "Zone d'intervention: FONDATION",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
+        "code_tache": null,
+        "nom_tache": "R+1",
         "id": "3"
       },
       {
         "tache_id": 4,
         "section_id": null,
-        "code_tache": "II.2.1",
-        "nom_tache": "ELEVATIONS SOUS-SOL",
-        "description": "Zone d'intervention: ELEVATIONS SOUS-SOL",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
+        "code_tache": null,
+        "nom_tache": "R+2",
         "id": "4"
       },
       {
         "tache_id": 5,
         "section_id": null,
-        "code_tache": "II.2.2",
-        "nom_tache": "ELEVATIONS RDC",
-        "description": "Zone d'intervention: ELEVATIONS RDC",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
+        "code_tache": null,
+        "nom_tache": "R+3",
         "id": "5"
       },
       {
         "tache_id": 6,
         "section_id": null,
-        "code_tache": "II.2.3",
-        "nom_tache": "ELEVATIONS R+1",
-        "description": "Zone d'intervention: ELEVATIONS R+1",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
+        "code_tache": null,
+        "nom_tache": "R+4",
         "id": "6"
       },
       {
         "tache_id": 7,
         "section_id": null,
-        "code_tache": "II.2.4",
-        "nom_tache": "ELEVATIONS R+2",
-        "description": "Zone d'intervention: ELEVATIONS R+2",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
+        "code_tache": null,
+        "nom_tache": "R+5",
         "id": "7"
       },
       {
         "tache_id": 8,
         "section_id": null,
-        "code_tache": "II.2.5",
-        "nom_tache": "ELEVATIONS R+3",
-        "description": "Zone d'intervention: ELEVATIONS R+3",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
+        "code_tache": null,
+        "nom_tache": "TOITURE",
         "id": "8"
       },
       {
         "tache_id": 9,
         "section_id": null,
-        "code_tache": "II.2.6",
-        "nom_tache": "ELEVATIONS R+4",
-        "description": "Zone d'intervention: ELEVATIONS R+4",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
+        "code_tache": null,
+        "nom_tache": "MUR",
         "id": "9"
-      },
-      {
-        "tache_id": 10,
-        "section_id": null,
-        "code_tache": "II.2.7",
-        "nom_tache": "ELEVATIONS R+5",
-        "description": "Zone d'intervention: ELEVATIONS R+5",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "10"
-      },
-      {
-        "tache_id": 11,
-        "section_id": null,
-        "code_tache": "II.3.1",
-        "nom_tache": "EDICULE CHARPENTE ET TOITURE",
-        "description": "Zone d'intervention: EDICULE CHARPENTE ET TOITURE",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "11"
-      },
-      {
-        "tache_id": 12,
-        "section_id": null,
-        "code_tache": "II.4.1",
-        "nom_tache": "ELECTRICITE",
-        "description": "Zone d'intervention: ELECTRICITE",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "12"
-      },
-      {
-        "tache_id": 13,
-        "section_id": null,
-        "code_tache": "II.4.2",
-        "nom_tache": "PLOMBERIE D'EVACUATION",
-        "description": "Zone d'intervention: PLOMBERIE D'EVACUATION",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "13"
-      },
-      {
-        "tache_id": 14,
-        "section_id": null,
-        "code_tache": "IV.1.1",
-        "nom_tache": "FAUX PLAFOND",
-        "description": "Zone d'intervention: FAUX PLAFOND",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "14"
-      },
-      {
-        "tache_id": 15,
-        "section_id": null,
-        "code_tache": "IV.1.2",
-        "nom_tache": "CARRELAGE",
-        "description": "Zone d'intervention: CARRELAGE",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "15"
-      },
-      {
-        "tache_id": 16,
-        "section_id": null,
-        "code_tache": "IV.1.3",
-        "nom_tache": "PEINTURE",
-        "description": "Zone d'intervention: PEINTURE",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "16"
-      },
-      {
-        "tache_id": 17,
-        "section_id": null,
-        "code_tache": "IV.1.4",
-        "nom_tache": "MENUISERIE ALUMINIUM-VITRERIE",
-        "description": "Zone d'intervention: MENUISERIE ALUMINIUM-VITRERIE",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "17"
-      },
-      {
-        "tache_id": 18,
-        "section_id": null,
-        "code_tache": "IV.1.5",
-        "nom_tache": "MENUISERIE BOIS",
-        "description": "Zone d'intervention: MENUISERIE BOIS",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "18"
-      },
-      {
-        "tache_id": 19,
-        "section_id": null,
-        "code_tache": "IV.1.6",
-        "nom_tache": "MENUISERIE METALLIQUE",
-        "description": "Zone d'intervention: MENUISERIE METALLIQUE",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "19"
-      },
-      {
-        "tache_id": 20,
-        "section_id": null,
-        "code_tache": "IV.1.7",
-        "nom_tache": "PLOMBERIE-SANITAIRES",
-        "description": "Zone d'intervention: PLOMBERIE-SANITAIRES",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "20"
-      },
-      {
-        "tache_id": 21,
-        "section_id": null,
-        "code_tache": "IV.1.8",
-        "nom_tache": "ELECTRICITE",
-        "description": "Zone d'intervention: ELECTRICITE",
-        "date_debut": null,
-        "date_fin": null,
-        "statut": "planifie",
-        "id": "21"
       }
     ],
     "types_projet": [

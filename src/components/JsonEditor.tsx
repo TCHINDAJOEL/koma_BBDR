@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
-import { AlertCircle, CheckCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle, Maximize2, Minimize2, X } from 'lucide-react';
 
 // Import dynamique pour éviter les erreurs SSR
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
@@ -48,6 +48,7 @@ export default function JsonEditor({
   const [parseError, setParseError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
   const [isValid, setIsValid] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Compiler le schéma AJV
   const validateFn = useMemo(() => {
@@ -144,42 +145,61 @@ export default function JsonEditor({
     return 'border-dark-200';
   }, [parseError, validationErrors, isValid]);
 
-  return (
-    <div className="flex flex-col h-full">
+  // Contenu de l'éditeur
+  const editorContent = (
+    <>
       {/* Barre d'outils */}
-      <div className="flex items-center justify-between px-3 py-2 bg-dark-50 border-b border-dark-200 rounded-t-xl">
+      <div className={`flex items-center justify-between px-3 py-2 bg-dark-800 border-b border-dark-700 ${isFullscreen ? '' : 'rounded-t-xl'}`}>
         <div className="flex items-center gap-2">
           {isValid ? (
             <CheckCircle className="w-4 h-4 text-green-500" />
           ) : (
             <AlertCircle className="w-4 h-4 text-red-500" />
           )}
-          <span className={`text-sm ${isValid ? 'text-green-600' : 'text-red-600'}`}>
+          <span className={`text-sm ${isValid ? 'text-green-400' : 'text-red-400'}`}>
             {isValid ? 'JSON valide' : 'JSON invalide'}
           </span>
         </div>
-        {!readOnly && (
+        <div className="flex items-center gap-2">
+          {!readOnly && (
+            <button
+              onClick={formatJson}
+              className="px-2 py-1 text-xs bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors"
+            >
+              Formater
+            </button>
+          )}
           <button
-            onClick={formatJson}
-            className="px-2 py-1 text-xs bg-primary-100 text-primary-700 rounded hover:bg-primary-200 transition-colors"
+            onClick={() => setIsFullscreen(!isFullscreen)}
+            className="p-1.5 text-dark-300 hover:text-white hover:bg-dark-700 rounded transition-colors"
+            title={isFullscreen ? 'Quitter le plein écran' : 'Plein écran'}
           >
-            Formater
+            {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
           </button>
-        )}
+          {isFullscreen && (
+            <button
+              onClick={() => setIsFullscreen(false)}
+              className="p-1.5 text-dark-300 hover:text-white hover:bg-dark-700 rounded transition-colors"
+              title="Fermer"
+            >
+              <X size={18} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Éditeur Monaco */}
-      <div className={`flex-1 border-2 ${borderColor} rounded-b-xl overflow-hidden transition-colors`}>
+      <div className={`flex-1 border-2 ${borderColor} ${isFullscreen ? '' : 'rounded-b-xl'} overflow-hidden transition-colors`}>
         <MonacoEditor
-          height={height}
+          height={isFullscreen ? 'calc(100vh - 120px)' : height}
           defaultLanguage="json"
           value={jsonString}
           onChange={handleChange}
           theme="vs-dark"
           options={{
             readOnly,
-            minimap: { enabled: false },
-            fontSize: 14,
+            minimap: { enabled: isFullscreen },
+            fontSize: isFullscreen ? 16 : 14,
             padding: { top: 16, bottom: 16 },
             scrollBeyondLastLine: false,
             wordWrap: 'on',
@@ -196,15 +216,15 @@ export default function JsonEditor({
 
       {/* Affichage des erreurs */}
       {(parseError || validationErrors.length > 0) && (
-        <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-xl max-h-32 overflow-y-auto">
+        <div className={`mt-2 p-3 bg-red-900/50 border border-red-700 ${isFullscreen ? '' : 'rounded-xl'} max-h-32 overflow-y-auto`}>
           {parseError && (
-            <div className="text-sm text-red-700 mb-1">
+            <div className="text-sm text-red-300 mb-1">
               <span className="font-medium">Erreur de syntaxe:</span> {parseError}
             </div>
           )}
           {validationErrors.map((err, index) => (
-            <div key={index} className="text-sm text-orange-700">
-              <span className="font-mono text-xs bg-orange-100 px-1 rounded">
+            <div key={index} className="text-sm text-orange-300">
+              <span className="font-mono text-xs bg-orange-900/50 px-1 rounded">
                 {err.path}
               </span>{' '}
               {err.message}
@@ -214,11 +234,29 @@ export default function JsonEditor({
       )}
 
       {/* Placeholder si vide */}
-      {jsonString === '{}' && placeholder && (
+      {jsonString === '{}' && placeholder && !isFullscreen && (
         <div className="mt-2 text-sm text-dark-400 italic">
           {placeholder}
         </div>
       )}
+    </>
+  );
+
+  // Mode plein écran
+  if (isFullscreen) {
+    return (
+      <div className="fixed inset-0 z-50 bg-dark-900 flex flex-col">
+        <div className="flex-1 flex flex-col p-4">
+          {editorContent}
+        </div>
+      </div>
+    );
+  }
+
+  // Mode normal
+  return (
+    <div className="flex flex-col h-full">
+      {editorContent}
     </div>
   );
 }

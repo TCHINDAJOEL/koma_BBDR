@@ -64,9 +64,9 @@ export default function Layout({ children }: LayoutProps) {
               <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center">
                 <Database className="w-5 h-5 text-white" />
               </div>
-              <div>
-                <span className="text-xl font-bold text-dark-900">KOMA</span>
-                <span className="text-xl font-light text-primary-600 ml-1">BBDR</span>
+              <div className="hidden sm:block">
+                <span className="text-lg font-bold text-dark-900">Visualisateur</span>
+                <span className="text-lg font-light text-primary-600 ml-1">BDD</span>
               </div>
             </Link>
 
@@ -273,12 +273,12 @@ export default function Layout({ children }: LayoutProps) {
                   <Database className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <span className="text-xl font-bold">KOMA</span>
-                  <span className="text-xl font-light text-primary-400 ml-1">BBDR</span>
+                  <span className="text-xl font-bold">Visualisateur</span>
+                  <span className="text-xl font-light text-primary-400 ml-1">BDD</span>
                 </div>
               </div>
               <p className="text-dark-400 text-sm">
-                Data Catalog & Schema Modeling Tool with intelligent validation
+                Visualisateur dynamique de base de données avec validation intelligente
               </p>
             </div>
 
@@ -349,7 +349,7 @@ export default function Layout({ children }: LayoutProps) {
 
           <div className="border-t border-dark-800 mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-dark-500 text-sm">
-              &copy; {new Date().getFullYear()} KOMA BBDR. All rights reserved.
+              &copy; {new Date().getFullYear()} Visualisateur BDD. Tous droits réservés.
             </p>
             <div className="flex items-center gap-4 text-sm text-dark-500">
               <span>Built with Next.js</span>
