@@ -213,10 +213,16 @@ export default function ValidationCenter() {
   if (loading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-96">
+        <div className="flex items-center justify-center h-[60vh]">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-dark-500">Validation en cours...</p>
+            <div className="relative w-20 h-20 mx-auto mb-6">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 animate-pulse opacity-30" />
+              <div className="absolute inset-2 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center">
+                <Shield className="w-8 h-8 text-primary-600 animate-pulse" />
+              </div>
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary-500 animate-spin" />
+            </div>
+            <p className="text-dark-500 font-medium">Validation en cours...</p>
           </div>
         </div>
       </Layout>
@@ -245,21 +251,31 @@ export default function ValidationCenter() {
   return (
     <Layout>
       <div className="animate-fade-in">
-        {/* Hero Section */}
-        <div className="card p-8 mb-8 gradient-hero text-white">
-          <div className="flex items-center justify-between">
+        {/* Hero Section - Glass Style */}
+        <div className="hero-glass p-10 mb-10 relative overflow-hidden">
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Validation Center</h1>
-              <p className="text-primary-200">
-                Validation complète du schéma et des données (3 niveaux)
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-white/70 text-sm font-medium">3-Level Validation</span>
+              </div>
+              <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+                Validation Center
+              </h1>
+              <p className="text-white/70 text-lg">
+                Validation complète du schéma et des données
               </p>
             </div>
+
+            {/* Actions */}
             <div className="flex gap-3">
               {report && report.alerts.filter(a => a.quickFix).length > 0 && (
                 <button
                   onClick={applyAllFixes}
                   disabled={fixingAll}
-                  className="btn bg-accent-500 hover:bg-accent-600 text-white gap-2"
+                  className="btn btn-accent gap-2"
                 >
                   {fixingAll ? (
                     <>
@@ -277,7 +293,7 @@ export default function ValidationCenter() {
               <button
                 onClick={runValidation}
                 disabled={validating}
-                className="btn bg-white/10 hover:bg-white/20 text-white border border-white/20 gap-2"
+                className="btn bg-white/15 hover:bg-white/25 text-white border border-white/20 gap-2 backdrop-blur-sm"
               >
                 <RefreshCw size={18} className={validating ? 'animate-spin' : ''} />
                 <span>Relancer</span>

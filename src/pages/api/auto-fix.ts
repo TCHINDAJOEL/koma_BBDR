@@ -128,16 +128,6 @@ export default async function handler(
         // Sauvegarder les données modifiées
         if (fixedCount > 0) {
             await storage.saveData(newData);
-
-            // Créer un événement d'audit
-            const event = storage.createAuditEvent(
-                'DATA_UPSERT',
-                { type: 'record', ref: `auto-fix:${alert.code}` } as any,
-                state.data,
-                newData,
-                `Auto-fix: ${alert.message}`
-            );
-            await storage.appendAuditEvent(event);
         }
 
         res.status(200).json({

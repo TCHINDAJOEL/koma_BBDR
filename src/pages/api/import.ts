@@ -74,7 +74,6 @@ export default async function handler(
     // Trouver et traiter les fichiers
     let schemaContent: string | null = null;
     let rulesContent: string | null = null;
-    let auditContent: string | null = null;
     const allTableData: Record<string, any> = {};
 
     for (const extractedFile of extractedFiles) {
@@ -88,10 +87,6 @@ export default async function handler(
       // rules.json
       else if (filePath === 'rules.json' || filePath.endsWith('/rules.json')) {
         rulesContent = fileData;
-      }
-      // audit.ndjson
-      else if (filePath === 'audit.ndjson' || filePath.endsWith('/audit.ndjson')) {
-        auditContent = fileData;
       }
       // Fichiers de données dans le dossier data/
       else if (filePath.includes('data/') && filePath.endsWith('.json')) {
@@ -125,27 +120,8 @@ export default async function handler(
       await storage.writeFile('rules.json', rulesContent);
     }
 
-    if (auditContent) {
-      await storage.writeFile('audit.ndjson', auditContent);
-    }
-
     // Invalider tout le cache pour forcer le rechargement
     storage.invalidateCache('all');
-
-    // Créer un événement d'audit pour l'import
-    const importEvent = storage.createAuditEvent(
-      'IMPORT',
-      { type: 'file', ref: originalFilename },
-      undefined,
-      {
-        filename: originalFilename,
-        format: extension,
-        filesExtracted: extractedFiles.length,
-        tablesImported: Object.keys(allTableData).length,
-      },
-      `Import depuis ${extension.toUpperCase().replace('.', '')}`
-    );
-    await storage.appendAuditEvent(importEvent);
 
     res.status(200).json({
       success: true,
@@ -154,10 +130,9 @@ export default async function handler(
         format: extension,
         filesExtracted: extractedFiles.length,
         tablesImported: Object.keys(allTableData).length,
-        tableNames: Object.keys(allTableData), // Noms des tables importées
+        tableNames: Object.keys(allTableData),
         hasSchema: !!schemaContent,
         hasRules: !!rulesContent,
-        hasAudit: !!auditContent,
       }
     });
   } catch (error: any) {

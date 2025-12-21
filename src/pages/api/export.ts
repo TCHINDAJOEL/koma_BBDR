@@ -45,10 +45,6 @@ export default async function handler(
       )
     );
 
-    // Audit en NDJSON
-    const auditLines = state.audit.map((e) => JSON.stringify(e)).join('\n');
-    zip.file('audit.ndjson', auditLines);
-
     // Rapport de validation
     const validationReport = {
       ...report,
@@ -69,7 +65,7 @@ export default async function handler(
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=koma-bbdr-export-${Date.now()}.zip`
+      `attachment; filename=data-explore-export-${Date.now()}.zip`
     );
     res.status(200).send(blob);
   } catch (error: any) {

@@ -174,10 +174,16 @@ export default function ERDiagram() {
   if (loading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-96">
+        <div className="flex items-center justify-center h-[60vh]">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-dark-500">Chargement du diagramme...</p>
+            <div className="relative w-20 h-20 mx-auto mb-6">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 animate-pulse opacity-30" />
+              <div className="absolute inset-2 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center">
+                <GitBranch className="w-8 h-8 text-primary-600 animate-pulse" />
+              </div>
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary-500 animate-spin" />
+            </div>
+            <p className="text-dark-500 font-medium">Chargement du diagramme...</p>
           </div>
         </div>
       </Layout>
@@ -189,20 +195,31 @@ export default function ERDiagram() {
   return (
     <Layout>
       <div className="animate-fade-in">
-        {/* Hero Section */}
-        <div className="card p-8 mb-8 gradient-hero text-white">
-          <div className="flex items-center justify-between">
+        {/* Hero Section - Glass Style */}
+        <div className="hero-glass p-10 mb-10 relative overflow-hidden">
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2">ER Diagram</h1>
-              <p className="text-primary-200">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <GitBranch className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-white/70 text-sm font-medium">Entity Relationship</span>
+              </div>
+              <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+                ER Diagram
+              </h1>
+              <p className="text-white/70 text-lg">
                 Visualisez et gérez les relations entre vos tables
               </p>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <div className="text-3xl font-bold">{relations.length}</div>
-                <div className="text-primary-200 text-sm">Relations</div>
+
+            {/* Stats */}
+            <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-5 py-4 border border-white/20">
+              <div className="flex items-center gap-2 mb-1">
+                <Link2 className="w-4 h-4 text-white/70" />
+                <span className="text-white/70 text-xs font-medium uppercase tracking-wider">Relations</span>
               </div>
+              <div className="text-3xl font-bold text-white">{relations.length}</div>
             </div>
           </div>
         </div>

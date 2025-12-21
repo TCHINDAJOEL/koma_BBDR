@@ -113,27 +113,6 @@ export default async function handler(
 
       // Invalider explicitement tout le cache
       storage.invalidateCache('all');
-
-      // Créer un événement d'audit
-      const importEvent = storage.createAuditEvent(
-        'IMPORT',
-        { type: 'file', ref: originalFilename },
-        undefined,
-        {
-          filename: originalFilename,
-          format: 'EXCEL',
-          sheetsProcessed: importedSheets.length,
-          tablesUpdated,
-          totalRecordsImported,
-          sheets: importedSheets.map(s => ({
-            name: s.name,
-            matchedTable: s.matchedTable,
-            rowCount: s.rowCount,
-          })),
-        },
-        `Import Excel depuis ${originalFilename}`
-      );
-      await storage.appendAuditEvent(importEvent);
     }
 
     const result: ImportResult = {

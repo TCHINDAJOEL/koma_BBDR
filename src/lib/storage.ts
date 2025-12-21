@@ -5,9 +5,7 @@ import {
   Schema,
   TableData,
   RuleDefinition,
-  AuditEvent,
   ApplicationState,
-  AuditAction,
 } from '@/types/schema';
 import { normalizeSchema } from './schema-adapter';
 
@@ -19,7 +17,6 @@ const STORAGE_DIR = path.join(process.cwd(), 'storage');
 const SCHEMA_FILE = path.join(STORAGE_DIR, 'schema.json');
 const DATA_FILE = path.join(STORAGE_DIR, 'data.json');
 const RULES_FILE = path.join(STORAGE_DIR, 'rules.json');
-const AUDIT_FILE = path.join(STORAGE_DIR, 'audit.ndjson');
 
 // Configuration du debouncing et du cache
 const DEBOUNCE_DELAY = 500; // ms
@@ -259,33 +256,14 @@ export class StorageManager {
     }
   }
 
-  async loadAudit(): Promise<AuditEvent[]> {
-    await this.ensureReady();
-    try {
-      const content = await fs.readFile(AUDIT_FILE, 'utf-8');
-      const lines = content.trim().split('\n').filter((l) => l.length > 0);
-      return lines.map((line, index) => {
-        const event = JSON.parse(line);
-        // Ensure eventId exists
-        if (!event.eventId) {
-          event.eventId = `evt_imported_${index}`;
-        }
-        return event as AuditEvent;
-      });
-    } catch (error) {
-      return [];
-    }
-  }
-
   async loadState(): Promise<ApplicationState> {
-    const [schema, data, rules, audit] = await Promise.all([
+    const [schema, data, rules] = await Promise.all([
       this.loadSchema(),
       this.loadData(),
       this.loadRules(),
-      this.loadAudit(),
     ]);
 
-    return { schema, data, rules, audit };
+    return { schema, data, rules };
   }
 
   // ==========================================================================
@@ -488,36 +466,6 @@ export class StorageManager {
     }
 
     await Promise.all(promises);
-  }
-
-  async appendAuditEvent(event: AuditEvent): Promise<void> {
-    await this.ensureStorageDir();
-    const line = JSON.stringify(event) + '\n';
-    await fs.appendFile(AUDIT_FILE, line, 'utf-8');
-  }
-
-  // ==========================================================================
-  // AUDIT EVENT CREATOR
-  // ==========================================================================
-
-  createAuditEvent(
-    action: AuditAction,
-    target: AuditEvent['target'],
-    before?: any,
-    after?: any,
-    reason?: string,
-    actor: string = 'local-user'
-  ): AuditEvent {
-    return {
-      eventId: uuidv4(),
-      ts: new Date().toISOString(),
-      actor,
-      action,
-      target,
-      before,
-      after,
-      reason,
-    };
   }
 
   // ==========================================================================

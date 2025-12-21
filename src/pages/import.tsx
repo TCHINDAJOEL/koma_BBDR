@@ -37,7 +37,6 @@ interface ImportResult {
     tableNames?: string[];
     hasSchema: boolean;
     hasRules: boolean;
-    hasAudit: boolean;
   };
 }
 
@@ -125,15 +124,17 @@ export default function Import() {
   return (
     <Layout>
       <div className="max-w-3xl mx-auto animate-fade-in">
-        {/* Hero Section */}
-        <div className="card p-8 mb-8 gradient-hero text-white">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center">
-              <Upload className="w-7 h-7" />
+        {/* Hero Section - Glass Style */}
+        <div className="hero-glass p-10 mb-10 relative overflow-hidden">
+          <div className="relative z-10 flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <Upload className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold mb-1">Import Archive</h1>
-              <p className="text-primary-200">
+              <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+                Import Archive
+              </h1>
+              <p className="text-white/70 text-lg">
                 Importez un projet complet depuis une archive compressée
               </p>
             </div>
@@ -293,8 +294,7 @@ export default function Import() {
 │   ├── table1.json
 │   ├── table2.json
 │   └── ...
-├── rules.json
-└── audit.ndjson`}
+└── rules.json`}
             </pre>
           </div>
 
@@ -311,13 +311,6 @@ export default function Import() {
               <ArrowRight className="text-primary-600 flex-shrink-0 mt-0.5" size={18} />
               <div className="text-sm text-primary-700">
                 Le dossier <code className="bg-white px-1.5 py-0.5 rounded font-mono text-xs">data/</code> doit contenir un fichier JSON par table
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3 p-3 bg-accent-50 border border-accent-200 rounded-xl">
-              <CheckCircle className="text-accent-600 flex-shrink-0 mt-0.5" size={18} />
-              <div className="text-sm text-accent-700">
-                Un événement d'audit sera créé automatiquement pour tracer l'import
               </div>
             </div>
 

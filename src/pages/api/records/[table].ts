@@ -250,16 +250,6 @@ async function handlePost(
   // Sauvegarder
   await storage.saveData(newData, true);
 
-  // Créer l'événement d'audit
-  const event = storage.createAuditEvent(
-    'DATA_UPSERT',
-    { type: 'record', ref: `${tableName}/${normalizedRecord.id}` },
-    null,
-    normalizedRecord,
-    'Record creation via REST API'
-  );
-  await storage.appendAuditEvent(event);
-
   return res.status(201).json({
     success: true,
     record: normalizedRecord,
@@ -339,16 +329,6 @@ async function handlePatch(
   // Sauvegarder
   await storage.saveData(newData, true);
 
-  // Créer l'événement d'audit
-  const event = storage.createAuditEvent(
-    'DATA_UPSERT',
-    { type: 'record', ref: `${tableName}/${id}` },
-    existingRecord,
-    normalizedRecord,
-    'Record update via REST API'
-  );
-  await storage.appendAuditEvent(event);
-
   return res.status(200).json({
     success: true,
     record: normalizedRecord,
@@ -407,16 +387,6 @@ async function handleDelete(
 
   // Sauvegarder
   await storage.saveData(newData, true);
-
-  // Créer l'événement d'audit
-  const event = storage.createAuditEvent(
-    'DATA_DELETE',
-    { type: 'record', ref: `${tableName}/${id}` },
-    existingRecord,
-    null,
-    'Record deletion via REST API'
-  );
-  await storage.appendAuditEvent(event);
 
   return res.status(200).json({
     success: true,

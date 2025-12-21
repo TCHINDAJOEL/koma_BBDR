@@ -1,6 +1,16 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import Layout from '@/components/Layout';
-import { Schema, TableDefinition, FieldDefinition, ValidationAlert, ApplyChangeResponse } from '@/types/schema';
+import { Schema, TableDefinition, FieldDefinition, ValidationAlert, TableData } from '@/types/schema';
+
+// Type pour la réponse de l'API apply-change
+interface ApplyChangeResponse {
+  success: boolean;
+  alerts: ValidationAlert[];
+  newState?: {
+    schema: Schema;
+    data: TableData;
+  };
+}
 import dynamic from 'next/dynamic';
 import {
   Edit2,
@@ -13,6 +23,7 @@ import {
   Shield,
   Clock,
   ChevronRight,
+  ChevronLeft,
   Search,
   Layers,
   Database,
@@ -20,7 +31,11 @@ import {
   Save,
   AlertCircle,
   CheckCircle,
-  XCircle
+  XCircle,
+  Sparkles,
+  Zap,
+  Hash,
+  Maximize2
 } from 'lucide-react';
 import { getTables, findTable } from '@/lib/data-helpers';
 import { fetchWithCacheBusting } from '@/lib/cache-helper';
@@ -33,6 +48,7 @@ export default function SchemaExplorer() {
   const [pendingSchema, setPendingSchema] = useState<Schema | null>(null);
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
   const [jsonMode, setJsonMode] = useState(false);
+  const [jsonFullscreen, setJsonFullscreen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,7 +56,6 @@ export default function SchemaExplorer() {
   const [alerts, setAlerts] = useState<ValidationAlert[]>([]);
   const [showAlerts, setShowAlerts] = useState(false);
 
-  // Hook pour les notifications
   const toast = useToast();
 
   // Modal states
@@ -55,7 +70,6 @@ export default function SchemaExplorer() {
 
   const loadSchema = async () => {
     try {
-      // Vérifier si on doit forcer le rechargement via les paramètres URL
       const urlParams = new URLSearchParams(window.location.search);
       const shouldReload = urlParams.get('reload') === 'true';
 
@@ -67,7 +81,6 @@ export default function SchemaExplorer() {
       setPendingSchema(null);
       setLoading(false);
 
-      // Nettoyer les paramètres URL après le rechargement
       if (shouldReload) {
         window.history.replaceState({}, '', '/');
       }
@@ -81,7 +94,6 @@ export default function SchemaExplorer() {
     setSaving(true);
     setAlerts([]);
     try {
-      // S'assurer que le schéma a tous les champs requis
       const schemaToSave = {
         ...newSchema,
         version: newSchema.version || '1.0.0',
@@ -106,7 +118,6 @@ export default function SchemaExplorer() {
         }),
       });
 
-      // Vérifier si la réponse est du JSON valide
       const text = await res.text();
       let result: ApplyChangeResponse;
       try {
@@ -117,20 +128,17 @@ export default function SchemaExplorer() {
         return false;
       }
 
-      // Toujours afficher les alertes retournées
       if (result.alerts && result.alerts.length > 0) {
         setAlerts(result.alerts);
         setShowAlerts(true);
       }
 
       if (result.success) {
-        // Mettre à jour l'état local SEULEMENT si le backend a réussi
         setSchema(result.newState?.schema || schemaToSave);
         setPendingSchema(null);
         toast.success('Schéma sauvegardé', 'Les modifications ont été enregistrées');
         return true;
       } else {
-        // En cas d'erreur, ne pas mettre à jour l'état local
         console.error('Erreur de sauvegarde:', result.alerts);
         const errorMsg = result.alerts?.[0]?.message || 'Erreur de validation';
         toast.error('Erreur de sauvegarde', errorMsg);
@@ -187,7 +195,6 @@ export default function SchemaExplorer() {
     let success = false;
 
     if (editingTable) {
-      // Update existing table
       const newSchema = {
         ...schema,
         tables: schema.tables.map(t =>
@@ -204,7 +211,6 @@ export default function SchemaExplorer() {
         }
       }
     } else {
-      // Create new table
       const newTable: TableDefinition = {
         name: tableData.name,
         label: tableData.label,
@@ -288,7 +294,6 @@ export default function SchemaExplorer() {
     try {
       const parsed = JSON.parse(value);
 
-      // Validation structurelle de base
       if (typeof parsed !== 'object' || parsed === null) {
         return { valid: false, error: 'Le JSON doit être un objet' };
       }
@@ -302,7 +307,6 @@ export default function SchemaExplorer() {
         return { valid: false, error: 'Le champ "relations" est requis et doit être un tableau' };
       }
 
-      // Validation des tables
       for (const table of parsed.tables) {
         if (!table.name || typeof table.name !== 'string') {
           return { valid: false, error: `Chaque table doit avoir un nom (string)` };
@@ -330,7 +334,6 @@ export default function SchemaExplorer() {
       setJsonError(null);
     } else {
       setJsonError(result.error || 'JSON invalide');
-      // Ne pas mettre à jour pendingSchema si invalide
     }
   }, [validateJsonSchema]);
 
@@ -339,16 +342,18 @@ export default function SchemaExplorer() {
       const success = await saveSchema(pendingSchema);
       if (success) {
         setJsonMode(false);
+        setJsonFullscreen(false);
         setJsonError(null);
       }
     } else if (schema && !jsonError) {
-      // Si aucune modification n'a été faite, juste fermer le mode JSON
       setJsonMode(false);
+      setJsonFullscreen(false);
     }
   };
 
   const handleExitJsonMode = () => {
     setJsonMode(false);
+    setJsonFullscreen(false);
     setPendingSchema(null);
     setJsonError(null);
   };
@@ -359,17 +364,14 @@ export default function SchemaExplorer() {
   const [tablePage, setTablePage] = useState(0);
   const [fieldPage, setFieldPage] = useState(0);
 
-  // Reset pagination when search changes
   useEffect(() => {
     setTablePage(0);
   }, [searchQuery]);
 
-  // Reset field pagination when selected table changes
   useEffect(() => {
     setFieldPage(0);
   }, [selectedTable]);
 
-  // Mémoïsation des calculs coûteux
   const tables = useMemo(() => {
     if (!schema) return [];
     return getTables(schema);
@@ -414,28 +416,39 @@ export default function SchemaExplorer() {
     return Math.ceil(currentTable.fields.length / FIELDS_PER_PAGE);
   }, [currentTable]);
 
+  // Loading state
   if (loading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-96">
+        <div className="flex items-center justify-center h-[60vh]">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-dark-500">Chargement du schéma...</p>
+            <div className="relative w-20 h-20 mx-auto mb-6">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 animate-pulse opacity-30" />
+              <div className="absolute inset-2 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center">
+                <Database className="w-8 h-8 text-primary-600 animate-pulse" />
+              </div>
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary-500 animate-spin" />
+            </div>
+            <p className="text-dark-500 font-medium">Chargement du schéma...</p>
           </div>
         </div>
       </Layout>
     );
   }
 
+  // Error state
   if (!schema) {
     return (
       <Layout>
-        <div className="text-center py-16">
-          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Database className="w-8 h-8 text-red-500" />
+        <div className="text-center py-20">
+          <div className="w-20 h-20 bg-red-100/80 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <Database className="w-10 h-10 text-red-500" />
           </div>
-          <h3 className="text-xl font-semibold text-dark-800 mb-2">Erreur de chargement</h3>
-          <p className="text-dark-500">Impossible de charger le schéma</p>
+          <h3 className="text-2xl font-bold text-dark-800 mb-3">Erreur de chargement</h3>
+          <p className="text-dark-500 mb-6">Impossible de charger le schéma de la base de données</p>
+          <button onClick={loadSchema} className="btn btn-primary">
+            Réessayer
+          </button>
         </div>
       </Layout>
     );
@@ -444,33 +457,53 @@ export default function SchemaExplorer() {
   return (
     <Layout>
       <div className="animate-fade-in">
-        {/* Hero Section */}
-        <div className="card p-8 mb-8 gradient-hero text-white">
-          <div className="flex items-center justify-between">
+        {/* Hero Section - Glass Style */}
+        <div className="hero-glass p-10 mb-10 relative overflow-hidden">
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Schema Explorer</h1>
-              <p className="text-primary-200">
-                Explorez et gérez la structure de votre base de données
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <Layers className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-white/70" />
+                  <span className="text-white/70 text-sm font-medium">Schema Explorer</span>
+                </div>
+              </div>
+              <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+                Explorez votre schéma
+              </h1>
+              <p className="text-white/70 text-lg">
+                Gérez et visualisez la structure de votre base de données
               </p>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <div className="text-3xl font-bold">{tableStats.totalTables}</div>
-                <div className="text-primary-200 text-sm">Tables</div>
+
+            {/* Stats Cards */}
+            <div className="flex items-center gap-4">
+              <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-5 border border-white/20 min-w-[120px]">
+                <div className="flex items-center gap-2 mb-1">
+                  <Table className="w-4 h-4 text-white/70" />
+                  <span className="text-white/70 text-xs font-medium uppercase tracking-wider">Tables</span>
+                </div>
+                <div className="text-4xl font-bold text-white">{tableStats.totalTables}</div>
               </div>
-              <div className="w-px h-12 bg-white/20"></div>
-              <div className="text-right">
-                <div className="text-3xl font-bold">{tableStats.totalFields}</div>
-                <div className="text-primary-200 text-sm">Champs</div>
+              <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-5 border border-white/20 min-w-[120px]">
+                <div className="flex items-center gap-2 mb-1">
+                  <Hash className="w-4 h-4 text-white/70" />
+                  <span className="text-white/70 text-xs font-medium uppercase tracking-wider">Champs</span>
+                </div>
+                <div className="text-4xl font-bold text-white">{tableStats.totalFields}</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Controls */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-6">
+        {/* Controls Bar */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-dark-400" size={20} />
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-dark-400">
+              <Search size={20} />
+            </div>
             <input
               type="text"
               placeholder="Rechercher une table..."
@@ -488,12 +521,12 @@ export default function SchemaExplorer() {
           </button>
         </div>
 
-        {/* Affichage des alertes de validation */}
+        {/* Validation Alerts */}
         {showAlerts && alerts.length > 0 && (
-          <div className="mb-6 card overflow-hidden">
-            <div className="p-4 border-b border-dark-100 bg-dark-50 flex items-center justify-between">
+          <div className="mb-8 card overflow-hidden animate-scale-in">
+            <div className="p-4 border-b border-dark-100/50 bg-dark-50/50 flex items-center justify-between">
               <h3 className="font-semibold text-dark-800 flex items-center gap-2">
-                <AlertCircle size={18} />
+                <AlertCircle size={18} className="text-amber-500" />
                 Alertes de validation ({alerts.length})
               </h3>
               <button
@@ -503,29 +536,34 @@ export default function SchemaExplorer() {
                 <XCircle size={18} />
               </button>
             </div>
-            <div className="max-h-64 overflow-y-auto divide-y divide-dark-100">
+            <div className="max-h-64 overflow-y-auto divide-y divide-dark-100/50">
               {alerts.map((alert, index) => (
                 <div
                   key={index}
-                  className={`p-3 flex items-start gap-3 ${
-                    alert.severity === 'error' ? 'bg-red-50' :
-                    alert.severity === 'warn' ? 'bg-yellow-50' : 'bg-blue-50'
+                  className={`p-4 flex items-start gap-3 ${
+                    alert.severity === 'error' ? 'bg-red-50/50' :
+                    alert.severity === 'warn' ? 'bg-amber-50/50' : 'bg-primary-50/50'
                   }`}
                 >
                   {alert.severity === 'error' ? (
                     <XCircle size={18} className="text-red-500 flex-shrink-0 mt-0.5" />
                   ) : alert.severity === 'warn' ? (
-                    <AlertCircle size={18} className="text-yellow-500 flex-shrink-0 mt-0.5" />
+                    <AlertCircle size={18} className="text-amber-500 flex-shrink-0 mt-0.5" />
                   ) : (
-                    <CheckCircle size={18} className="text-blue-500 flex-shrink-0 mt-0.5" />
+                    <CheckCircle size={18} className="text-primary-500 flex-shrink-0 mt-0.5" />
                   )}
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium text-dark-800">{alert.message}</div>
                     <div className="text-xs text-dark-500 mt-1">
-                      <code>{alert.location}</code> - {alert.code}
+                      <code className="bg-dark-100/50 px-1.5 py-0.5 rounded">{alert.location}</code>
+                      <span className="mx-2">•</span>
+                      <span>{alert.code}</span>
                     </div>
                     {alert.suggestion && (
-                      <div className="text-xs text-dark-600 mt-1 italic">{alert.suggestion}</div>
+                      <div className="text-xs text-dark-600 mt-2 italic flex items-center gap-1">
+                        <Zap size={12} className="text-amber-500" />
+                        {alert.suggestion}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -534,137 +572,166 @@ export default function SchemaExplorer() {
           </div>
         )}
 
+        {/* JSON Editor Mode */}
         {jsonMode ? (
-          <div className="card overflow-hidden">
-            <div className="h-[600px]">
-              <MonacoEditor
-                height="100%"
-                defaultLanguage="json"
-                value={JSON.stringify(pendingSchema || schema, null, 2)}
-                onChange={handleJsonChange}
-                theme="vs-dark"
-                options={{
-                  minimap: { enabled: false },
-                  fontSize: 14,
-                  padding: { top: 16 },
-                  scrollBeyondLastLine: false,
-                }}
-              />
-            </div>
-            {jsonError && (
-              <div className="p-3 bg-red-50 border-t border-red-200 flex items-center gap-2">
-                <XCircle size={18} className="text-red-500" />
-                <span className="text-sm text-red-700">{jsonError}</span>
+          <div className={`card overflow-hidden ${jsonFullscreen ? 'fixed inset-4 z-50' : ''}`}>
+            <div className={jsonFullscreen ? 'h-full flex flex-col' : ''}>
+              <div className={`${jsonFullscreen ? 'flex-1' : 'h-[600px]'}`}>
+                <MonacoEditor
+                  height="100%"
+                  defaultLanguage="json"
+                  value={JSON.stringify(pendingSchema || schema, null, 2)}
+                  onChange={handleJsonChange}
+                  theme="vs-dark"
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    padding: { top: 16 },
+                    scrollBeyondLastLine: false,
+                    fontFamily: "'SF Mono', 'Fira Code', monospace",
+                    fontLigatures: true,
+                    cursorBlinking: 'smooth',
+                    smoothScrolling: true,
+                    renderLineHighlight: 'all',
+                  }}
+                />
               </div>
-            )}
-            <div className="p-4 border-t border-dark-100 bg-dark-50 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                {pendingSchema && !jsonError && (
-                  <span className="text-sm text-green-600 flex items-center gap-1">
-                    <CheckCircle size={14} />
-                    Modifications en attente
-                  </span>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={handleExitJsonMode}
-                  className="btn btn-secondary"
-                >
-                  Annuler
-                </button>
-                <button
-                  onClick={handleSaveJson}
-                  disabled={!!jsonError || saving || (!pendingSchema && !schema)}
-                  className="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {saving ? 'Sauvegarde...' : 'Sauvegarder les modifications'}
-                </button>
+              {jsonError && (
+                <div className="p-4 bg-red-50/80 border-t border-red-200/50 flex items-center gap-3">
+                  <XCircle size={18} className="text-red-500" />
+                  <span className="text-sm text-red-700">{jsonError}</span>
+                </div>
+              )}
+              <div className="p-4 border-t border-dark-100/50 bg-dark-50/50 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  {pendingSchema && !jsonError && (
+                    <span className="text-sm text-emerald-600 flex items-center gap-2 bg-emerald-50/80 px-3 py-1.5 rounded-full">
+                      <CheckCircle size={14} />
+                      Modifications en attente
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setJsonFullscreen(!jsonFullscreen)}
+                    className="btn btn-ghost p-2"
+                    title={jsonFullscreen ? 'Réduire' : 'Agrandir'}
+                  >
+                    <Maximize2 size={18} />
+                  </button>
+                  <button
+                    onClick={handleExitJsonMode}
+                    className="btn btn-secondary"
+                  >
+                    Annuler
+                  </button>
+                  <button
+                    onClick={handleSaveJson}
+                    disabled={!!jsonError || saving || (!pendingSchema && !schema)}
+                    className="btn btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {saving ? 'Sauvegarde...' : 'Sauvegarder'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         ) : (
+          /* Table Explorer UI */
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Tables list */}
+            {/* Tables List */}
             <div className="lg:col-span-1">
               <div className="card">
-                <div className="p-4 border-b border-dark-100">
+                <div className="p-5 border-b border-dark-100/50">
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-dark-800 flex items-center gap-2">
-                      <Layers size={18} />
+                      <Layers size={18} className="text-primary-500" />
                       Tables
                     </h3>
-                    <button onClick={handleAddTable} className="btn btn-ghost p-2" title="Ajouter une table">
-                      <Plus size={18} className="text-primary-600" />
+                    <button
+                      onClick={handleAddTable}
+                      className="w-9 h-9 rounded-xl bg-primary-50 hover:bg-primary-100 flex items-center justify-center transition-colors group"
+                      title="Ajouter une table"
+                    >
+                      <Plus size={18} className="text-primary-600 group-hover:scale-110 transition-transform" />
                     </button>
                   </div>
                 </div>
-                <div className="max-h-[500px] overflow-y-auto">
+
+                <div className="max-h-[520px] overflow-y-auto">
                   {filteredTables.length === 0 ? (
-                    <div className="p-8 text-center text-dark-500">
-                      Aucune table trouvée
+                    <div className="p-10 text-center">
+                      <div className="w-14 h-14 rounded-2xl bg-dark-100/50 flex items-center justify-center mx-auto mb-4">
+                        <Table className="w-7 h-7 text-dark-400" />
+                      </div>
+                      <p className="text-dark-500 font-medium">Aucune table trouvée</p>
                     </div>
                   ) : (
-                    <div className="divide-y divide-dark-100">
+                    <div className="divide-y divide-dark-100/50">
                       {paginatedTables.map((t) => (
                         <button
                           key={t.name}
                           onClick={() => setSelectedTable(t.name)}
-                          className={`w-full text-left p-4 transition-all duration-200 hover:bg-dark-50 flex items-center justify-between group ${selectedTable === t.name
-                            ? 'bg-primary-50 border-l-4 border-primary-500'
-                            : ''
-                            }`}
+                          className={`w-full text-left p-4 transition-all duration-300 hover:bg-dark-50/50 flex items-center justify-between group ${
+                            selectedTable === t.name
+                              ? 'bg-primary-50/80 border-l-4 border-primary-500'
+                              : ''
+                          }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${selectedTable === t.name
-                              ? 'bg-primary-100 text-primary-600'
-                              : 'bg-dark-100 text-dark-500 group-hover:bg-primary-100 group-hover:text-primary-600'
-                              }`}>
+                            <div className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                              selectedTable === t.name
+                                ? 'bg-primary-100 text-primary-600 shadow-sm'
+                                : 'bg-dark-100/70 text-dark-500 group-hover:bg-primary-100 group-hover:text-primary-600'
+                            }`}>
                               <Table size={20} />
                             </div>
                             <div>
-                              <div className={`font-medium ${selectedTable === t.name ? 'text-primary-700' : 'text-dark-800'
-                                }`}>
+                              <div className={`font-medium ${
+                                selectedTable === t.name ? 'text-primary-700' : 'text-dark-800'
+                              }`}>
                                 {t.label || t.name}
                               </div>
                               <div className="text-xs text-dark-500">
-                                {t.fields.length} champs
+                                {t.fields.length} champ{t.fields.length > 1 ? 's' : ''}
                               </div>
                             </div>
                           </div>
                           <ChevronRight
                             size={18}
-                            className={`transition-transform ${selectedTable === t.name
-                              ? 'text-primary-500'
-                              : 'text-dark-300 group-hover:translate-x-1'
-                              }`}
+                            className={`transition-all duration-300 ${
+                              selectedTable === t.name
+                                ? 'text-primary-500'
+                                : 'text-dark-300 group-hover:translate-x-1 group-hover:text-primary-400'
+                            }`}
                           />
                         </button>
                       ))}
                     </div>
                   )}
                 </div>
-                {/* Pagination des tables */}
+
+                {/* Pagination */}
                 {totalTablePages > 1 && (
-                  <div className="p-3 border-t border-dark-100 bg-dark-50 flex items-center justify-between">
-                    <span className="text-xs text-dark-500">
+                  <div className="p-3 border-t border-dark-100/50 bg-dark-50/30 flex items-center justify-between">
+                    <span className="text-xs text-dark-500 font-medium">
                       {filteredTables.length} table{filteredTables.length > 1 ? 's' : ''}
                     </span>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                       <button
                         onClick={() => setTablePage(p => Math.max(0, p - 1))}
                         disabled={tablePage === 0}
-                        className="btn btn-ghost p-1 disabled:opacity-50"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-dark-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                       >
-                        <ChevronRight size={16} className="rotate-180" />
+                        <ChevronLeft size={16} />
                       </button>
-                      <span className="text-xs text-dark-600">
+                      <span className="text-xs text-dark-600 px-2">
                         {tablePage + 1} / {totalTablePages}
                       </span>
                       <button
                         onClick={() => setTablePage(p => Math.min(totalTablePages - 1, p + 1))}
                         disabled={tablePage >= totalTablePages - 1}
-                        className="btn btn-ghost p-1 disabled:opacity-50"
+                        className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-dark-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                       >
                         <ChevronRight size={16} />
                       </button>
@@ -674,53 +741,66 @@ export default function SchemaExplorer() {
               </div>
             </div>
 
-            {/* Table details */}
+            {/* Table Details */}
             <div className="lg:col-span-2">
               {currentTable ? (
                 <div className="card animate-fade-in">
                   {/* Header */}
-                  <div className="p-6 border-b border-dark-100">
+                  <div className="p-6 border-b border-dark-100/50">
                     <div className="flex items-start justify-between">
-                      <div>
-                        <h2 className="text-2xl font-bold text-dark-900 mb-1">
-                          {currentTable.label || currentTable.name}
-                        </h2>
-                        {currentTable.description && (
-                          <p className="text-dark-500">{currentTable.description}</p>
-                        )}
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-500/20">
+                          <Table className="w-7 h-7 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-2xl font-bold text-dark-900 mb-1">
+                            {currentTable.label || currentTable.name}
+                          </h2>
+                          {currentTable.description && (
+                            <p className="text-dark-500">{currentTable.description}</p>
+                          )}
+                        </div>
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => handleEditTable(currentTable!)} className="btn btn-ghost p-2" title="Éditer la table">
-                          <Edit2 size={18} />
+                        <button
+                          onClick={() => handleEditTable(currentTable!)}
+                          className="w-10 h-10 rounded-xl bg-dark-100/50 hover:bg-dark-100 flex items-center justify-center transition-colors group"
+                          title="Éditer la table"
+                        >
+                          <Edit2 size={18} className="text-dark-500 group-hover:text-primary-600" />
                         </button>
-                        <button onClick={() => handleDeleteTable(currentTable!.name)} className="btn btn-ghost p-2 text-red-500 hover:bg-red-50" title="Supprimer la table">
-                          <Trash2 size={18} />
+                        <button
+                          onClick={() => handleDeleteTable(currentTable!.name)}
+                          className="w-10 h-10 rounded-xl bg-red-50 hover:bg-red-100 flex items-center justify-center transition-colors group"
+                          title="Supprimer la table"
+                        >
+                          <Trash2 size={18} className="text-red-500" />
                         </button>
                       </div>
                     </div>
 
                     {/* Meta badges */}
-                    <div className="flex flex-wrap gap-2 mt-4">
+                    <div className="flex flex-wrap gap-2 mt-5">
                       {currentTable.primaryKey && (
-                        <span className="badge badge-primary flex items-center gap-1">
+                        <span className="badge badge-primary flex items-center gap-1.5">
                           <Key size={12} />
                           PK: {Array.isArray(currentTable.primaryKey) ? currentTable.primaryKey.join(', ') : currentTable.primaryKey}
                         </span>
                       )}
                       {currentTable.owner && (
-                        <span className="badge badge-gray flex items-center gap-1">
+                        <span className="badge badge-gray flex items-center gap-1.5">
                           <User size={12} />
                           {currentTable.owner}
                         </span>
                       )}
                       {currentTable.sensitivity && (
-                        <span className="badge badge-warning flex items-center gap-1">
+                        <span className="badge badge-warning flex items-center gap-1.5">
                           <Shield size={12} />
                           {currentTable.sensitivity}
                         </span>
                       )}
                       {currentTable.status && (
-                        <span className="badge badge-accent flex items-center gap-1">
+                        <span className="badge badge-accent flex items-center gap-1.5">
                           <Clock size={12} />
                           {currentTable.status}
                         </span>
@@ -728,18 +808,22 @@ export default function SchemaExplorer() {
                     </div>
                   </div>
 
-                  {/* Fields table */}
+                  {/* Fields Table */}
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
                         <tr className="table-header">
-                          <th className="px-6 py-3 text-left">Nom</th>
-                          <th className="px-6 py-3 text-left">Type</th>
-                          <th className="px-6 py-3 text-center">Unique</th>
-                          <th className="px-6 py-3 text-left">Description</th>
-                          <th className="px-6 py-3 text-center">
-                            <button onClick={handleAddField} className="btn btn-ghost p-1" title="Ajouter un champ">
-                              <Plus size={16} className="text-primary-600" />
+                          <th className="px-6 py-4 text-left">Nom</th>
+                          <th className="px-6 py-4 text-left">Type</th>
+                          <th className="px-6 py-4 text-center">Unique</th>
+                          <th className="px-6 py-4 text-left">Description</th>
+                          <th className="px-6 py-4 text-center">
+                            <button
+                              onClick={handleAddField}
+                              className="w-8 h-8 rounded-lg bg-primary-50 hover:bg-primary-100 flex items-center justify-center transition-colors mx-auto group"
+                              title="Ajouter un champ"
+                            >
+                              <Plus size={16} className="text-primary-600 group-hover:scale-110 transition-transform" />
                             </button>
                           </th>
                         </tr>
@@ -748,11 +832,12 @@ export default function SchemaExplorer() {
                         {paginatedFields.map((field, index) => (
                           <tr
                             key={field.name}
-                            className={`hover:bg-dark-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-dark-50/50'
-                              }`}
+                            className={`transition-colors hover:bg-primary-50/30 ${
+                              index % 2 === 0 ? 'bg-white' : 'bg-dark-50/30'
+                            }`}
                           >
                             <td className="table-cell">
-                              <code className="text-sm font-mono text-dark-700">
+                              <code className="text-sm font-mono text-dark-700 bg-dark-100/50 px-2 py-1 rounded">
                                 {field.name}
                               </code>
                             </td>
@@ -763,23 +848,31 @@ export default function SchemaExplorer() {
                             </td>
                             <td className="table-cell text-center">
                               {field.unique ? (
-                                <span className="inline-flex w-6 h-6 items-center justify-center bg-accent-100 text-accent-600 rounded-full text-xs font-bold">
-                                  ✓
+                                <span className="inline-flex w-7 h-7 items-center justify-center bg-emerald-100 text-emerald-600 rounded-full">
+                                  <CheckCircle size={14} />
                                 </span>
                               ) : (
                                 <span className="text-dark-300">—</span>
                               )}
                             </td>
                             <td className="table-cell text-dark-600 text-sm">
-                              {field.description || '—'}
+                              {field.description || <span className="text-dark-300">—</span>}
                             </td>
                             <td className="table-cell text-center">
                               <div className="flex gap-1 justify-center">
-                                <button onClick={() => handleEditField(field)} className="p-1 text-primary-600 hover:bg-primary-50 rounded" title="Éditer">
-                                  <Edit2 size={14} />
+                                <button
+                                  onClick={() => handleEditField(field)}
+                                  className="w-8 h-8 rounded-lg hover:bg-primary-50 flex items-center justify-center transition-colors"
+                                  title="Éditer"
+                                >
+                                  <Edit2 size={14} className="text-primary-600" />
                                 </button>
-                                <button onClick={() => handleDeleteField(field.name)} className="p-1 text-red-500 hover:bg-red-50 rounded" title="Supprimer">
-                                  <Trash2 size={14} />
+                                <button
+                                  onClick={() => handleDeleteField(field.name)}
+                                  className="w-8 h-8 rounded-lg hover:bg-red-50 flex items-center justify-center transition-colors"
+                                  title="Supprimer"
+                                >
+                                  <Trash2 size={14} className="text-red-500" />
                                 </button>
                               </div>
                             </td>
@@ -788,27 +881,28 @@ export default function SchemaExplorer() {
                       </tbody>
                     </table>
                   </div>
-                  {/* Pagination des champs */}
+
+                  {/* Field Pagination */}
                   {totalFieldPages > 1 && (
-                    <div className="p-3 border-t border-dark-100 bg-dark-50 flex items-center justify-between">
-                      <span className="text-xs text-dark-500">
+                    <div className="p-4 border-t border-dark-100/50 bg-dark-50/30 flex items-center justify-between">
+                      <span className="text-xs text-dark-500 font-medium">
                         {currentTable.fields.length} champ{currentTable.fields.length > 1 ? 's' : ''}
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
                         <button
                           onClick={() => setFieldPage(p => Math.max(0, p - 1))}
                           disabled={fieldPage === 0}
-                          className="btn btn-ghost p-1 disabled:opacity-50"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-dark-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                         >
-                          <ChevronRight size={16} className="rotate-180" />
+                          <ChevronLeft size={16} />
                         </button>
-                        <span className="text-xs text-dark-600">
+                        <span className="text-xs text-dark-600 px-2">
                           {fieldPage + 1} / {totalFieldPages}
                         </span>
                         <button
                           onClick={() => setFieldPage(p => Math.min(totalFieldPages - 1, p + 1))}
                           disabled={fieldPage >= totalFieldPages - 1}
-                          className="btn btn-ghost p-1 disabled:opacity-50"
+                          className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-dark-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                         >
                           <ChevronRight size={16} />
                         </button>
@@ -817,16 +911,17 @@ export default function SchemaExplorer() {
                   )}
                 </div>
               ) : (
+                /* Empty State */
                 <div className="card h-[600px] flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-dark-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Table className="w-8 h-8 text-dark-400" />
+                    <div className="w-20 h-20 bg-dark-100/50 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-6">
+                      <Table className="w-10 h-10 text-dark-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-dark-700 mb-2">
+                    <h3 className="text-xl font-semibold text-dark-700 mb-2">
                       Sélectionnez une table
                     </h3>
-                    <p className="text-dark-500">
-                      Cliquez sur une table pour voir ses détails
+                    <p className="text-dark-500 max-w-xs mx-auto">
+                      Cliquez sur une table dans la liste pour voir ses détails et gérer ses champs
                     </p>
                   </div>
                 </div>
@@ -881,20 +976,36 @@ function TableModal({ table, onSave, onClose }: TableModalProps) {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content w-full max-w-lg p-6 animate-fade-in">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-dark-900">
-            {table ? 'Modifier la table' : 'Nouvelle table'}
-          </h3>
-          <button onClick={onClose} className="p-2 text-dark-500 hover:bg-dark-100 rounded-lg">
-            <X size={24} />
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal-content w-full max-w-lg p-8 animate-scale-in"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg shadow-primary-500/20">
+              <Table className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-dark-900">
+                {table ? 'Modifier la table' : 'Nouvelle table'}
+              </h3>
+              <p className="text-dark-500 text-sm">
+                {table ? 'Modifiez les propriétés de la table' : 'Créez une nouvelle table dans le schéma'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-10 h-10 rounded-xl bg-dark-100/50 hover:bg-dark-100 flex items-center justify-center transition-colors"
+          >
+            <X size={20} className="text-dark-500" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-dark-700 mb-1">
+            <label className="block text-sm font-semibold text-dark-700 mb-2">
               Nom technique <span className="text-red-500">*</span>
             </label>
             <input
@@ -908,7 +1019,7 @@ function TableModal({ table, onSave, onClose }: TableModalProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark-700 mb-1">
+            <label className="block text-sm font-semibold text-dark-700 mb-2">
               Libellé
             </label>
             <input
@@ -921,7 +1032,7 @@ function TableModal({ table, onSave, onClose }: TableModalProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark-700 mb-1">
+            <label className="block text-sm font-semibold text-dark-700 mb-2">
               Description
             </label>
             <textarea
@@ -934,7 +1045,7 @@ function TableModal({ table, onSave, onClose }: TableModalProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark-700 mb-1">
+            <label className="block text-sm font-semibold text-dark-700 mb-2">
               Clé primaire
             </label>
             <input
@@ -946,7 +1057,7 @@ function TableModal({ table, onSave, onClose }: TableModalProps) {
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-dark-100">
+          <div className="flex justify-end gap-3 pt-6 border-t border-dark-100/50">
             <button type="button" onClick={onClose} className="btn btn-secondary">
               Annuler
             </button>
@@ -983,27 +1094,43 @@ function FieldModal({ field, onSave, onClose }: FieldModalProps) {
       type: type as any,
       label: label || name,
       description,
-      required: false, // Toujours non obligatoire
+      required: false,
       unique,
     });
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content w-full max-w-lg p-6 animate-fade-in">
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-dark-900">
-            {field ? 'Modifier le champ' : 'Nouveau champ'}
-          </h3>
-          <button onClick={onClose} className="p-2 text-dark-500 hover:bg-dark-100 rounded-lg">
-            <X size={24} />
+    <div className="modal-overlay" onClick={onClose}>
+      <div
+        className="modal-content w-full max-w-lg p-8 animate-scale-in"
+        onClick={e => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent-500 to-accent-700 flex items-center justify-center shadow-lg shadow-accent-500/20">
+              <Hash className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold text-dark-900">
+                {field ? 'Modifier le champ' : 'Nouveau champ'}
+              </h3>
+              <p className="text-dark-500 text-sm">
+                {field ? 'Modifiez les propriétés du champ' : 'Ajoutez un nouveau champ à la table'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-10 h-10 rounded-xl bg-dark-100/50 hover:bg-dark-100 flex items-center justify-center transition-colors"
+          >
+            <X size={20} className="text-dark-500" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-dark-700 mb-1">
+              <label className="block text-sm font-semibold text-dark-700 mb-2">
                 Nom <span className="text-red-500">*</span>
               </label>
               <input
@@ -1017,7 +1144,7 @@ function FieldModal({ field, onSave, onClose }: FieldModalProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-dark-700 mb-1">
+              <label className="block text-sm font-semibold text-dark-700 mb-2">
                 Type
               </label>
               <select
@@ -1038,7 +1165,7 @@ function FieldModal({ field, onSave, onClose }: FieldModalProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark-700 mb-1">
+            <label className="block text-sm font-semibold text-dark-700 mb-2">
               Libellé
             </label>
             <input
@@ -1051,7 +1178,7 @@ function FieldModal({ field, onSave, onClose }: FieldModalProps) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-dark-700 mb-1">
+            <label className="block text-sm font-semibold text-dark-700 mb-2">
               Description
             </label>
             <textarea
@@ -1063,19 +1190,21 @@ function FieldModal({ field, onSave, onClose }: FieldModalProps) {
             />
           </div>
 
-          <div className="flex gap-6">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={unique}
-                onChange={(e) => setUnique(e.target.checked)}
-                className="h-5 w-5 rounded border-dark-300 text-primary-600"
-              />
-              <span className="text-sm text-dark-700">Unique</span>
+          <div className="flex items-center gap-3 p-4 bg-dark-50/50 rounded-2xl">
+            <input
+              type="checkbox"
+              id="unique"
+              checked={unique}
+              onChange={(e) => setUnique(e.target.checked)}
+              className="h-5 w-5 rounded-lg border-dark-300 text-primary-600 focus:ring-primary-500"
+            />
+            <label htmlFor="unique" className="text-sm text-dark-700 cursor-pointer">
+              <span className="font-medium">Valeur unique</span>
+              <span className="text-dark-500 ml-2">— Chaque valeur doit être distincte</span>
             </label>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-dark-100">
+          <div className="flex justify-end gap-3 pt-6 border-t border-dark-100/50">
             <button type="button" onClick={onClose} className="btn btn-secondary">
               Annuler
             </button>

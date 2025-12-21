@@ -133,15 +133,17 @@ export default function ImportExcel() {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto animate-fade-in">
-        {/* Hero Section */}
-        <div className="card p-8 mb-8 bg-gradient-to-r from-green-600 to-emerald-600 text-white">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center">
-              <FileSpreadsheet className="w-7 h-7" />
+        {/* Hero Section - Glass Style */}
+        <div className="hero-glass p-10 mb-10 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.95) 50%, rgba(4, 120, 87, 0.9) 100%)' }}>
+          <div className="relative z-10 flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <FileSpreadsheet className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold mb-1">Import Excel</h1>
-              <p className="text-green-100">
+              <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+                Import Excel
+              </h1>
+              <p className="text-white/70 text-lg">
                 Importez vos données depuis un fichier Excel multi-onglets
               </p>
             </div>

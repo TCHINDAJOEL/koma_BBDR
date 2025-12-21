@@ -134,41 +134,6 @@ export interface RulesStore {
 }
 
 // ============================================================================
-// AUDIT EVENT TYPES
-// ============================================================================
-
-export type AuditAction =
-  | 'SCHEMA_UPDATE'
-  | 'SCHEMA_TABLE_CREATE'
-  | 'SCHEMA_TABLE_DELETE'
-  | 'SCHEMA_TABLE_UPDATE'
-  | 'SCHEMA_FIELD_CREATE'
-  | 'SCHEMA_FIELD_DELETE'
-  | 'SCHEMA_FIELD_UPDATE'
-  | 'DATA_UPSERT'
-  | 'DATA_DELETE'
-  | 'RELATION_CREATE'
-  | 'RELATION_DELETE'
-  | 'RELATION_UPDATE'
-  | 'IMPORT'
-  | 'EXPORT';
-
-export interface AuditEvent {
-  eventId: string;
-  ts: string;
-  actor: string;
-  action: AuditAction;
-  target: {
-    type: 'table' | 'field' | 'relation' | 'record' | 'file' | 'schema';
-    ref: string;
-  };
-  before?: any;
-  after?: any;
-  reason?: string;
-  metadata?: Record<string, any>;
-}
-
-// ============================================================================
 // VALIDATION & ALERT TYPES
 // ============================================================================
 
@@ -240,7 +205,6 @@ export interface ApplicationState {
   schema: Schema;
   data: TableData;
   rules: RuleDefinition[];
-  audit: AuditEvent[];
 }
 
 // ============================================================================
@@ -256,21 +220,6 @@ export interface ValidateRequest {
 export interface ValidateResponse {
   valid: boolean;
   report: ValidationReport;
-}
-
-export interface ApplyChangeRequest {
-  action: AuditAction;
-  target: AuditEvent['target'];
-  before?: any;
-  after?: any;
-  reason?: string;
-}
-
-export interface ApplyChangeResponse {
-  success: boolean;
-  event: AuditEvent;
-  alerts: ValidationAlert[];
-  newState?: Partial<ApplicationState>;
 }
 
 export interface ExportResponse {

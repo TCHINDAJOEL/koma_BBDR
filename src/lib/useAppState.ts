@@ -5,7 +5,6 @@ import {
   DataRecord,
   ValidationAlert,
   RuleDefinition,
-  AuditEvent,
 } from '@/types/schema';
 import { fetchWithCacheBusting, updateCacheVersion } from './cache-helper';
 import { generateRecordId, normalizeRecord } from './record-helpers';
@@ -19,7 +18,6 @@ export interface AppState {
   schema: Schema | null;
   data: TableData;
   rules: RuleDefinition[];
-  audit: AuditEvent[];
 }
 
 export interface UseAppStateReturn {
@@ -27,7 +25,6 @@ export interface UseAppStateReturn {
   schema: Schema | null;
   data: TableData;
   rules: RuleDefinition[];
-  audit: AuditEvent[];
   loading: boolean;
   error: string | null;
 
@@ -75,7 +72,6 @@ export function useAppState(): UseAppStateReturn {
   const [schema, setSchema] = useState<Schema | null>(null);
   const [data, setData] = useState<TableData>({});
   const [rules, setRules] = useState<RuleDefinition[]>([]);
-  const [audit, setAudit] = useState<AuditEvent[]>([]);
 
   // État de chargement et erreurs
   const [loading, setLoading] = useState(true);
@@ -105,7 +101,6 @@ export function useAppState(): UseAppStateReturn {
       setSchema(state.schema);
       setData(state.data || {});
       setRules(state.rules || []);
-      setAudit(state.audit || []);
     } catch (err: any) {
       console.error('Erreur de chargement:', err);
       setError(err.message || 'Erreur lors du chargement des données');
@@ -530,7 +525,6 @@ export function useAppState(): UseAppStateReturn {
     schema,
     data,
     rules,
-    audit,
     loading,
     error,
 

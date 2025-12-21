@@ -21,13 +21,11 @@ import {
   Table,
   GitBranch,
   LayoutGrid,
-  History,
 } from 'lucide-react';
 import { getTableData } from '@/lib/data-helpers';
 import useAppState from '@/lib/useAppState';
 import RecordForm from '@/components/RecordForm';
 import RelatedRecords from '@/components/RelatedRecords';
-import AuditPanel from '@/components/AuditPanel';
 import { useToast } from '@/components/Toast';
 
 // Import dynamique pour éviter les erreurs SSR avec ReactFlow
@@ -48,7 +46,6 @@ export default function DataEnrichment() {
     deleteRecord,
     updateSchema,
     refresh,
-    audit,
   } = useAppState();
 
   // Hook pour les notifications
@@ -68,7 +65,6 @@ export default function DataEnrichment() {
   const [graphRecord, setGraphRecord] = useState<DataRecord | null>(null);
   const [graphTableName, setGraphTableName] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'table' | 'graph'>('table');
-  const [showAuditPanel, setShowAuditPanel] = useState(false);
 
   // Tables filtrées
   const filteredTables = useMemo(() => {
@@ -461,10 +457,16 @@ export default function DataEnrichment() {
   if (loading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-96">
+        <div className="flex items-center justify-center h-[60vh]">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-primary-200 border-t-primary-600 rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-dark-500">Chargement des données...</p>
+            <div className="relative w-20 h-20 mx-auto mb-6">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary-500 to-accent-500 animate-pulse opacity-30" />
+              <div className="absolute inset-2 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center">
+                <Layers className="w-8 h-8 text-primary-600 animate-pulse" />
+              </div>
+              <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary-500 animate-spin" />
+            </div>
+            <p className="text-dark-500 font-medium">Chargement des données...</p>
           </div>
         </div>
       </Layout>
@@ -493,47 +495,63 @@ export default function DataEnrichment() {
   return (
     <Layout>
       <div className="animate-fade-in">
-        {/* Hero Section */}
-        <div className="card p-8 mb-8 gradient-hero text-white">
-          <div className="flex items-center justify-between">
+        {/* Hero Section - Glass Style */}
+        <div className="hero-glass p-10 mb-10 relative overflow-hidden">
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Data Enrichment</h1>
-              <p className="text-primary-200">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                  <LayoutGrid className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-white/70" />
+                  <span className="text-white/70 text-sm font-medium">Data Enrichment</span>
+                </div>
+              </div>
+              <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+                Gestion des données
+              </h1>
+              <p className="text-white/70 text-lg">
                 Gérez les données de vos tables avec validation automatique
               </p>
             </div>
-            <div className="flex items-center gap-6">
+
+            {/* Stats & Alerts */}
+            <div className="flex items-center gap-3 flex-wrap">
               {/* Alertes résumées */}
               {alerts.length > 0 && (
                 <button
                   onClick={() => setShowAlerts(!showAlerts)}
-                  className="flex items-center gap-2 px-3 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 bg-white/15 backdrop-blur-sm rounded-2xl border border-white/20 hover:bg-white/25 transition-all"
                 >
                   {alertStats.errors > 0 && (
-                    <span className="flex items-center gap-1 text-red-300">
+                    <span className="flex items-center gap-1.5 text-red-300">
                       <AlertCircle size={16} />
-                      {alertStats.errors}
+                      <span className="font-bold">{alertStats.errors}</span>
                     </span>
                   )}
                   {alertStats.warnings > 0 && (
-                    <span className="flex items-center gap-1 text-yellow-300">
+                    <span className="flex items-center gap-1.5 text-yellow-300">
                       <AlertCircle size={16} />
-                      {alertStats.warnings}
+                      <span className="font-bold">{alertStats.warnings}</span>
                     </span>
                   )}
                   {alertStats.infos > 0 && (
-                    <span className="flex items-center gap-1 text-blue-300">
+                    <span className="flex items-center gap-1.5 text-blue-300">
                       <Info size={16} />
-                      {alertStats.infos}
+                      <span className="font-bold">{alertStats.infos}</span>
                     </span>
                   )}
                 </button>
               )}
-              <div className="text-right">
-                <div className="text-3xl font-bold">
+              <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-5 py-4 border border-white/20">
+                <div className="flex items-center gap-2 mb-1">
+                  <Table className="w-4 h-4 text-white/70" />
+                  <span className="text-white/70 text-xs font-medium uppercase tracking-wider">Records</span>
+                </div>
+                <div className="text-3xl font-bold text-white">
                   {Object.values(data).reduce((acc, arr) => acc + arr.length, 0)}
                 </div>
-                <div className="text-primary-200 text-sm">Enregistrements</div>
               </div>
             </div>
           </div>
@@ -622,19 +640,6 @@ export default function DataEnrichment() {
             >
               <Undo size={18} />
               <span className="hidden sm:inline">Annuler</span>
-            </button>
-            <button
-              onClick={() => setShowAuditPanel(true)}
-              className="btn btn-secondary gap-2"
-              title="Voir l'historique des modifications"
-            >
-              <History size={18} />
-              <span className="hidden sm:inline">Historique</span>
-              {audit.length > 0 && (
-                <span className="bg-primary-600 text-white text-xs px-1.5 py-0.5 rounded-full">
-                  {audit.length}
-                </span>
-              )}
             </button>
           </div>
         </div>
@@ -812,14 +817,6 @@ export default function DataEnrichment() {
           </div>
         )}
 
-        {/* Panneau d'audit */}
-        {showAuditPanel && (
-          <AuditPanel
-            audit={audit}
-            onClose={() => setShowAuditPanel(false)}
-            onRefresh={() => refresh(true)}
-          />
-        )}
       </div>
     </Layout>
   );

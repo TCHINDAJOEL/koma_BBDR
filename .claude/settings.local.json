@@ -2,9 +2,14 @@
   "permissions": {
     "allow": [
       "Bash(unzip:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
+  },
+  "enabledPlugins": {
+    "base@aiblueprint": true
   }
 }

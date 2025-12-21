@@ -3,10 +3,42 @@ import Ajv from 'ajv';
 import { storage } from '@/lib/storage';
 import { validator } from '@/lib/validator';
 import { schemaMetaSchema } from '@/lib/meta-schema';
-import { ApplyChangeRequest, ApplyChangeResponse, AuditAction, Schema, TableData } from '@/types/schema';
+import { Schema, TableData, ValidationAlert } from '@/types/schema';
+
+// Types d'actions supportées
+type ActionType =
+  | 'SCHEMA_UPDATE'
+  | 'SCHEMA_TABLE_CREATE'
+  | 'SCHEMA_TABLE_DELETE'
+  | 'SCHEMA_TABLE_UPDATE'
+  | 'SCHEMA_FIELD_CREATE'
+  | 'SCHEMA_FIELD_DELETE'
+  | 'SCHEMA_FIELD_UPDATE'
+  | 'DATA_UPSERT'
+  | 'DATA_DELETE'
+  | 'RELATION_CREATE'
+  | 'RELATION_DELETE'
+  | 'RELATION_UPDATE';
+
+interface ApplyChangeRequest {
+  action: ActionType;
+  target: { type: string; ref: string };
+  before?: any;
+  after: any;
+  reason?: string;
+}
+
+interface ApplyChangeResponse {
+  success: boolean;
+  alerts: ValidationAlert[];
+  newState?: {
+    schema: Schema;
+    data: TableData;
+  };
+}
 
 // Actions autorisées
-const VALID_ACTIONS: AuditAction[] = [
+const VALID_ACTIONS: ActionType[] = [
   'SCHEMA_UPDATE',
   'SCHEMA_TABLE_CREATE',
   'SCHEMA_TABLE_DELETE',
@@ -21,7 +53,7 @@ const VALID_ACTIONS: AuditAction[] = [
   'RELATION_UPDATE',
 ];
 
-const SCHEMA_ACTIONS: AuditAction[] = [
+const SCHEMA_ACTIONS: ActionType[] = [
   'SCHEMA_UPDATE',
   'SCHEMA_TABLE_CREATE',
   'SCHEMA_TABLE_UPDATE',
@@ -34,7 +66,7 @@ const SCHEMA_ACTIONS: AuditAction[] = [
   'RELATION_DELETE',
 ];
 
-const DATA_ACTIONS: AuditAction[] = ['DATA_UPSERT', 'DATA_DELETE'];
+const DATA_ACTIONS: ActionType[] = ['DATA_UPSERT', 'DATA_DELETE'];
 
 // Validateur AJV pour le schéma
 const ajv = new Ajv({ allErrors: true, strict: false });
@@ -55,7 +87,7 @@ function validateRequest(body: any): { valid: boolean; errors: string[] } {
   // Vérifier l'action
   if (!action || typeof action !== 'string') {
     errors.push('Le champ "action" est requis et doit être une chaîne');
-  } else if (!VALID_ACTIONS.includes(action as AuditAction)) {
+  } else if (!VALID_ACTIONS.includes(action as ActionType)) {
     errors.push(`Action non autorisée: ${action}. Actions valides: ${VALID_ACTIONS.join(', ')}`);
   }
 
@@ -72,7 +104,7 @@ function validateRequest(body: any): { valid: boolean; errors: string[] } {
   }
 
   // Vérifier que "after" est présent pour les actions de modification
-  if (action && VALID_ACTIONS.includes(action as AuditAction)) {
+  if (action && VALID_ACTIONS.includes(action as ActionType)) {
     if (after === undefined || after === null) {
       errors.push('Le champ "after" est requis pour cette action');
     }
@@ -84,7 +116,7 @@ function validateRequest(body: any): { valid: boolean; errors: string[] } {
 /**
  * Valide le payload "after" selon le type d'action
  */
-function validatePayload(action: AuditAction, after: any): { valid: boolean; errors: string[] } {
+function validatePayload(action: ActionType, after: any): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (SCHEMA_ACTIONS.includes(action)) {
@@ -150,7 +182,6 @@ export default async function handler(
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
-      event: null as any,
       alerts: [],
     });
   }
@@ -161,7 +192,6 @@ export default async function handler(
     if (!requestValidation.valid) {
       return res.status(400).json({
         success: false,
-        event: null as any,
         alerts: requestValidation.errors.map(msg => ({
           severity: 'error',
           code: 'INVALID_REQUEST',
@@ -178,7 +208,6 @@ export default async function handler(
     if (!payloadValidation.valid) {
       return res.status(400).json({
         success: false,
-        event: null as any,
         alerts: payloadValidation.errors.map(msg => ({
           severity: 'error',
           code: 'INVALID_PAYLOAD',
@@ -214,28 +243,20 @@ export default async function handler(
     if (blockingErrors.length > 0) {
       return res.status(400).json({
         success: false,
-        event: null as any,
         alerts: blockingErrors,
       });
     }
 
-    // 6. Créer l'événement d'audit
-    const event = storage.createAuditEvent(action, target, before, after, reason);
-
-    // 7. Appliquer le changement (écriture sur disque) - mode immédiat pour les actions explicites
+    // 6. Appliquer le changement (écriture sur disque) - mode immédiat pour les actions explicites
     if (SCHEMA_ACTIONS.includes(action)) {
       await storage.saveSchema(after as Schema, true);
     } else if (DATA_ACTIONS.includes(action)) {
       await storage.saveData(after as TableData, true);
     }
 
-    // 8. Enregistrer l'événement d'audit
-    await storage.appendAuditEvent(event);
-
-    // 9. Retourner le succès avec les alertes (warnings/infos)
+    // 7. Retourner le succès avec les alertes (warnings/infos)
     res.status(200).json({
       success: true,
-      event,
       alerts: preValidation.alerts,
       newState: {
         schema: newState.schema,
@@ -245,7 +266,6 @@ export default async function handler(
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      event: null as any,
       alerts: [
         {
           severity: 'error',
